@@ -682,18 +682,3 @@ VALUES
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
 
--- ============================================================
--- GHI CHÚ CHUẨN HÓA 3NF
--- ============================================================
--- 1NF : Tất cả cột có giá trị nguyên tố, không nhóm lặp.
---       ENUMs thay thế multi-value trong 1 cột.
--- 2NF : Không có phụ thuộc từng phần vào khóa ghép.
---       Mỗi bảng có PK đơn (id AUTO_INCREMENT).
--- 3NF : Không có phụ thuộc bắc cầu (transitive dependency):
---       - invoices.monthly_fee KHÔNG tham chiếu rooms.price_per_month,
---         mà dùng contracts.monthly_fee (snapshot tại thời điểm ký).
---       - utility_readings lưu elec_rate/water_rate tại thời điểm ghi,
---         không phụ thuộc vào bảng cấu hình giá riêng biệt.
---       - students tách khỏi users: thông tin sinh viên KHÔNG phụ thuộc
---         vào username hay email (thuộc tính của users).
--- ============================================================
