@@ -450,7 +450,7 @@ class Router
             $uri = strstr($uri, '?', true);
         }
 
-        // Bỏ base path (khi app chạy trong subfolder /testfinal/public hoặc /testfinal)
+        // Bỏ base path (khi app chạy trong subfolder /Final-Web2-PHP-Dormitory-Management/public)
         $scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
         $rootDir   = rtrim(dirname($scriptDir), '/\\');
 

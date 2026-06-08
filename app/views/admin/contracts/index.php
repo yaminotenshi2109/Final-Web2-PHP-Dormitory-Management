@@ -34,7 +34,7 @@ $searchQ     = htmlspecialchars($search ?? '');
     </div>
     <button class="btn btn-primary btn-sm" onclick="doSearch()">Tìm kiếm</button>
     <?php if ($searchQ): ?>
-      <a href="/testfinal/public/admin/contracts" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
     <?php endif; ?>
     <span style="margin-left:auto;font-size:12px;color:var(--txt-muted);">
       Hiển thị <?= $from ?>–<?= $to ?> / <?= number_format($total) ?>
@@ -85,7 +85,7 @@ $searchQ     = htmlspecialchars($search ?? '');
               <td><span class="badge <?= $badge[0] ?>"><?= $badge[1] ?></span></td>
               <td>
                 <div style="display:flex;gap:6px;justify-content:center;">
-                  <a href="/testfinal/public/admin/contracts/<?= (int)$c['id'] ?>" class="btn btn-ghost btn-sm">👁️ Chi tiết</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts/<?= (int)$c['id'] ?>" class="btn btn-ghost btn-sm">👁️ Chi tiết</a>
                   <?php if ($status === 'active'): ?>
                     <button class="btn btn-danger-outline btn-sm" onclick="terminateContract(<?= (int)$c['id'] ?>, '<?= htmlspecialchars(addslashes($c['student_name'])) ?>')">🛑 Chấm dứt</button>
                   <?php endif; ?>
@@ -138,7 +138,7 @@ function terminateContract(id, name) {
     
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    fetch('/testfinal/public/admin/contracts/' + id + '/terminate', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/contracts/' + id + '/terminate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

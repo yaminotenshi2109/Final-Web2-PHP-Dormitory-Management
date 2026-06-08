@@ -34,7 +34,7 @@ $searchQ     = htmlspecialchars($search ?? '');
     </div>
     <button class="btn btn-primary btn-sm" onclick="doSearch()">Tìm kiếm</button>
     <?php if ($searchQ): ?>
-      <a href="/testfinal/public/admin/students" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
     <?php endif; ?>
     <span style="margin-left:auto;font-size:12px;color:var(--txt-muted);">
       Hiển thị <?= $from ?>–<?= $to ?> / <?= number_format($total) ?>
@@ -93,7 +93,7 @@ $searchQ     = htmlspecialchars($search ?? '');
               </td>
               <td>
                 <div style="display:flex;justify-content:center;">
-                  <a href="/testfinal/public/admin/students/<?= (int)$s['id'] ?>" class="btn btn-ghost btn-sm" title="Chi tiết">👁️ Chi tiết</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students/<?= (int)$s['id'] ?>" class="btn btn-ghost btn-sm" title="Chi tiết">👁️ Chi tiết</a>
                 </div>
               </td>
             </tr>

@@ -53,7 +53,7 @@ $statusLabel = match($status) {
     <p class="page-subtitle">Sự cố báo cáo tại Phòng <?= $roomNumber ?> (Tòa <?= $building ?>)</p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/maintenance" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 
@@ -143,7 +143,7 @@ function submitResolve(e) {
     const data = new FormData(form);
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    fetch('/testfinal/public/admin/maintenance/<?= $id ?>/resolve', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/<?= $id ?>/resolve', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ function closeRequest(id) {
     
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    fetch('/testfinal/public/admin/maintenance/' + id + '/close', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/' + id + '/close', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

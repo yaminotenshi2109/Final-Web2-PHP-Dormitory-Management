@@ -30,7 +30,7 @@ $badge = match($status) {
     <p class="page-subtitle">Xem chi tiết hợp đồng thuê phòng của sinh viên <?= $studentName ?></p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/contracts" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 
@@ -95,7 +95,7 @@ function terminateContract(id, name) {
     
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    fetch('/testfinal/public/admin/contracts/' + id + '/terminate', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/contracts/' + id + '/terminate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -107,7 +107,7 @@ function terminateContract(id, name) {
     .then(json => {
         if (json.success) {
             alert('✅ Đã chấm dứt hợp đồng thành công!');
-            window.location.href = '/testfinal/public/admin/contracts';
+            window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/contracts';
         } else {
             alert('❌ Lỗi: ' + json.message);
         }

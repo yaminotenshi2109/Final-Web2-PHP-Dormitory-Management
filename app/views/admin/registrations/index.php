@@ -18,7 +18,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
 
 <!-- Filter Bar -->
 <div class="filter-bar">
-    <form method="GET" action="/testfinal/public/admin/registrations" class="filter-bar-form">
+    <form method="GET" action="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="filter-bar-form">
         <div class="filter-group">
             <select name="status" class="form-control">
                 <option value="">-- Tất cả trạng thái --</option>
@@ -37,7 +37,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Lọc</button>
-        <a href="/testfinal/public/admin/registrations" class="btn btn-outline">Đặt lại</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-outline">Đặt lại</a>
     </form>
 </div>
 
@@ -122,13 +122,13 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
                             </td>
                             <td style="text-align:center">
                                 <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-                                    <a href="/testfinal/public/admin/registrations/<?= (int)$reg['id'] ?>"
+                                    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations/<?= (int)$reg['id'] ?>"
                                        class="btn btn-ghost btn-sm">👁 Xem</a>
 
                                     <?php if (($reg['status'] ?? '') === 'pending'): ?>
                                         <!-- Approve -->
                                         <form method="POST"
-                                              action="/testfinal/public/admin/registrations/<?= (int)$reg['id'] ?>/approve"
+                                              action="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations/<?= (int)$reg['id'] ?>/approve"
                                               onsubmit="return confirm('Xác nhận duyệt đăng ký này?')"
                                               style="display:inline">
                                             <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -171,14 +171,14 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
         ]));
         ?>
         <?php if ($cur > 1): ?>
-            <a href="/testfinal/public/admin/registrations?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
         <?php endif; ?>
         <?php for ($p = max(1, $cur - 2); $p <= min($total, $cur + 2); $p++): ?>
-            <a href="/testfinal/public/admin/registrations?page=<?= $p ?>&<?= $qs ?>"
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?page=<?= $p ?>&<?= $qs ?>"
                class="page-link <?= $p === $cur ? 'active' : '' ?>"><?= $p ?></a>
         <?php endfor; ?>
         <?php if ($cur < $total): ?>
-            <a href="/testfinal/public/admin/registrations?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
         <?php endif; ?>
     </div>
 <?php endif; ?>
@@ -227,7 +227,7 @@ function openRejectModal(registrationId) {
     var err    = document.getElementById('reject-reason-error');
     var reason = document.getElementById('reject-reason');
 
-    form.action = '/testfinal/public/admin/registrations/' + registrationId + '/reject';
+    form.action = '/Final-Web2-PHP-Dormitory-Management/public/admin/registrations/' + registrationId + '/reject';
     reason.value = '';
     err.style.display = 'none';
     modal.style.display = 'flex';

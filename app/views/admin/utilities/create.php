@@ -15,12 +15,12 @@ $currentYear  = (int)date('Y');
     <p class="page-subtitle">Nhập số công tơ điện nước tiêu thụ của phòng</p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/utilities" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 
 <div class="card" style="max-width: 650px; margin: 0 auto;">
-  <form method="POST" action="/testfinal/public/admin/utilities">
+  <form method="POST" action="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities">
     <div class="card-body" style="display: flex; flex-direction: column; gap: 16px;">
       <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
 
@@ -110,7 +110,7 @@ $currentYear  = (int)date('Y');
 
     </div>
     <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
-      <a href="/testfinal/public/admin/utilities" class="btn btn-ghost">Hủy</a>
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="btn btn-ghost">Hủy</a>
       <button type="submit" class="btn btn-primary">➕ Ghi chỉ số</button>
     </div>
   </form>

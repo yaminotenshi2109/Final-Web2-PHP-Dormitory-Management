@@ -20,12 +20,12 @@ $address = htmlspecialchars($building['address']);
     <p class="page-subtitle">Cập nhật thông tin chi tiết cho tòa nhà <?= $name ?></p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/buildings" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
-  <form method="POST" action="/testfinal/public/admin/buildings/<?= $id ?>">
+  <form method="POST" action="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/<?= $id ?>">
     <input type="hidden" name="_method" value="PUT">
     <div class="card-body" style="display: flex; flex-direction: column; gap: 16px;">
       <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -86,7 +86,7 @@ $address = htmlspecialchars($building['address']);
 
     </div>
     <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
-      <a href="/testfinal/public/admin/buildings" class="btn btn-ghost">Hủy</a>
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings" class="btn btn-ghost">Hủy</a>
       <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
     </div>
   </form>

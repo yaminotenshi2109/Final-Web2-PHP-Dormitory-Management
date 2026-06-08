@@ -19,7 +19,7 @@ $address = htmlspecialchars($building['address']);
     <p class="page-subtitle">Xem chi tiết cơ cấu và danh sách phòng</p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/buildings" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 

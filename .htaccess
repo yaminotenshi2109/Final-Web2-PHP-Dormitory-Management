@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /testfinal/
+    RewriteBase /Final-Web2-PHP-Dormitory-Management/
 
     # Rewrite empty path to public/
     RewriteRule ^$ public/ [L]

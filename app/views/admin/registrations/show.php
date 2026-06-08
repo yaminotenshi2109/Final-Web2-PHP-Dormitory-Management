@@ -41,7 +41,7 @@ $statusLabel = match($status) {
     <p class="page-subtitle">Duyệt và xếp phòng cho sinh viên <?= $studentName ?></p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/registrations" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 
@@ -133,7 +133,7 @@ function autoAllocate() {
     if (!confirm('Xác nhận tự động xếp phòng cho sinh viên này?')) return;
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    fetch('/testfinal/public/api/registrations/<?= $id ?>/auto-allocate', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/registrations/<?= $id ?>/auto-allocate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ function manualAllocate() {
     if (!confirm('Xác nhận gán sinh viên vào phòng đã chọn?')) return;
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    fetch('/testfinal/public/api/registrations/<?= $id ?>/manual-allocate', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/registrations/<?= $id ?>/manual-allocate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -189,7 +189,7 @@ function rejectRegistration() {
     if (!confirm('Xác nhận từ chối đơn đăng ký này?')) return;
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     
-    fetch('/testfinal/public/api/registrations/<?= $id ?>/reject', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/registrations/<?= $id ?>/reject', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

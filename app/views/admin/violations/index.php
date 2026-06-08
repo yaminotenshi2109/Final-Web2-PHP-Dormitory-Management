@@ -21,7 +21,7 @@
 
 <!-- Filter Bar -->
 <div class="filter-bar">
-    <form method="GET" action="/testfinal/public/admin/violations" class="filter-bar-form">
+    <form method="GET" action="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="filter-bar-form">
         <div class="filter-group">
             <input
                 type="text"
@@ -52,7 +52,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Lọc</button>
-        <a href="/testfinal/public/admin/violations" class="btn btn-outline">Đặt lại</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="btn btn-outline">Đặt lại</a>
     </form>
 </div>
 
@@ -120,11 +120,11 @@
                                 </td>
                                 <td style="text-align:center">
                                     <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-                                        <a href="/testfinal/public/admin/violations/<?= (int)$v['id'] ?>"
+                                        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>"
                                            class="btn btn-ghost btn-sm">👁 Chi tiết</a>
                                         <?php if (($v['status'] ?? '') !== 'dismissed'): ?>
                                             <form method="POST"
-                                                  action="/testfinal/public/admin/violations/<?= (int)$v['id'] ?>/dismiss"
+                                                  action="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>/dismiss"
                                                   onsubmit="return confirm('Xác nhận hủy vi phạm này?')"
                                                   style="display:inline">
                                                 <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -161,14 +161,14 @@
         ]));
         ?>
         <?php if ($cur > 1): ?>
-            <a href="/testfinal/public/admin/violations?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
         <?php endif; ?>
         <?php for ($p = max(1, $cur - 2); $p <= min($total, $cur + 2); $p++): ?>
-            <a href="/testfinal/public/admin/violations?page=<?= $p ?>&<?= $qs ?>"
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?page=<?= $p ?>&<?= $qs ?>"
                class="page-link <?= $p === $cur ? 'active' : '' ?>"><?= $p ?></a>
         <?php endfor; ?>
         <?php if ($cur < $total): ?>
-            <a href="/testfinal/public/admin/violations?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
         <?php endif; ?>
     </div>
 <?php endif; ?>
@@ -312,7 +312,7 @@
 
             if (!data.override_points) delete data.override_points;
 
-            ktxFetch('POST', '/testfinal/public/api/violations', data)
+            ktxFetch('POST', '/Final-Web2-PHP-Dormitory-Management/public/api/violations', data)
                 .then(function (res) {
                     if (res && res.success) {
                         alert.innerHTML = '<div class="alert alert-success">✅ Ghi nhận vi phạm thành công!</div>';

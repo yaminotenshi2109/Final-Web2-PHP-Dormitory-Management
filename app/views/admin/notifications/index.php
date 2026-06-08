@@ -103,7 +103,7 @@ function sendNotification(e) {
     const data = new FormData(form);
     const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-    fetch('/testfinal/public/admin/notifications/send', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/notifications/send', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

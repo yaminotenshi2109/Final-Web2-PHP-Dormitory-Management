@@ -12,7 +12,7 @@
     <p class="page-subtitle">Quản lý cơ cấu các tòa nhà ký túc xá</p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/buildings/create" class="btn btn-primary">➕ Thêm tòa nhà</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/create" class="btn btn-primary">➕ Thêm tòa nhà</a>
   </div>
 </div>
 
@@ -69,8 +69,8 @@
               </td>
               <td>
                 <div style="display:flex;gap:6px;justify-content:center;">
-                  <a href="/testfinal/public/admin/buildings/<?= (int)$b['id'] ?>" class="btn btn-ghost btn-sm">👁️ Xem</a>
-                  <a href="/testfinal/public/admin/buildings/<?= (int)$b['id'] ?>/edit" class="btn btn-ghost btn-sm">✏️ Sửa</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/<?= (int)$b['id'] ?>" class="btn btn-ghost btn-sm">👁️ Xem</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/<?= (int)$b['id'] ?>/edit" class="btn btn-ghost btn-sm">✏️ Sửa</a>
                   <button class="btn btn-danger-outline btn-sm" onclick="deleteBuilding(<?= (int)$b['id'] ?>, '<?= htmlspecialchars(addslashes($b['name'])) ?>')">🗑️ Xóa</button>
                 </div>
               </td>
@@ -96,7 +96,7 @@
 function deleteBuilding(id, name) {
     if (!confirm('Bạn có chắc chắn muốn xóa tòa nhà "' + name + '"?\nHành động này không thể hoàn tác!')) return;
     
-    fetch('/testfinal/public/admin/buildings/' + id, {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/' + id, {
         method: 'DELETE',
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })

@@ -13,8 +13,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/1.110.0/tabler-icons.min.css">
     
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="/testfinal/public/assets/css/base/variables.css">
-    <link rel="stylesheet" href="/testfinal/public/assets/css/layouts/main.css">
+    <link rel="stylesheet" href="/Final-Web2-PHP-Dormitory-Management/public/assets/css/base/variables.css">
+    <link rel="stylesheet" href="/Final-Web2-PHP-Dormitory-Management/public/assets/css/layouts/main.css">
     <?= $additionalCSS ?? '' ?>
 </head>
 <body>
@@ -25,7 +25,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-top">
         <div class="container-fluid">
             <!-- Logo -->
-            <a class="navbar-brand d-flex align-items-center" href="/testfinal/public/">
+            <a class="navbar-brand d-flex align-items-center" href="/Final-Web2-PHP-Dormitory-Management/public/">
                 <i class="ti ti-building-community me-2" style="font-size: 24px;"></i>
                 <span class="fw-bold">KTX System</span>
             </a>
@@ -45,7 +45,7 @@
                             </span>
                         </li>
                         <li class="nav-item">
-                            <form action="/testfinal/public/logout" method="POST" style="display: inline;">
+                            <form action="/Final-Web2-PHP-Dormitory-Management/public/logout" method="POST" style="display: inline;">
                                 <button type="submit" class="btn btn-outline-light btn-sm">
                                     <i class="ti ti-logout me-1"></i> Đăng xuất
                                 </button>
@@ -53,7 +53,7 @@
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <a class="nav-link" href="/testfinal/public/auth/login">Đăng nhập</a>
+                            <a class="nav-link" href="/Final-Web2-PHP-Dormitory-Management/public/auth/login">Đăng nhập</a>
                         </li>
                     <?php endif; ?>
                 </ul>
@@ -77,34 +77,34 @@
                         </div>
                         
                         <nav class="nav flex-column">
-                            <a href="/testfinal/public/admin/dashboard" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/dashboard" class="nav-link">
                                 <i class="ti ti-dashboard"></i> Dashboard
                             </a>
-                            <a href="/testfinal/public/admin/buildings" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings" class="nav-link">
                                 <i class="ti ti-building"></i> Tòa nhà
                             </a>
-                            <a href="/testfinal/public/admin/rooms" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms" class="nav-link">
                                 <i class="ti ti-door"></i> Phòng
                             </a>
-                            <a href="/testfinal/public/admin/students" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="nav-link">
                                 <i class="ti ti-users"></i> Sinh viên
                             </a>
-                            <a href="/testfinal/public/admin/registrations" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="nav-link">
                                 <i class="ti ti-clipboard-list"></i> Đăng ký phòng
                             </a>
-                            <a href="/testfinal/public/admin/contracts" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="nav-link">
                                 <i class="ti ti-file-text"></i> Hợp đồng
                             </a>
-                            <a href="/testfinal/public/admin/invoices" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="nav-link">
                                 <i class="ti ti-receipt"></i> Hóa đơn
                             </a>
-                            <a href="/testfinal/public/admin/utilities" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="nav-link">
                                 <i class="ti ti-zap"></i> Tiện ích
                             </a>
-                            <a href="/testfinal/public/admin/violations" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="nav-link">
                                 <i class="ti ti-alert-circle"></i> Vi phạm
                             </a>
-                            <a href="/testfinal/public/admin/maintenance" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance" class="nav-link">
                                 <i class="ti ti-tool"></i> Bảo trì
                             </a>
                         </nav>
@@ -117,25 +117,25 @@
                         </div>
                         
                         <nav class="nav flex-column">
-                            <a href="/testfinal/public/student/dashboard" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/dashboard" class="nav-link">
                                 <i class="ti ti-dashboard"></i> Dashboard
                             </a>
-                            <a href="/testfinal/public/student/registrations" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/registrations" class="nav-link">
                                 <i class="ti ti-door"></i> Phòng của tôi
                             </a>
-                            <a href="/testfinal/public/student/contracts" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/contracts" class="nav-link">
                                 <i class="ti ti-file-text"></i> Hợp đồng
                             </a>
-                            <a href="/testfinal/public/student/invoices" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/invoices" class="nav-link">
                                 <i class="ti ti-receipt"></i> Hóa đơn
                             </a>
-                            <a href="/testfinal/public/student/maintenance" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/maintenance" class="nav-link">
                                 <i class="ti ti-tool"></i> Bảo trì
                             </a>
-                            <a href="/testfinal/public/student/violations" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/violations" class="nav-link">
                                 <i class="ti ti-alert-circle"></i> Vi phạm
                             </a>
-                            <a href="/testfinal/public/student/profile" class="nav-link">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/profile" class="nav-link">
                                 <i class="ti ti-user"></i> Hồ sơ
                             </a>
                         </nav>
@@ -151,7 +151,7 @@
                 <nav class="breadcrumb-nav mb-3">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="/testfinal/public/">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/Final-Web2-PHP-Dormitory-Management/public/">Home</a></li>
                             <?php foreach ($breadcrumb as $link => $label): ?>
                                 <li class="breadcrumb-item active"><?= $label ?></li>
                             <?php endforeach; ?>
@@ -201,8 +201,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     
     <!-- Custom Scripts -->
-    <script src="/testfinal/public/assets/js/lib/utils.js"></script>
-    <script src="/testfinal/public/assets/js/main.js"></script>
+    <script src="/Final-Web2-PHP-Dormitory-Management/public/assets/js/lib/utils.js"></script>
+    <script src="/Final-Web2-PHP-Dormitory-Management/public/assets/js/main.js"></script>
     <?= $additionalJS ?? '' ?>
 </body>
 </html>

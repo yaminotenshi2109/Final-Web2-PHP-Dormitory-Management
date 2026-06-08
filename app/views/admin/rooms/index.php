@@ -48,7 +48,7 @@ $typeLabels = [
         <p class="page-subtitle">Tổng cộng <?= number_format($total) ?> phòng trong hệ thống</p>
     </div>
     <div class="page-actions">
-        <a href="/testfinal/public/admin/rooms/map" class="btn btn-outline btn-sm">🗺️ Sơ đồ phòng</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms/map" class="btn btn-outline btn-sm">🗺️ Sơ đồ phòng</a>
         <button class="btn btn-outline btn-sm" onclick="exportRooms()">📥 Xuất Excel</button>
         <button class="btn btn-primary" data-modal-open="modalAddRoom">➕ Thêm phòng</button>
     </div>
@@ -135,7 +135,7 @@ $typeLabels = [
         </select>
 
         <?php if ($currentQ || $currentBuilding || $currentStatus): ?>
-            <a href="/testfinal/public/admin/rooms" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
         <?php endif; ?>
 
         <span style="margin-left:auto;font-size:12px;color:var(--txt-muted)">
@@ -244,7 +244,7 @@ $typeLabels = [
                             <!-- Actions -->
                             <td>
                                 <div style="display:flex;gap:4px;justify-content:center">
-                                    <a href="/testfinal/public/admin/rooms/<?= $rid ?>"
+                                    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms/<?= $rid ?>"
                                        class="btn btn-ghost btn-sm" title="Xem chi tiết">
                                         👁️
                                     </a>
@@ -271,7 +271,7 @@ $typeLabels = [
                                 <div class="empty-msg">
                                     <?php if ($currentQ || $currentBuilding || $currentStatus): ?>
                                         Không có phòng nào phù hợp với bộ lọc hiện tại.
-                                        <a href="/testfinal/public/admin/rooms">Xóa bộ lọc</a>
+                                        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms">Xóa bộ lọc</a>
                                     <?php else: ?>
                                         Chưa có phòng nào trong hệ thống.
                                         <button class="btn btn-primary btn-sm" style="margin-top:12px"
@@ -584,7 +584,7 @@ function submitAddRoom(e) {
     const payload = Object.fromEntries(data);
     payload.has_ac = form.querySelector('[name="has_ac"]')?.checked ? 1 : 0;
 
-    fetch('/testfinal/public/api/rooms', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/rooms', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': payload._csrf_token },
         body: JSON.stringify(payload)
@@ -615,7 +615,7 @@ function submitAddRoom(e) {
 
 /* ── Open Edit Room Modal ───────────────────────────────────── */
 function openEditRoomModal(id) {
-    fetch('/testfinal/public/api/rooms/' + id)
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/rooms/' + id)
     .then(r => r.json())
     .then(json => {
         if (!json.success) { showKtxToast('error', 'Không tải được thông tin phòng.'); return; }
@@ -645,7 +645,7 @@ function submitEditRoom(e) {
     const payload = Object.fromEntries(data);
     payload.has_ac = form.querySelector('[name="has_ac"]')?.checked ? 1 : 0;
 
-    fetch('/testfinal/public/api/rooms/' + roomId, {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/rooms/' + roomId, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': payload._csrf_token },
         body: JSON.stringify(payload)
@@ -667,7 +667,7 @@ function submitEditRoom(e) {
 function deleteRoom(id, roomNumber) {
     if (!confirm('Bạn có chắc muốn xóa phòng "' + roomNumber + '"?\n\nLưu ý: Không thể xóa phòng đang có sinh viên!')) return;
 
-    fetch('/testfinal/public/api/rooms/' + id, { method: 'DELETE' })
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/rooms/' + id, { method: 'DELETE' })
     .then(r => r.json())
     .then(json => {
         if (json.success) {
@@ -685,7 +685,7 @@ function exportRooms() {
     const q        = document.getElementById('searchInput')?.value ?? '';
     const building = document.getElementById('buildingFilter')?.value ?? '';
     const status   = document.getElementById('statusFilter')?.value ?? '';
-    window.location.href = '/testfinal/public/api/rooms/export'
+    window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/api/rooms/export'
                          + '?q=' + encodeURIComponent(q)
                          + '&building=' + encodeURIComponent(building)
                          + '&status='   + encodeURIComponent(status);

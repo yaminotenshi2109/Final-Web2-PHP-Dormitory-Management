@@ -231,7 +231,7 @@
 
 <div class="no-print-bar no-print">
     <div>
-        <a href="/testfinal/public/admin/invoices/<?= $invoice['id'] ?>" class="btn btn-secondary">⬅️ Trở lại chi tiết</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= $invoice['id'] ?>" class="btn btn-secondary">⬅️ Trở lại chi tiết</a>
     </div>
     <div style="display: flex; gap: 12px;">
         <button class="btn btn-primary" onclick="window.print()">🖨️ In ngay (Print)</button>

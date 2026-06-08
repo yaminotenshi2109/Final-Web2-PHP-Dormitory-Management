@@ -18,7 +18,7 @@ $filterPriority = $_GET['priority'] ?? '';
 
 <!-- Filter Bar -->
 <div class="filter-bar">
-    <form method="GET" action="/testfinal/public/admin/maintenance" class="filter-bar-form">
+    <form method="GET" action="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance" class="filter-bar-form">
         <div class="filter-group">
             <select name="status" class="form-control">
                 <option value="">-- Tất cả trạng thái --</option>
@@ -39,7 +39,7 @@ $filterPriority = $_GET['priority'] ?? '';
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Lọc</button>
-        <a href="/testfinal/public/admin/maintenance" class="btn btn-outline">Đặt lại</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance" class="btn btn-outline">Đặt lại</a>
     </form>
 </div>
 
@@ -127,12 +127,12 @@ $filterPriority = $_GET['priority'] ?? '';
                             </td>
                             <td style="text-align:center">
                                 <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-                                    <a href="/testfinal/public/admin/maintenance/<?= (int)$req['id'] ?>"
+                                    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/<?= (int)$req['id'] ?>"
                                        class="btn btn-ghost btn-sm">👁 Xem</a>
 
                                     <?php if ($canResolve): ?>
                                         <form method="POST"
-                                              action="/testfinal/public/admin/maintenance/<?= (int)$req['id'] ?>/resolve"
+                                              action="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/<?= (int)$req['id'] ?>/resolve"
                                               onsubmit="return confirm('Đánh dấu yêu cầu #<?= (int)$req['id'] ?> là đã giải quyết?')"
                                               style="display:inline">
                                             <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -142,7 +142,7 @@ $filterPriority = $_GET['priority'] ?? '';
 
                                     <?php if ($canClose && ($req['status'] ?? '') !== 'closed'): ?>
                                         <form method="POST"
-                                              action="/testfinal/public/admin/maintenance/<?= (int)$req['id'] ?>/close"
+                                              action="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/<?= (int)$req['id'] ?>/close"
                                               onsubmit="return confirm('Đóng yêu cầu bảo trì #<?= (int)$req['id'] ?>?')"
                                               style="display:inline">
                                             <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -178,14 +178,14 @@ $filterPriority = $_GET['priority'] ?? '';
         ]));
         ?>
         <?php if ($cur > 1): ?>
-            <a href="/testfinal/public/admin/maintenance?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
         <?php endif; ?>
         <?php for ($p = max(1, $cur - 2); $p <= min($total, $cur + 2); $p++): ?>
-            <a href="/testfinal/public/admin/maintenance?page=<?= $p ?>&<?= $qs ?>"
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance?page=<?= $p ?>&<?= $qs ?>"
                class="page-link <?= $p === $cur ? 'active' : '' ?>"><?= $p ?></a>
         <?php endfor; ?>
         <?php if ($cur < $total): ?>
-            <a href="/testfinal/public/admin/maintenance?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
         <?php endif; ?>
     </div>
 <?php endif; ?>

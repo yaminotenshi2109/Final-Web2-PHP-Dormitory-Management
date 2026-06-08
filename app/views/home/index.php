@@ -11,7 +11,7 @@
     <h1>Hệ thống quản lý<br><span>Ký túc xá thông minh</span></h1>
     <p>Quản lý phòng ở, hợp đồng, hóa đơn và vi phạm một cách hiệu quả, minh bạch và tiện lợi cho sinh viên và ban quản lý.</p>
     <div class="hero-btns">
-      <a href="/testfinal/public/auth/login" class="hero-btn-primary">🔐 Đăng nhập</a>
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/auth/login" class="hero-btn-primary">🔐 Đăng nhập</a>
       <a href="#features" class="hero-btn-outline">📖 Tìm hiểu thêm</a>
     </div>
   </div>
@@ -69,7 +69,7 @@
 <div style="background:linear-gradient(135deg,#0f172a,#1e1b4b);padding:60px 24px;text-align:center;color:#fff">
   <h2 style="font-size:24px;font-weight:800;margin-bottom:12px">Sẵn sàng bắt đầu?</h2>
   <p style="color:rgba(255,255,255,.6);margin-bottom:28px;font-size:14px">Đăng nhập để truy cập hệ thống quản lý ký túc xá</p>
-  <a href="/testfinal/public/auth/login" class="hero-btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
+  <a href="/Final-Web2-PHP-Dormitory-Management/public/auth/login" class="hero-btn-primary" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none">
     🚀 Đăng nhập ngay
   </a>
 </div>

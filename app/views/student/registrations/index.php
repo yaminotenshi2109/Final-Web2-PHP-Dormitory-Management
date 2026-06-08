@@ -43,7 +43,7 @@ function semesterLabel(string $sem): string {
     </div>
     <div class="page-actions">
         <?php if (!$hasActiveReg): ?>
-            <a href="/testfinal/public/student/registrations/create" class="btn btn-primary">
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/registrations/create" class="btn btn-primary">
                 ➕ Đăng ký mới
             </a>
         <?php else: ?>
@@ -51,7 +51,7 @@ function semesterLabel(string $sem): string {
                 ➕ Đăng ký mới
             </button>
         <?php endif; ?>
-        <a href="/testfinal/public/student/dashboard" class="btn btn-ghost">← Về trang chủ</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/student/dashboard" class="btn btn-ghost">← Về trang chủ</a>
     </div>
 </div>
 
@@ -74,7 +74,7 @@ function semesterLabel(string $sem): string {
                 <p style="color:#6b7280;font-size:14px;margin-bottom:24px;max-width:320px;margin-left:auto;margin-right:auto;">
                     Bạn chưa có đơn đăng ký phòng ký túc xá nào. Hãy tạo đơn đăng ký để được sắp xếp phòng ở.
                 </p>
-                <a href="/testfinal/public/student/registrations/create" class="btn btn-primary">
+                <a href="/Final-Web2-PHP-Dormitory-Management/public/student/registrations/create" class="btn btn-primary">
                     ➕ Tạo đơn đăng ký ngay
                 </a>
             </div>
@@ -153,7 +153,7 @@ function semesterLabel(string $sem): string {
 
                         <!-- Right actions -->
                         <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0;">
-                            <a href="/testfinal/public/student/registrations/<?= $regId ?>" class="btn btn-outline btn-sm">
+                            <a href="/Final-Web2-PHP-Dormitory-Management/public/student/registrations/<?= $regId ?>" class="btn btn-outline btn-sm">
                                 👁️ Chi tiết
                             </a>
                             <?php if ($isPending): ?>
@@ -210,7 +210,7 @@ async function doCancel() {
     btn.textContent = 'Đang huỷ...';
 
     try {
-        const result = await ktxFetch(`/testfinal/public/student/registrations/${cancelRegId}/cancel`, {
+        const result = await ktxFetch(`/Final-Web2-PHP-Dormitory-Management/public/student/registrations/${cancelRegId}/cancel`, {
             method: 'POST',
         });
         if (result && result.success) {

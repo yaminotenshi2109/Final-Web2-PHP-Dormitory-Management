@@ -82,7 +82,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
         </select>
 
         <?php if ($currentQ || $currentRole || $currentStatus): ?>
-            <a href="/testfinal/public/admin/users" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
         <?php endif; ?>
 
         <span style="margin-left:auto;font-size:12px;color:var(--txt-muted)">
@@ -185,7 +185,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                                 <div class="empty-msg">
                                     <?php if ($currentQ || $currentRole || $currentStatus): ?>
                                         Không có kết quả phù hợp với bộ lọc hiện tại.
-                                        <a href="/testfinal/public/admin/users">Xóa bộ lọc</a>
+                                        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users">Xóa bộ lọc</a>
                                     <?php else: ?>
                                         Chưa có tài khoản nào trong hệ thống.
                                     <?php endif; ?>
@@ -526,7 +526,7 @@ function submitAddUser(e) {
     btn.disabled = true;
     btn.innerHTML = '<span class="loading"></span> Đang tạo...';
 
-    fetch('/testfinal/public/api/users', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': data.get('_csrf_token') },
         body: JSON.stringify(Object.fromEntries(data))
@@ -557,7 +557,7 @@ function submitAddUser(e) {
 
 /* ── Open edit modal ────────────────────────────────────────── */
 function openEditUserModal(id) {
-    fetch('/testfinal/public/api/users/' + id)
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users/' + id)
     .then(r => r.json())
     .then(json => {
         if (!json.success) { showKtxToast('error', 'Không tải được thông tin người dùng.'); return; }
@@ -584,7 +584,7 @@ function submitEditUser(e) {
         el.textContent = ''; el.classList.add('d-none');
     });
 
-    fetch('/testfinal/public/api/users/' + userId, {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users/' + userId, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': data.get('_csrf_token') },
         body: JSON.stringify(Object.fromEntries(data))
@@ -613,7 +613,7 @@ function submitEditUser(e) {
 function deleteUser(id, username) {
     if (!confirm('Bạn có chắc muốn xóa tài khoản "' + username + '"?\nHành động này không thể hoàn tác!')) return;
 
-    fetch('/testfinal/public/api/users/' + id, { method: 'DELETE' })
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users/' + id, { method: 'DELETE' })
     .then(r => r.json())
     .then(json => {
         if (json.success) {
@@ -641,7 +641,7 @@ function submitResetPassword(e) {
     const data   = new FormData(form);
     const userId = data.get('user_id');
 
-    fetch('/testfinal/public/api/users/' + userId + '/reset-password', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users/' + userId + '/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': data.get('_csrf_token') },
         body: JSON.stringify(Object.fromEntries(data))
@@ -663,7 +663,7 @@ function exportUsers() {
     const q      = document.getElementById('searchInput')?.value ?? '';
     const role   = document.getElementById('roleFilter')?.value  ?? '';
     const status = document.getElementById('statusFilter')?.value ?? '';
-    window.location.href = '/testfinal/public/api/users/export?q=' + encodeURIComponent(q)
+    window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/api/users/export?q=' + encodeURIComponent(q)
                          + '&role=' + encodeURIComponent(role)
                          + '&status=' + encodeURIComponent(status);
 }

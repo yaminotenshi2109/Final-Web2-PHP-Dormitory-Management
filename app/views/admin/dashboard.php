@@ -23,8 +23,8 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
         <span style="font-size:12px;color:var(--txt-muted);background:var(--card-bg);border:1px solid var(--border);padding:6px 12px;border-radius:var(--radius-sm);">
             📅 <?= date('d/m/Y H:i') ?>
         </span>
-        <a href="/testfinal/public/admin/reports" class="btn btn-outline btn-sm">📊 Báo cáo</a>
-        <a href="/testfinal/public/admin/registrations" class="btn btn-primary btn-sm">➕ Đăng ký mới</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-outline btn-sm">📊 Báo cáo</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-primary btn-sm">➕ Đăng ký mới</a>
     </div>
 </div>
 
@@ -125,7 +125,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
             <div class="stat-label">Đơn chờ duyệt</div>
         </div>
         <?php if (($stats['pending_registrations'] ?? 0) > 0): ?>
-            <a href="/testfinal/public/admin/registrations?status=pending"
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?status=pending"
                style="font-size:11px;color:#ec4899;font-weight:600;text-decoration:underline;margin-top:4px">
                 Xem ngay →
             </a>
@@ -142,7 +142,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
             <div class="stat-label">Vi phạm chưa xử lý</div>
         </div>
         <?php if (($stats['open_violations'] ?? 0) > 0): ?>
-            <a href="/testfinal/public/admin/violations?status=open"
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?status=open"
                style="font-size:11px;color:#ef4444;font-weight:600;text-decoration:underline;margin-top:4px">
                 Xem ngay →
             </a>
@@ -184,7 +184,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                 <div class="card-title">📋 Đơn đăng ký gần đây</div>
                 <div class="card-subtitle">5 đơn mới nhất trong hệ thống</div>
             </div>
-            <a href="/testfinal/public/admin/registrations" class="btn btn-ghost btn-sm">Xem tất cả →</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-ghost btn-sm">Xem tất cả →</a>
         </div>
 
         <?php if (!empty($recent_registrations)): ?>
@@ -252,7 +252,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 
         <?php if (!empty($recent_registrations) && ($stats['pending_registrations'] ?? 0) > 0): ?>
             <div class="card-footer" style="text-align:center">
-                <a href="/testfinal/public/admin/registrations?status=pending"
+                <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?status=pending"
                    class="btn btn-outline btn-sm">
                     ⏳ Xem <?= $stats['pending_registrations'] ?> đơn chờ duyệt
                 </a>
@@ -267,7 +267,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                 <div class="card-title">⚠️ Vi phạm gần đây</div>
                 <div class="card-subtitle">Các trường hợp vi phạm mới nhất</div>
             </div>
-            <a href="/testfinal/public/admin/violations" class="btn btn-ghost btn-sm">Xem tất cả →</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="btn btn-ghost btn-sm">Xem tất cả →</a>
         </div>
 
         <?php if (!empty($recent_violations)): ?>
@@ -324,7 +324,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 
         <?php if (!empty($recent_violations) && ($stats['open_violations'] ?? 0) > 0): ?>
             <div class="card-footer" style="text-align:center">
-                <a href="/testfinal/public/admin/violations?status=open"
+                <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?status=open"
                    class="btn btn-danger btn-sm">
                     ⚠️ Xử lý <?= $stats['open_violations'] ?> vi phạm
                 </a>
@@ -341,14 +341,14 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
     </div>
     <div class="card-body">
         <div style="display:flex;flex-wrap:wrap;gap:10px">
-            <a href="/testfinal/public/admin/rooms" class="btn btn-outline">🚪 Quản lý phòng</a>
-            <a href="/testfinal/public/admin/students" class="btn btn-outline">🎓 Quản lý sinh viên</a>
-            <a href="/testfinal/public/admin/contracts" class="btn btn-outline">📄 Hợp đồng</a>
-            <a href="/testfinal/public/admin/invoices" class="btn btn-outline">💰 Hóa đơn</a>
-            <a href="/testfinal/public/admin/violations" class="btn btn-outline">⚠️ Vi phạm</a>
-            <a href="/testfinal/public/admin/users" class="btn btn-outline">👤 Tài khoản</a>
-            <a href="/testfinal/public/admin/services" class="btn btn-outline">🔧 Dịch vụ</a>
-            <a href="/testfinal/public/admin/reports" class="btn btn-primary">📊 Báo cáo tổng hợp</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms" class="btn btn-outline">🚪 Quản lý phòng</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-outline">🎓 Quản lý sinh viên</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-outline">📄 Hợp đồng</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-outline">💰 Hóa đơn</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="btn btn-outline">⚠️ Vi phạm</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users" class="btn btn-outline">👤 Tài khoản</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/services" class="btn btn-outline">🔧 Dịch vụ</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-primary">📊 Báo cáo tổng hợp</a>
         </div>
     </div>
 </div>

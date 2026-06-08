@@ -40,7 +40,7 @@ function oldValue(array $old, string $field, string $default = ''): string {
         <p class="page-subtitle">Điền thông tin để đăng ký ở ký túc xá</p>
     </div>
     <div class="page-actions">
-        <a href="/testfinal/public/student/registrations" class="btn btn-ghost">← Quay lại</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/student/registrations" class="btn btn-ghost">← Quay lại</a>
     </div>
 </div>
 
@@ -72,7 +72,7 @@ function oldValue(array $old, string $field, string $default = ''): string {
                 </div>
             <?php endif; ?>
 
-            <form action="/testfinal/public/student/registrations" method="POST" id="registrationForm">
+            <form action="/Final-Web2-PHP-Dormitory-Management/public/student/registrations" method="POST" id="registrationForm">
                 <input type="hidden" name="_token" value="<?= htmlspecialchars($csrfToken) ?>">
                 <input type="hidden" name="_method" value="POST">
 
@@ -182,7 +182,7 @@ function oldValue(array $old, string $field, string $default = ''): string {
                     <button type="submit" class="btn btn-primary" id="submitBtn" style="flex:1;min-width:120px;">
                         ✅ Gửi đơn đăng ký
                     </button>
-                    <a href="/testfinal/public/student/registrations" class="btn btn-outline" style="flex:1;min-width:120px;text-align:center;">
+                    <a href="/Final-Web2-PHP-Dormitory-Management/public/student/registrations" class="btn btn-outline" style="flex:1;min-width:120px;text-align:center;">
                         ✕ Huỷ bỏ
                     </a>
                 </div>

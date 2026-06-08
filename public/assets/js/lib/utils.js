@@ -6,7 +6,7 @@
 const API = {
     async get(url) {
         try {
-            const response = await axios.get(`/testfinal/public${url}`);
+            const response = await axios.get(`/Final-Web2-PHP-Dormitory-Management/public${url}`);
             return response.data;
         } catch (error) {
             console.error('GET Error:', error);
@@ -16,7 +16,7 @@ const API = {
 
     async post(url, data = {}) {
         try {
-            const response = await axios.post(`/testfinal/public${url}`, data);
+            const response = await axios.post(`/Final-Web2-PHP-Dormitory-Management/public${url}`, data);
             return response.data;
         } catch (error) {
             console.error('POST Error:', error);
@@ -26,7 +26,7 @@ const API = {
 
     async put(url, data = {}) {
         try {
-            const response = await axios.put(`/testfinal/public${url}`, data);
+            const response = await axios.put(`/Final-Web2-PHP-Dormitory-Management/public${url}`, data);
             return response.data;
         } catch (error) {
             console.error('PUT Error:', error);
@@ -36,7 +36,7 @@ const API = {
 
     async delete(url) {
         try {
-            const response = await axios.delete(`/testfinal/public${url}`);
+            const response = await axios.delete(`/Final-Web2-PHP-Dormitory-Management/public${url}`);
             return response.data;
         } catch (error) {
             console.error('DELETE Error:', error);

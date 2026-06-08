@@ -8,7 +8,7 @@
 <div class="container-fluid" style="padding: 24px;">
     <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
         <div>
-            <a href="/testfinal/public/admin/invoices" class="btn btn-secondary" style="margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px;">
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-secondary" style="margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px;">
                 ⬅️ Quay lại danh sách
             </a>
             <h1 style="margin: 0; font-size: 1.75rem; font-weight: 700; color: #fff;">Chi tiết Hóa đơn #<?= $invoice['id'] ?></h1>
@@ -16,7 +16,7 @@
         </div>
 
         <div style="display: flex; gap: 12px;">
-            <a href="/testfinal/public/api/invoices/<?= $invoice['id'] ?>/pdf" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/api/invoices/<?= $invoice['id'] ?>/pdf" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
                 🖨️ In / Tải PDF
             </a>
             <?php if ($invoice['status'] === 'unpaid' || $invoice['status'] === 'overdue'): ?>
@@ -262,7 +262,7 @@ function submitPayment(e) {
         _csrf_token: csrf
     };
     
-    fetch('/testfinal/public/api/invoices/<?= $invoice['id'] ?>/pay', {
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/invoices/<?= $invoice['id'] ?>/pay', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

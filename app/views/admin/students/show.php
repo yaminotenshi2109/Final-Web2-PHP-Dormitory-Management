@@ -29,7 +29,7 @@ $priorities = [
     <p class="page-subtitle">Hồ sơ cá nhân và lịch sử hoạt động của <?= $name ?></p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/students" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 

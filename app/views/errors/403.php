@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>403 — Không có quyền truy cập | KTX System</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
-    <link rel="stylesheet" href="/testfinal/public/assets/css/app.css">
+    <link rel="stylesheet" href="/Final-Web2-PHP-Dormitory-Management/public/assets/css/app.css">
     <style>
         body {
             min-height: 100vh;
@@ -152,7 +152,7 @@
                 <a href="javascript:history.back()" class="error-btn error-btn-outline">
                     ← Quay lại
                 </a>
-                <a href="/testfinal/public/" class="error-btn error-btn-primary">
+                <a href="/Final-Web2-PHP-Dormitory-Management/public/" class="error-btn error-btn-primary">
                     🏠 Trang chủ
                 </a>
             </div>

@@ -18,7 +18,7 @@ $to          = (int)($pagination['to']           ?? 0);
     <p class="page-subtitle">Quản lý và ghi chỉ số tiêu thụ điện nước của từng phòng theo tháng</p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/utilities/create" class="btn btn-primary">➕ Ghi chỉ số mới</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/create" class="btn btn-primary">➕ Ghi chỉ số mới</a>
   </div>
 </div>
 
@@ -65,7 +65,7 @@ $to          = (int)($pagination['to']           ?? 0);
               </td>
               <td>
                 <div style="display:flex;gap:6px;justify-content:center;">
-                  <a href="/testfinal/public/admin/utilities/<?= (int)$u['id'] ?>/edit" class="btn btn-ghost btn-sm">✏️ Sửa</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/<?= (int)$u['id'] ?>/edit" class="btn btn-ghost btn-sm">✏️ Sửa</a>
                 </div>
               </td>
             </tr>

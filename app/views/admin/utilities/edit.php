@@ -24,12 +24,12 @@ $notes     = htmlspecialchars($reading['notes'] ?? '');
     <p class="page-subtitle">Sửa chỉ số tiêu thụ Phòng <?= $room ?> (Tháng <?= $month ?>/<?= $year ?>)</p>
   </div>
   <div class="page-actions">
-    <a href="/testfinal/public/admin/utilities" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 
 <div class="card" style="max-width: 650px; margin: 0 auto;">
-  <form method="POST" action="/testfinal/public/admin/utilities/<?= $id ?>">
+  <form method="POST" action="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/<?= $id ?>">
     <input type="hidden" name="_method" value="PUT">
     <div class="card-body" style="display: flex; flex-direction: column; gap: 16px;">
       <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -99,7 +99,7 @@ $notes     = htmlspecialchars($reading['notes'] ?? '');
 
     </div>
     <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
-      <a href="/testfinal/public/admin/utilities" class="btn btn-ghost">Hủy</a>
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="btn btn-ghost">Hủy</a>
       <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
     </div>
   </form>

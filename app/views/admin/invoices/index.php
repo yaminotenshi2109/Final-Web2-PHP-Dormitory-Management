@@ -32,7 +32,7 @@ $currentYear = (int)date('Y');
         <p class="page-subtitle">Quản lý thu tiền phòng và các khoản phí dịch vụ</p>
     </div>
     <div class="page-actions">
-        <a href="/testfinal/public/admin/invoices/generate" class="btn btn-primary">
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/generate" class="btn btn-primary">
             ➕ Tạo hóa đơn
         </a>
     </div>
@@ -65,7 +65,7 @@ $currentYear = (int)date('Y');
 
 <!-- Filter Bar -->
 <div class="filter-bar">
-    <form method="GET" action="/testfinal/public/admin/invoices" class="filter-bar-form">
+    <form method="GET" action="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="filter-bar-form">
         <div class="filter-group">
             <select name="month" class="form-control">
                 <option value="">-- Tháng --</option>
@@ -96,7 +96,7 @@ $currentYear = (int)date('Y');
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Lọc</button>
-        <a href="/testfinal/public/admin/invoices" class="btn btn-outline">Đặt lại</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-outline">Đặt lại</a>
     </form>
 </div>
 
@@ -179,11 +179,11 @@ $currentYear = (int)date('Y');
                             </td>
                             <td style="text-align:center">
                                 <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-                                    <a href="/testfinal/public/admin/invoices/<?= (int)$inv['id'] ?>"
+                                    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= (int)$inv['id'] ?>"
                                        class="btn btn-ghost btn-sm">👁 Xem</a>
                                     <?php if (($inv['status'] ?? '') === 'unpaid' || ($inv['status'] ?? '') === 'overdue'): ?>
                                         <form method="POST"
-                                              action="/testfinal/public/admin/invoices/<?= (int)$inv['id'] ?>/mark-paid"
+                                              action="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= (int)$inv['id'] ?>/mark-paid"
                                               onsubmit="return confirm('Xác nhận đánh dấu hóa đơn #<?= (int)$inv['id'] ?> là đã thanh toán?')"
                                               style="display:inline">
                                             <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -202,7 +202,7 @@ $currentYear = (int)date('Y');
                 <div class="empty-state-icon">🧾</div>
                 <div class="empty-state-title">Không có hóa đơn nào</div>
                 <div class="empty-state-desc">Không tìm thấy hóa đơn phù hợp với bộ lọc hiện tại.</div>
-                <a href="/testfinal/public/admin/invoices/generate" class="btn btn-primary" style="margin-top:1rem">
+                <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/generate" class="btn btn-primary" style="margin-top:1rem">
                     ➕ Tạo hóa đơn mới
                 </a>
             </div>
@@ -223,14 +223,14 @@ $currentYear = (int)date('Y');
         ]));
         ?>
         <?php if ($cur > 1): ?>
-            <a href="/testfinal/public/admin/invoices?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
         <?php endif; ?>
         <?php for ($p = max(1, $cur - 2); $p <= min($total, $cur + 2); $p++): ?>
-            <a href="/testfinal/public/admin/invoices?page=<?= $p ?>&<?= $qs ?>"
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices?page=<?= $p ?>&<?= $qs ?>"
                class="page-link <?= $p === $cur ? 'active' : '' ?>"><?= $p ?></a>
         <?php endfor; ?>
         <?php if ($cur < $total): ?>
-            <a href="/testfinal/public/admin/invoices?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
         <?php endif; ?>
     </div>
 <?php endif; ?>
