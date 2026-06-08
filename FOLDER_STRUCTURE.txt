@@ -1,0 +1,201 @@
+// ============================================================
+// 📁 PROJECT FOLDER STRUCTURE - ORGANIZED FRONTEND
+// ============================================================
+
+C:\xampp\htdocs\testfinal/
+│
+├── 📁 public/
+│   ├── index.php                    ← Front Controller (Entry Point)
+│   ├── .htaccess                    ← URL Rewriting
+│   │
+│   └── 📁 assets/                   ← ALL Frontend Assets
+│       │
+│       ├── 📁 css/
+│       │   ├── 📁 vendor/           ← Third-party CSS
+│       │   │   ├── bootstrap.min.css
+│       │   │   ├── tabler-icons.min.css
+│       │   │   └── chart.min.css
+│       │   │
+│       │   ├── 📁 base/             ← Core Styling
+│       │   │   ├── variables.css         ← Color variables, fonts
+│       │   │   ├── reset.css             ← CSS Reset
+│       │   │   ├── typography.css        ← Font styles
+│       │   │   └── layout.css            ← Main layout
+│       │   │
+│       │   ├── 📁 components/       ← Component Styles
+│       │   │   ├── buttons.css
+│       │   │   ├── cards.css
+│       │   │   ├── forms.css
+│       │   │   ├── tables.css
+│       │   │   ├── alerts.css
+│       │   │   ├── modals.css
+│       │   │   ├── navbar.css
+│       │   │   ├── sidebar.css
+│       │   │   ├── pagination.css
+│       │   │   └── badges.css
+│       │   │
+│       │   ├── 📁 layouts/          ← Layout Styles
+│       │   │   ├── dashboard.css
+│       │   │   ├── admin.css
+│       │   │   ├── student.css
+│       │   │   └── auth.css
+│       │   │
+│       │   ├── 📁 pages/            ← Page-specific Styles
+│       │   │   ├── home.css
+│       │   │   ├── rooms.css
+│       │   │   ├── invoices.css
+│       │   │   ├── users.css
+│       │   │   └── violations.css
+│       │   │
+│       │   └── main.css             ← Import all styles
+│       │
+│       ├── 📁 js/
+│       │   ├── 📁 vendor/           ← Third-party JS
+│       │   │   ├── bootstrap.bundle.min.js
+│       │   │   ├── chart.min.js
+│       │   │   ├── axios.min.js
+│       │   │   └── moment.min.js
+│       │   │
+│       │   ├── 📁 lib/              ← Utility Functions
+│       │   │   ├── api.js               ← API calls
+│       │   │   ├── utils.js             ← Helper functions
+│       │   │   ├── validation.js        ← Form validation
+│       │   │   ├── notifications.js     ← Toast/alerts
+│       │   │   └── storage.js           ← LocalStorage helpers
+│       │   │
+│       │   ├── 📁 components/       ← Reusable Components
+│       │   │   ├── form.js
+│       │   │   ├── table.js
+│       │   │   ├── modal.js
+│       │   │   ├── pagination.js
+│       │   │   ├── chart.js
+│       │   │   └── dropdown.js
+│       │   │
+│       │   ├── 📁 pages/            ← Page Scripts
+│       │   │   ├── dashboard.js
+│       │   │   ├── rooms.js
+│       │   │   ├── invoices.js
+│       │   │   ├── users.js
+│       │   │   ├── violations.js
+│       │   │   └── auth.js
+│       │   │
+│       │   └── main.js              ← Init & Global
+│       │
+│       ├── 📁 images/
+│       │   ├── 📁 logo/
+│       │   ├── 📁 icons/
+│       │   ├── 📁 backgrounds/
+│       │   └── 📁 illustrations/
+│       │
+│       └── 📁 fonts/
+│           ├── roboto/
+│           └── inter/
+│
+├── 📁 app/
+│   ├── 📁 views/                    ← ALL View Templates
+│   │   ├── 📁 layouts/
+│   │   │   ├── main.php             ← Base layout
+│   │   │   ├── admin.php            ← Admin layout
+│   │   │   ├── student.php          ← Student layout
+│   │   │   ├── auth.php             ← Auth layout
+│   │   │   └── blank.php            ← Blank layout
+│   │   │
+│   │   ├── 📁 components/           ← Reusable Components
+│   │   │   ├── navbar.php
+│   │   │   ├── sidebar.php
+│   │   │   ├── footer.php
+│   │   │   ├── breadcrumb.php
+│   │   │   ├── alert.php
+│   │   │   ├── form/
+│   │   │   │   ├── input.php
+│   │   │   │   ├── select.php
+│   │   │   │   ├── checkbox.php
+│   │   │   │   ├── radio.php
+│   │   │   │   ├── textarea.php
+│   │   │   │   └── file.php
+│   │   │   └── table/
+│   │   │       ├── header.php
+│   │   │       ├── row.php
+│   │   │       ├── pagination.php
+│   │   │       └── empty.php
+│   │   │
+│   │   ├── 📁 admin/                ← Admin Pages
+│   │   │   ├── dashboard.php
+│   │   │   ├── buildings/
+│   │   │   │   ├── index.php
+│   │   │   │   ├── create.php
+│   │   │   │   ├── edit.php
+│   │   │   │   └── show.php
+│   │   │   ├── rooms/
+│   │   │   │   ├── index.php
+│   │   │   │   ├── create.php
+│   │   │   │   ├── edit.php
+│   │   │   │   └── show.php
+│   │   │   ├── students/
+│   │   │   ├── invoices/
+│   │   │   ├── violations/
+│   │   │   ├── users/
+│   │   │   └── maintenance/
+│       │   │
+│   │   ├── 📁 student/               ← Student Pages
+│   │   │   ├── dashboard.php
+│   │   │   ├── invoices.php
+│   │   │   ├── contracts.php
+│   │   │   ├── registrations.php
+│   │   │   ├── maintenance.php
+│   │   │   ├── violations.php
+│   │   │   └── profile.php
+│   │   │
+│   │   ├── 📁 auth/                  ← Auth Pages
+│   │   │   ├── login.php
+│   │   │   ├── register.php
+│   │   │   ├── forgot-password.php
+│   │   │   └── reset-password.php
+│   │   │
+│   │   └── 📁 errors/                ← Error Pages
+│   │       ├── 404.php
+│   │       ├── 500.php
+│   │       └── 403.php
+│   │
+│   ├── 📁 core/
+│   │   ├── Database.php
+│   │   ├── BaseController.php
+│   │   ├── BaseModel.php
+│   │   ├── Router.php
+│   │   └── Validator.php
+│   │
+│   ├── 📁 models/
+│   │   └── Models.php
+│   │
+│   ├── 📁 controllers/
+│   │   ├── AdminController.php
+│   │   ├── StudentController.php
+│   │   ├── AuthController.php
+│   │   └── ... (other controllers)
+│   │
+│   ├── 📁 services/
+│   │   └── ... (business logic)
+│   │
+│   └── 📁 helpers/                   ← Helper Functions
+│       ├── ViewHelper.php             ← Template helpers
+│       ├── FormHelper.php             ← Form builders
+│       ├── DateHelper.php             ← Date formatting
+│       └── CurrencyHelper.php         ← Currency formatting
+│
+├── 📁 config/
+│   └── config.php
+│
+├── 📁 middleware/
+│   └── Middleware.php
+│
+├── 📁 routes/
+│   └── web.php
+│
+└── 📁 storage/                        ← Upload files
+    ├── 📁 uploads/
+    ├── 📁 invoices/                   ← Generated PDFs
+    └── 📁 logs/
+
+═══════════════════════════════════════════════════════════════════
+TOTAL: ~50 organized folders for professional structure
+═══════════════════════════════════════════════════════════════════
