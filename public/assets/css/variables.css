@@ -1,0 +1,46 @@
+/* variables.css */
+:root {
+  /* Light theme */
+  --color-primary: hsl(260, 80%, 60%);
+  --color-secondary: hsl(210, 70%, 55%);
+  --color-bg: hsl(0, 0%, 98%);
+  --color-card-bg: hsl(0, 0%, 100%);
+  --color-text: hsl(210, 10%, 15%);
+  --color-muted: hsl(210, 10%, 45%);
+  --color-border: hsl(210, 10%, 85%);
+  --gradient-start: hsl(260, 80%, 65%);
+  --gradient-end: hsl(210, 70%, 55%);
+  --glass-bg: rgba(255, 255, 255, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.3);
+
+  /* Legacy/View aliases */
+  --page-bg: var(--color-bg);
+  --card-bg: var(--color-card-bg);
+  --txt-primary: var(--color-text);
+  --txt-secondary: var(--color-muted);
+  --txt-muted: var(--color-muted);
+  --border: var(--color-border);
+  --brand: var(--color-primary);
+  --brand-glow: rgba(139, 92, 246, 0.2);
+}
+[data-theme='dark'] {
+  --color-primary: hsl(260, 80%, 70%);
+  --color-secondary: hsl(210, 70%, 65%);
+  --color-bg: hsl(210, 15%, 10%);
+  --color-card-bg: hsl(210, 15%, 14%);
+  --color-text: hsl(0, 0%, 95%);
+  --color-muted: hsl(210, 10%, 60%);
+  --color-border: hsl(210, 10%, 30%);
+  --glass-bg: rgba(0, 0, 0, 0.2);
+  --glass-border: rgba(255, 255, 255, 0.2);
+
+  /* Legacy/View aliases */
+  --page-bg: var(--color-bg);
+  --card-bg: var(--color-card-bg);
+  --txt-primary: var(--color-text);
+  --txt-secondary: var(--color-muted);
+  --txt-muted: var(--color-muted);
+  --border: var(--color-border);
+  --brand: var(--color-primary);
+  --brand-glow: rgba(167, 139, 250, 0.2);
+}

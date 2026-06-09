@@ -1,105 +1,58 @@
 <?php
 /**
- * app/views/admin/utilities/index.php
- * Admin — Danh sách chỉ số điện nước
- * Variables: $title, $readings[], $pagination[]
+ * admin/utilities/index.php — Chỉ số điện nước
+ * Variables: $title, $readings[], $stats, $filters
  */
-
-$currentPage = (int)($pagination['current_page'] ?? 1);
-$lastPage    = (int)($pagination['last_page']    ?? 1);
-$total       = (int)($pagination['total']        ?? 0);
-$from        = (int)($pagination['from']         ?? 0);
-$to          = (int)($pagination['to']           ?? 0);
 ?>
 
 <div class="page-header">
-  <div>
-    <h1 class="page-title">⚡ Quản lý điện nước</h1>
-    <p class="page-subtitle">Quản lý và ghi chỉ số tiêu thụ điện nước của từng phòng theo tháng</p>
-  </div>
+  <div><h1 class="page-title">⚡ Chỉ số Điện Nước</h1><p class="page-subtitle">Ghi nhận và theo dõi chỉ số điện, nước theo phòng</p></div>
   <div class="page-actions">
-    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/create" class="btn btn-primary">➕ Ghi chỉ số mới</a>
+    <a href="<?= getDynamicUrl('/admin/utilities/create') ?>" class="btn btn-primary">+ Nhập chỉ số mới</a>
   </div>
 </div>
 
+<div class="stat-grid mb-24">
+  <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7"><div class="stat-icon">⚡</div><div><div class="stat-value"><?= number_format($stats['total_readings'] ?? 0) ?></div><div class="stat-label">Tổng bản ghi</div></div></div>
+  <div class="stat-card" style="--stat-color:#3b82f6;--stat-icon-bg:#eff6ff"><div class="stat-icon">💧</div><div><div class="stat-value"><?= number_format($stats['avg_water'] ?? 0, 1) ?> m³</div><div class="stat-label">TB nước/phòng</div></div></div>
+  <div class="stat-card" style="--stat-color:#ef4444;--stat-icon-bg:#fee2e2"><div class="stat-icon">🔌</div><div><div class="stat-value"><?= number_format($stats['avg_elec'] ?? 0, 1) ?> kWh</div><div class="stat-label">TB điện/phòng</div></div></div>
+</div>
+
 <div class="card">
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Phòng</th>
-          <th>Tháng/Năm</th>
-          <th>Chỉ số Điện (đầu/cuối)</th>
-          <th>Tiêu thụ Điện (kWh)</th>
-          <th>Chỉ số Nước (đầu/cuối)</th>
-          <th>Tiêu thụ Nước (m³)</th>
-          <th>Ghi bởi</th>
-          <th style="width:120px;text-align:center;">Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if (!empty($readings)): ?>
-          <?php foreach ($readings as $u): ?>
-            <?php 
-              $elecUsed  = (float)$u['elec_curr'] - (float)$u['elec_prev'];
-              $waterUsed = (float)$u['water_curr'] - (float)$u['water_prev'];
-            ?>
-            <tr>
-              <td><strong>🚪 Tòa <?= htmlspecialchars($u['building_name']) ?> - Phòng <?= htmlspecialchars($u['room_number']) ?></strong></td>
-              <td><strong>Tháng <?= (int)$u['month'] ?>/<?= (int)$u['year'] ?></strong></td>
-              <td style="color:var(--txt-secondary);">
-                <?= number_format((float)$u['elec_prev'], 1) ?> – <strong><?= number_format((float)$u['elec_curr'], 1) ?></strong>
-              </td>
-              <td>
-                <span class="badge badge-info">⚡ <?= number_format($elecUsed, 1) ?> kWh</span>
-              </td>
-              <td style="color:var(--txt-secondary);">
-                <?= number_format((float)$u['water_prev'], 1) ?> – <strong><?= number_format((float)$u['water_curr'], 1) ?></strong>
-              </td>
-              <td>
-                <span class="badge badge-purple">💧 <?= number_format($waterUsed, 1) ?> m³</span>
-              </td>
-              <td>
-                <div style="font-size:12.5px;"><?= htmlspecialchars($u['recorder_username']) ?></div>
-                <div class="sub" style="font-size:11px;"><?= date('d/m/Y', strtotime($u['recorded_at'])) ?></div>
-              </td>
-              <td>
-                <div style="display:flex;gap:6px;justify-content:center;">
-                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/<?= (int)$u['id'] ?>/edit" class="btn btn-ghost btn-sm">✏️ Sửa</a>
-                </div>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <tr>
-            <td colspan="8">
-              <div class="empty-state">
-                <div class="empty-icon">⚡</div>
-                <div class="empty-title">Chưa có chỉ số điện nước nào</div>
-                <div class="empty-msg">Bấm nút "Ghi chỉ số mới" để bắt đầu nhập chỉ số tiêu thụ cho các phòng.</div>
-              </div>
-            </td>
-          </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
+  <div class="filter-bar">
+    <select class="form-control" style="width:auto;min-width:120px">
+      <option value="">Tháng</option>
+      <?php for ($m = 1; $m <= 12; $m++): ?><option value="<?= $m ?>" <?= ($filters['month'] ?? '') == $m ? 'selected' : '' ?>>Tháng <?= $m ?></option><?php endfor; ?>
+    </select>
+    <select class="form-control" style="width:auto;min-width:100px">
+      <option value="">Năm</option>
+      <?php for ($y = date('Y'); $y >= 2024; $y--): ?><option value="<?= $y ?>" <?= ($filters['year'] ?? '') == $y ? 'selected' : '' ?>><?= $y ?></option><?php endfor; ?>
+    </select>
   </div>
 
-  <!-- Pagination -->
-  <?php if ($lastPage > 1): ?>
-    <div class="card-footer" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-      <span class="pagination-info">Trang <?= $currentPage ?> / <?= $lastPage ?></span>
-      <div class="pagination" style="margin-left:auto;">
-        <?php if ($currentPage > 1): ?>
-          <a href="?page=<?= $currentPage - 1 ?>" class="page-link">‹</a>
-        <?php endif; ?>
-        <?php for ($p = 1; $p <= $lastPage; $p++): ?>
-          <a href="?page=<?= $p ?>" class="page-link <?= $p === $currentPage ? 'active' : '' ?>"><?= $p ?></a>
-        <?php endfor; ?>
-        <?php if ($currentPage < $lastPage): ?>
-          <a href="?page=<?= $currentPage + 1 ?>" class="page-link">›</a>
-        <?php endif; ?>
-      </div>
+  <?php if (!empty($readings)): ?>
+    <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
+      <table>
+        <thead><tr><th>Phòng</th><th>Tháng/Năm</th><th>Điện đầu kỳ</th><th>Điện cuối kỳ</th><th>Tiêu thụ (kWh)</th><th>Nước đầu kỳ</th><th>Nước cuối kỳ</th><th>Tiêu thụ (m³)</th><th>Người ghi</th></tr></thead>
+        <tbody>
+          <?php foreach ($readings as $rd): ?>
+            <?php $elecUsage = ($rd['elec_curr'] ?? 0) - ($rd['elec_prev'] ?? 0); $waterUsage = ($rd['water_curr'] ?? 0) - ($rd['water_prev'] ?? 0); ?>
+            <tr>
+              <td style="font-weight:700"><?= htmlspecialchars($rd['room_number'] ?? '') ?><div class="sub"><?= htmlspecialchars($rd['building_name'] ?? '') ?></div></td>
+              <td><?= ($rd['month'] ?? '') . '/' . ($rd['year'] ?? '') ?></td>
+              <td style="color:var(--txt-muted)"><?= number_format($rd['elec_prev'] ?? 0, 1) ?></td>
+              <td style="font-weight:600"><?= number_format($rd['elec_curr'] ?? 0, 1) ?></td>
+              <td style="font-weight:700;color:var(--warning)"><?= number_format($elecUsage, 1) ?></td>
+              <td style="color:var(--txt-muted)"><?= number_format($rd['water_prev'] ?? 0, 1) ?></td>
+              <td style="font-weight:600"><?= number_format($rd['water_curr'] ?? 0, 1) ?></td>
+              <td style="font-weight:700;color:var(--info)"><?= number_format($waterUsage, 1) ?></td>
+              <td style="font-size:12px;color:var(--txt-muted)"><?= htmlspecialchars($rd['recorder_name'] ?? '') ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
+  <?php else: ?>
+    <div class="empty-state"><div class="empty-icon">⚡</div><div class="empty-title">Chưa có dữ liệu</div><div class="empty-msg">Nhập chỉ số điện nước để bắt đầu theo dõi.</div></div>
   <?php endif; ?>
 </div>

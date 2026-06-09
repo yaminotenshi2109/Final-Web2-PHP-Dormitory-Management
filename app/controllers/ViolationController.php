@@ -94,8 +94,19 @@ class ViolationController extends BaseController
         }
 
         if ($severity) {
-            $where .= ' AND v.severity = ?';
-            $args[] = $severity;
+            $severityTypes = [];
+            foreach (self::VIOLATION_TYPES as $typeKey => $info) {
+                if ((int)$info['severity'] === (int)$severity) {
+                    $severityTypes[] = $typeKey;
+                }
+            }
+            if (!empty($severityTypes)) {
+                $placeholders = implode(',', array_fill(0, count($severityTypes), '?'));
+                $where .= " AND v.violation_type IN ({$placeholders})";
+                $args = array_merge($args, $severityTypes);
+            } else {
+                $where .= " AND 1=0";
+            }
         }
 
         if ($search) {
@@ -106,14 +117,13 @@ class ViolationController extends BaseController
         }
 
         $result = $this->db->paginate(
-            "SELECT v.*, s.full_name, s.student_code, u.username,
-                    c.id AS contract_id
+            "SELECT v.*, s.full_name AS student_name, s.student_code, u.username
              FROM violation_records v
              JOIN students s ON s.id = v.student_id
              JOIN users u ON u.id = s.user_id
              LEFT JOIN contracts c ON c.student_id = s.id AND c.status = 'active'
              WHERE {$where}
-             ORDER BY v.created_at DESC",
+             ORDER BY v.recorded_at DESC",
             $args,
             $page,
             $perPage
@@ -143,7 +153,7 @@ class ViolationController extends BaseController
         $id = (int)$params['id'];
 
         $violation = $this->db->selectOne(
-            "SELECT v.*, s.full_name, s.student_code, u.username
+            "SELECT v.*, s.full_name AS student_name, s.student_code, u.username
              FROM violation_records v
              JOIN students s ON s.id = v.student_id
              JOIN users u ON u.id = s.user_id
@@ -209,11 +219,11 @@ class ViolationController extends BaseController
             'student_id',
             'violation_type',
             'description',
-            'location',
-            'witnessed_by',
-            'evidence',
+            'penalty_points',
             'override_points',
         ]);
+
+        $points = !empty($data['penalty_points']) ? (int)$data['penalty_points'] : (!empty($data['override_points']) ? (int)$data['override_points'] : null);
 
         // Validation
         $errors = [];
@@ -232,7 +242,12 @@ class ViolationController extends BaseController
         }
 
         if (!empty($errors)) {
-            $this->jsonError('Dữ liệu không hợp lệ', 422, $errors);
+            if ($this->isAjax()) {
+                $this->jsonError('Dữ liệu không hợp lệ', 422, $errors);
+            } else {
+                $this->withOldInput($data);
+                $this->withErrors($errors, '/admin/violations/create');
+            }
         }
 
         try {
@@ -240,25 +255,41 @@ class ViolationController extends BaseController
                 (int)$data['student_id'],
                 $data['violation_type'],
                 $data['description'],
-                $data['location'] ?? '',
-                $data['witnessed_by'] ?? '',
-                $data['evidence'] ?? '',
-                !empty($data['override_points']) ? (int)$data['override_points'] : null,
+                '',
+                '',
+                '',
+                $points,
                 (int)$this->auth('id')  // recorded_by admin ID
             );
 
             if (!$result['success']) {
-                $this->jsonError($result['message'], 422);
+                if ($this->isAjax()) {
+                    $this->jsonError($result['message'], 422);
+                } else {
+                    $this->flash('error', $result['message']);
+                    $this->withOldInput($data);
+                    $this->redirect('/admin/violations/create');
+                }
             }
 
-            $this->jsonOk(
-                $result['data'],
-                'Ghi nhận vi phạm thành công',
-                201
-            );
+            if ($this->isAjax()) {
+                $this->jsonOk(
+                    $result['data'],
+                    'Ghi nhận vi phạm thành công',
+                    201
+                );
+            } else {
+                $this->flash('success', 'Ghi nhận vi phạm thành công');
+                $this->redirect('/admin/violations');
+            }
         } catch (\Throwable $e) {
             error_log($e->getMessage());
-            $this->jsonError('Lỗi: ' . $e->getMessage(), 500);
+            if ($this->isAjax()) {
+                $this->jsonError('Lỗi: ' . $e->getMessage(), 500);
+            } else {
+                $this->flash('error', 'Lỗi: ' . $e->getMessage());
+                $this->back();
+            }
         }
     }
 
@@ -365,15 +396,13 @@ class ViolationController extends BaseController
                 'violation_records',
                 [
                     'status'        => 'dismissed',
-                    'dismissed_at'  => date('Y-m-d H:i:s'),
-                    'dismissed_by'  => $this->auth('id'),
                 ],
                 'id = ?',
                 [$id]
             );
 
             // Re-evaluate student status
-            $this->violationService->evaluateStudentStatus($violation['student_id']);
+            $this->violationService->evaluateStudentStatus((int)$violation['student_id']);
 
             $this->jsonOk(null, 'Hủy bỏ vi phạm thành công');
         } catch (\Throwable $e) {
@@ -596,8 +625,8 @@ class ViolationController extends BaseController
      */
 
     /**
-     * GET /api/student/violations
-     * Sinh viên xem các vi phạm của mình
+     * GET /student/violations
+     * Sinh viên xem các vi phạm của mình (render HTML view)
      */
     public function studentViolations(array $params = []): void
     {
@@ -610,32 +639,87 @@ class ViolationController extends BaseController
         );
 
         if (!$student) {
-            $this->jsonError('Không tìm thấy hồ sơ sinh viên', 404);
+            $this->abort(404, 'Không tìm thấy hồ sơ sinh viên');
         }
 
         $violations = $this->db->select(
             "SELECT * FROM violation_records
              WHERE student_id = ?
-             ORDER BY created_at DESC",
+             ORDER BY recorded_at DESC",
             [$student['id']]
         );
 
         // Calculate totals
         $totalPoints = array_sum(array_column($violations, 'penalty_points'));
-        $activePoints = array_sum(
-            array_map(
-                fn($v) => $v['status'] === 'active' ? $v['penalty_points'] : 0,
-                $violations
-            )
+
+        $this->view('student/violations/index', [
+            'title'       => 'Vi phạm của tôi',
+            'violations'  => $violations,
+            'totalPoints' => $totalPoints,
+            'types'       => self::VIOLATION_TYPES,
+        ]);
+    }
+
+    /**
+     * GET /admin/violations/create
+     * Hiển thị form ghi nhận vi phạm
+     */
+    public function create(array $params = []): void
+    {
+        $this->requireAdmin();
+
+        $students = $this->db->select(
+            "SELECT s.id, s.full_name, s.student_code
+             FROM students s
+             ORDER BY s.full_name"
         );
 
-        $this->jsonOk([
-            'violations'   => $violations,
-            'total_points' => $totalPoints,
-            'active_points' => $activePoints,
-            'threshold'    => VIOLATION_THRESHOLD,
-            'is_banned'    => $activePoints >= VIOLATION_THRESHOLD,
-        ], 'Lấy danh sách vi phạm');
+        $this->view('admin/violations/create', [
+            'title'    => 'Ghi nhận vi phạm',
+            'students' => $students,
+        ]);
+    }
+
+    /**
+     * POST /admin/violations/:id/dismiss
+     * Bác bỏ vi phạm (Admin)
+     */
+    public function dismiss(array $params = []): void
+    {
+        $this->requireAdmin();
+        $this->verifyCsrf();
+
+        $id = (int)$params['id'];
+
+        $violation = $this->db->selectOne(
+            "SELECT * FROM violation_records WHERE id = ?",
+            [$id]
+        );
+
+        if (!$violation) {
+            $this->abort(404, 'Vi phạm không tồn tại');
+        }
+
+        try {
+            $this->db->update(
+                'violation_records',
+                [
+                    'status' => 'dismissed',
+                ],
+                'id = ?',
+                [$id]
+            );
+
+            // Re-evaluate student status
+            $this->violationService->evaluateStudentStatus((int)$violation['student_id']);
+
+            $this->flash('success', 'Bác bỏ vi phạm thành công');
+            $this->redirect('/admin/violations');
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+            $this->flash('error', 'Lỗi: ' . $e->getMessage());
+            $this->back();
+        }
     }
 
     /**
@@ -669,13 +753,22 @@ class ViolationController extends BaseController
                  ORDER BY count DESC"
             ),
 
-            // Count by severity
-            'by_severity' => $this->db->select(
-                "SELECT severity, COUNT(*) as count
-                 FROM violation_records
-                 WHERE status = 'active'
-                 GROUP BY severity"
-            ),
+            // Count by severity (grouped in PHP because severity is not a column)
+            'by_severity' => (function() {
+                $rows = $this->db->select("SELECT violation_type, COUNT(*) as count FROM violation_records WHERE status = 'active' GROUP BY violation_type");
+                $sevCounts = [self::SEVERITY_LIGHT => 0, self::SEVERITY_MEDIUM => 0, self::SEVERITY_HEAVY => 0];
+                foreach ($rows as $row) {
+                    $type = $row['violation_type'];
+                    $count = (int)$row['count'];
+                    $sev = self::VIOLATION_TYPES[$type]['severity'] ?? self::SEVERITY_LIGHT;
+                    $sevCounts[$sev] += $count;
+                }
+                $res = [];
+                foreach ($sevCounts as $sev => $count) {
+                    $res[] = ['severity' => $sev, 'count' => $count];
+                }
+                return $res;
+            })(),
 
             // Students with violations
             'high_risk_students' => $this->db->select(
@@ -692,10 +785,10 @@ class ViolationController extends BaseController
 
             // Monthly trend
             'monthly_trend' => $this->db->select(
-                "SELECT DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as count
+                "SELECT DATE_FORMAT(recorded_at, '%Y-%m') as month, COUNT(*) as count
                  FROM violation_records
-                 WHERE created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
-                 GROUP BY DATE_FORMAT(created_at, '%Y-%m')
+                 WHERE recorded_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+                 GROUP BY DATE_FORMAT(recorded_at, '%Y-%m')
                  ORDER BY month"
             ),
 
@@ -741,7 +834,7 @@ class ViolationController extends BaseController
             "SELECT v.*, s.full_name, s.student_code
              FROM violation_records v
              JOIN students s ON s.id = v.student_id
-             ORDER BY v.created_at DESC"
+             ORDER BY v.recorded_at DESC"
         );
 
         if ($format === 'csv') {
@@ -759,7 +852,7 @@ class ViolationController extends BaseController
                     $v['violation_type'],
                     $v['penalty_points'],
                     $v['status'],
-                    $v['created_at'],
+                    $v['recorded_at'],
                 ]);
             }
 

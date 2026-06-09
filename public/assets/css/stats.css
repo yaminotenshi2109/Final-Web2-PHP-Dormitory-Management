@@ -1,0 +1,11 @@
+/* stats.css */
+.stat-value {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+}
+.stat-label {
+  font-size: 0.8125rem;
+  color: rgba(255,255,255,0.5);
+  margin-top: 0.125rem;
+}

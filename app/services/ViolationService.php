@@ -120,31 +120,36 @@ class ViolationService
         $severity = self::VIOLATION_CATALOG[$violationType]['severity'];
 
         // ─── Step 3: Insert violation ──────────────────────────
+        // Every violation must belong to a contract. Let's find student's active contract.
+        $contract = $this->db->selectOne(
+            "SELECT id FROM contracts WHERE student_id = ? AND status IN ('active', 'under_review', 'suspended') ORDER BY created_at DESC LIMIT 1",
+            [$studentId]
+        );
+
+        if (!$contract) {
+            return $this->error('Sinh viên không có hợp đồng thuê phòng hoạt động.');
+        }
+        $contractId = (int)$contract['id'];
+
         try {
             $violationId = $this->db->transaction(function (Database $db) use (
                 $studentId,
+                $contractId,
                 $violationType,
                 $description,
-                $location,
-                $witnessedBy,
-                $evidence,
                 $penaltyPoints,
-                $severity,
                 $recordedBy
             ) {
                 // Insert violation record
                 $id = $db->insert('violation_records', [
                     'student_id'      => $studentId,
+                    'contract_id'     => $contractId,
                     'violation_type'  => $violationType,
                     'description'     => $description,
-                    'location'        => $location,
-                    'witnessed_by'    => $witnessedBy,
-                    'evidence'        => $evidence,
                     'penalty_points'  => $penaltyPoints,
-                    'severity'        => $severity,
                     'status'          => 'active',
                     'recorded_by'     => $recordedBy,
-                    'created_at'      => date('Y-m-d H:i:s'),
+                    'recorded_at'     => date('Y-m-d H:i:s'),
                 ]);
 
                 // Step 4: Evaluate student status

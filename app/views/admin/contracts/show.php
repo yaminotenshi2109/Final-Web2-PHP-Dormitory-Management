@@ -1,117 +1,62 @@
 <?php
 /**
- * app/views/admin/contracts/show.php
- * Admin — Chi tiết hợp đồng
- * Variables: $title, $contract
+ * admin/contracts/show.php — Chi tiết hợp đồng
+ * Variables: $title, $contract, $_csrfToken
  */
-
-$studentName = htmlspecialchars($contract['student_name']);
-$studentCode = htmlspecialchars($contract['student_code']);
-$phone       = htmlspecialchars($contract['phone']);
-$roomNumber  = htmlspecialchars($contract['room_number']);
-$roomType    = htmlspecialchars($contract['room_type']);
-$building    = htmlspecialchars($contract['building_name']);
-$startDate   = date('d/m/Y', strtotime($contract['start_date']));
-$endDate     = date('d/m/Y', strtotime($contract['end_date']));
-$monthlyFee  = number_format((float)$contract['monthly_fee']);
-$status      = $contract['status'] ?? 'active';
-
-$badge = match($status) {
-    'active'    => ['badge-success', 'Đang hoạt động'],
-    'expired'   => ['badge-neutral', 'Hết hạn'],
-    'cancelled' => ['badge-danger',  'Đã hủy'],
-    default     => ['badge-neutral', $status]
-};
+$c = $contract ?? [];
+$statusMap = ['active'=>['badge-success','✅ Hiệu lực'],'expired'=>['badge-neutral','⏰ Hết hạn'],'terminated'=>['badge-danger','🚫 Chấm dứt'],'under_review'=>['badge-warning','⚠️ Xem xét']];
+$st = $c['status'] ?? 'active'; [$bClass, $bLabel] = $statusMap[$st] ?? ['badge-neutral', $st];
 ?>
 
 <div class="page-header">
-  <div>
-    <h1 class="page-title">📄 Chi tiết hợp đồng</h1>
-    <p class="page-subtitle">Xem chi tiết hợp đồng thuê phòng của sinh viên <?= $studentName ?></p>
-  </div>
+  <div><h1 class="page-title">📄 Hợp đồng #<?= $c['id'] ?? '' ?></h1><p class="page-subtitle">Chi tiết hợp đồng thuê phòng</p></div>
   <div class="page-actions">
-    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+    <a href="<?= getDynamicUrl('/admin/contracts') ?>" class="btn btn-ghost">← Quay lại</a>
+    <?php if ($st === 'active'): ?>
+      <form method="POST" action="<?= getDynamicUrl('/admin/contracts/' . ($c['id'] ?? '') . '/terminate') ?>" style="display:inline"><input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>"><button type="submit" class="btn btn-danger" onclick="return confirm('Chấm dứt hợp đồng?')">🚫 Chấm dứt</button></form>
+    <?php endif; ?>
   </div>
 </div>
 
-<div class="card" style="max-width: 700px; margin: 0 auto;">
-  <div class="card-header">
-    <h3 class="card-title">📝 Thông tin hợp đồng số #<?= (int)$contract['id'] ?></h3>
-    <span class="badge <?= $badge[0] ?>" style="margin-left:auto;"><?= $badge[1] ?></span>
-  </div>
-  
-  <div class="card-body" style="display:flex;flex-direction:column;gap:20px;">
-    <!-- 2 columns -->
-    <div class="grid-2" style="gap:24px;">
-      <!-- Column 1: Student info -->
-      <div>
-        <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;">🎓 Bên thuê (Sinh viên)</h4>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
-          <div>Họ và tên: <strong><?= $studentName ?></strong></div>
-          <div>Mã số sinh viên: <strong><?= $studentCode ?></strong></div>
-          <div>Số điện thoại: <strong><?= $phone ?></strong></div>
-        </div>
-      </div>
-      
-      <!-- Column 2: Room info -->
-      <div>
-        <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;">🏠 Đối tượng thuê (Phòng ở)</h4>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
-          <div>Tòa nhà: <strong>Tòa <?= $building ?></strong></div>
-          <div>Số phòng: <strong>Phòng <?= $roomNumber ?></strong></div>
-          <div>Loại phòng: <strong><?= htmlspecialchars($roomType) ?></strong></div>
-        </div>
-      </div>
-    </div>
-    
-    <hr style="border:0;border-top:1px solid var(--border);margin:10px 0;">
-    
-    <!-- Terms & Pricing -->
-    <div>
-      <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;">💸 Điều khoản & Đơn giá</h4>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:14px;">
-        <div style="background:var(--bg-neutral);padding:14px;border-radius:var(--radius-sm);">
-          <div style="font-size:11px;color:var(--txt-muted);font-weight:600;margin-bottom:4px;text-transform:uppercase;">Giá thuê hàng tháng</div>
-          <strong style="font-size:18px;color:var(--txt-primary);"><?= $monthlyFee ?> ₫</strong>
-        </div>
-        <div style="background:var(--bg-neutral);padding:14px;border-radius:var(--radius-sm);">
-          <div style="font-size:11px;color:var(--txt-muted);font-weight:600;margin-bottom:4px;text-transform:uppercase;">Thời hạn hợp đồng</div>
-          <strong style="font-size:14px;color:var(--txt-primary);"><?= $startDate ?> – <?= $endDate ?></strong>
-        </div>
-      </div>
+<div class="grid-2 mb-24">
+  <div class="card">
+    <div class="card-header"><div class="card-title">Thông tin hợp đồng</div></div>
+    <div class="card-body">
+      <table style="width:100%;font-size:14px">
+        <tr><td style="padding:10px 0;color:var(--txt-muted);width:130px">Trạng thái</td><td><span class="badge <?= $bClass ?>"><?= $bLabel ?></span></td></tr>
+        <tr><td style="padding:10px 0;color:var(--txt-muted)">Phòng</td><td style="font-weight:700;font-size:16px"><?= htmlspecialchars($c['room_number'] ?? '') ?> — <?= htmlspecialchars($c['building_name'] ?? '') ?></td></tr>
+        <tr><td style="padding:10px 0;color:var(--txt-muted)">Ngày bắt đầu</td><td style="font-weight:600"><?= !empty($c['start_date']) ? date('d/m/Y', strtotime($c['start_date'])) : '—' ?></td></tr>
+        <tr><td style="padding:10px 0;color:var(--txt-muted)">Ngày kết thúc</td><td style="font-weight:600"><?= !empty($c['end_date']) ? date('d/m/Y', strtotime($c['end_date'])) : '—' ?></td></tr>
+        <tr><td style="padding:10px 0;color:var(--txt-muted)">Phí/tháng</td><td style="font-weight:800;font-size:18px;color:var(--brand)"><?= number_format($c['monthly_fee'] ?? 0, 0, ',', '.') ?> VND</td></tr>
+        <tr><td style="padding:10px 0;color:var(--txt-muted)">Đặt cọc</td><td style="font-weight:600;color:var(--warning)"><?= number_format($c['deposit_amount'] ?? 0, 0, ',', '.') ?> VND</td></tr>
+      </table>
     </div>
   </div>
-  
-  <?php if ($status === 'active'): ?>
-    <div class="card-footer" style="display:flex;justify-content:flex-end;gap:10px;">
-      <button class="btn btn-danger" onclick="terminateContract(<?= (int)$contract['id'] ?>, '<?= $studentName ?>')">🛑 Chấm dứt hợp đồng</button>
-    </div>
-  <?php endif; ?>
-</div>
 
-<script>
-function terminateContract(id, name) {
-    if (!confirm('Bạn có chắc chắn muốn chấm dứt hợp đồng của sinh viên "' + name + '"?\nHành động này sẽ giải phóng chỗ trống trong phòng!')) return;
-    
-    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    
-    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/contracts/' + id + '/terminate', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-Token': token
-        }
-    })
-    .then(r => r.json())
-    .then(json => {
-        if (json.success) {
-            alert('✅ Đã chấm dứt hợp đồng thành công!');
-            window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/contracts';
-        } else {
-            alert('❌ Lỗi: ' + json.message);
-        }
-    })
-    .catch(err => alert('Lỗi kết nối: ' + err.message));
-}
-</script>
+  <div class="card">
+    <div class="card-header"><div class="card-title">Sinh viên</div></div>
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
+        <div class="avatar avatar-lg"><?= mb_strtoupper(mb_substr($c['student_name'] ?? 'S', 0, 1)) ?></div>
+        <div>
+          <div style="font-weight:700;font-size:16px"><?= htmlspecialchars($c['student_name'] ?? '') ?></div>
+          <div style="color:var(--txt-muted);font-size:13px"><?= htmlspecialchars($c['student_code'] ?? '') ?></div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">📋 Timeline</div>
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-time">Bắt đầu</div><div class="timeline-content"><?= !empty($c['start_date']) ? date('d/m/Y', strtotime($c['start_date'])) : '—' ?></div></div>
+          <?php if (!empty($c['end_date'])): ?>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--warning)"></div><div class="timeline-time">Kết thúc</div><div class="timeline-content"><?= date('d/m/Y', strtotime($c['end_date'])) ?></div></div>
+          <?php endif; ?>
+          <?php if (!empty($c['terminated_at'])): ?>
+            <div class="timeline-item"><div class="timeline-dot" style="background:var(--danger)"></div><div class="timeline-time">Chấm dứt</div><div class="timeline-content"><?= date('d/m/Y', strtotime($c['terminated_at'])) ?></div></div>
+          <?php endif; ?>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
