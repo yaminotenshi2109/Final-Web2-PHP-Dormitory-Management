@@ -89,6 +89,7 @@ CREATE TABLE `students` (
 -- Người phụ trách: Thành viên 1
 -- Quan hệ : 1-N với rooms
 -- ============================================================
+
 CREATE TABLE `buildings` (
   `id`           INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   `name`         VARCHAR(100)  NOT NULL COMMENT 'Tên tòa nhà (A1, B2...)',
@@ -108,7 +109,6 @@ CREATE TABLE `buildings` (
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Tòa nhà KTX – gender_type kiểm soát room allocation logic';
-
 
 -- ============================================================
 -- BẢNG 4: rooms
@@ -655,30 +655,11 @@ VALUES
  500000+(268-200)*3500+(46-40)*15000,
  'paid','2025-10-10');
 
-INSERT INTO `violation_records`
-  (`student_id`,`contract_id`,`violation_type`,
-   `description`,`penalty_points`,`recorded_by`)
-VALUES
-(1,1,'Tiếng ồn',
- 'Phát nhạc to sau 22:00 ngày 2025-09-15',3,1);
-
-INSERT INTO `notifications`
-  (`user_id`,`title`,`message`,`type`)
-VALUES
-(2,'Đăng ký phòng được duyệt',
- 'Đăng ký phòng 101 tòa A1 học kỳ 1/2025 đã được duyệt. Vui lòng đến ký hợp đồng.',
- 'registration'),
-(3,'Hóa đơn tháng 9/2025',
- 'Hóa đơn tháng 9/2025 đã được tạo. Hạn nộp: 10/10/2025. Tổng: 738,000 VND.',
- 'invoice');
-
-INSERT INTO `maintenance_requests`
-  (`room_id`,`reported_by`,`title`,`description`,`priority`)
-VALUES
-(1,2,'Quạt trần hỏng','Quạt phòng 101 không quay, đã thử công tắc.','high'),
-(4,3,'Vòi nước rỉ','Vòi rửa tay nhà vệ sinh chảy nước liên tục.','medium');
 
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 57c5a74 (Update files)
