@@ -55,13 +55,15 @@ class RegistrationController extends BaseController
         }
 
         $registrations = $this->db->select(
-            "SELECT r.*, b.name AS building_name, b.gender_type,
-                    rm.room_number, rm.floor, rm.capacity
+            "SELECT r.*, 
+                    pb.name AS preferred_building_name, pb.gender_type,
+                    rm.room_number, rm.floor, rm.capacity, b.name AS assigned_building_name
              FROM room_registrations r
-             LEFT JOIN buildings b ON b.id = r.preferred_building_id
-             LEFT JOIN rooms rm ON rm.id = r.assigned_room_id
+             LEFT JOIN buildings pb ON pb.id = r.preferred_building_id
+             LEFT JOIN rooms rm ON rm.id = r.room_id OR rm.id = r.assigned_room_id
+             LEFT JOIN buildings b ON b.id = rm.building_id
              WHERE r.student_id = ?
-             ORDER BY r.created_at DESC",
+             ORDER BY r.registered_at DESC",
             [$student['id']]
         );
 
@@ -153,7 +155,8 @@ class RegistrationController extends BaseController
             $registrationId = $this->db->transaction(function (Database $db) use (
                 $student,
                 $data,
-                $currentSemester
+                $currentSemester,
+                $userId
             ) {
                 // Tạo đơn đăng ký
                 return $db->insert('room_registrations', [
@@ -166,7 +169,6 @@ class RegistrationController extends BaseController
                     'preferred_room_type'    => $data['preferred_room_type'] ?? null,
                     'notes'                  => $data['notes'] ?? null,
                     'status'                 => 'pending',
-                    'created_at'             => date('Y-m-d H:i:s'),
                 ]);
             });
 
@@ -185,8 +187,94 @@ class RegistrationController extends BaseController
                 201
             );
         } catch (\Throwable $e) {
+            error_log('[RegistrationController::studentStore] ' . $e->getMessage() . ' | ' . $e->getFile() . ':' . $e->getLine());
+            $this->jsonError('Lỗi khi tạo đơn đăng ký: ' . ($e->getMessage() ?? 'Unknown error'), 500);
+        }
+    }
+
+    /**
+     * GET /student/registrations/create
+     * Hiển thị form tạo đơn đăng ký phòng
+     */
+    public function studentCreate(array $params = []): void
+    {
+        $this->requireAuth();
+
+        $userId = $this->auth('id');
+        
+        // Kiểm tra student profile tồn tại
+        $student = $this->db->selectOne(
+            "SELECT id FROM students WHERE user_id = ?",
+            [$userId]
+        );
+
+        if (!$student) {
+            $this->abort(404, 'Không tìm thấy hồ sơ sinh viên');
+        }
+
+        // Lấy danh sách tòa nhà hoạt động
+        $buildings = $this->db->select(
+            "SELECT id, name, gender_type FROM buildings WHERE status = 'active' ORDER BY name"
+        );
+
+        // Lấy học kỳ hiện tại
+        $currentSemester = $this->getCurrentSemester();
+
+        $this->view('student/registrations/create', [
+            'title'              => 'Tạo đơn đăng ký phòng',
+            'buildings'          => $buildings,
+            'current_semester'   => $currentSemester,
+        ]);
+    }
+
+    /**
+     * DELETE /student/registrations/:id
+     * Hủy đơn đăng ký (chỉ được hủy nếu status = pending)
+     */
+    public function studentCancel(array $params = []): void
+    {
+        $this->requireAuth();
+        $this->verifyCsrf();
+
+        $userId = $this->auth('id');
+        $registrationId = (int)($params['id'] ?? 0);
+
+        // Lấy student profile
+        $student = $this->db->selectOne(
+            "SELECT id FROM students WHERE user_id = ?",
+            [$userId]
+        );
+
+        if (!$student) {
+            $this->abort(404, 'Không tìm thấy hồ sơ sinh viên');
+        }
+
+        // Kiểm tra đơn đăng ký thuộc về student này và có thể hủy được
+        $registration = $this->db->selectOne(
+            "SELECT id, status FROM room_registrations WHERE id = ? AND student_id = ?",
+            [$registrationId, $student['id']]
+        );
+
+        if (!$registration) {
+            $this->abort(404, 'Không tìm thấy đơn đăng ký');
+        }
+
+        if ($registration['status'] !== 'pending') {
+            $this->jsonError('Chỉ có thể hủy đơn đăng ký ở trạng thái chờ duyệt', 403);
+        }
+
+        try {
+            $this->db->update(
+                'room_registrations',
+                ['status' => 'cancelled', 'updated_at' => date('Y-m-d H:i:s')],
+                'id = ?',
+                [$registrationId]
+            );
+
+            $this->jsonOk([], 'Hủy đơn đăng ký thành công', 200);
+        } catch (\Throwable $e) {
             error_log($e->getMessage());
-            $this->jsonError('Lỗi khi tạo đơn đăng ký', 500);
+            $this->jsonError('Lỗi khi hủy đơn đăng ký', 500);
         }
     }
 
@@ -232,9 +320,9 @@ class RegistrationController extends BaseController
              FROM room_registrations r
              JOIN students s ON s.id = r.student_id
              LEFT JOIN buildings b ON b.id = r.preferred_building_id
-             LEFT JOIN rooms rm ON rm.id = r.assigned_room_id
+             LEFT JOIN rooms rm ON rm.id = r.room_id OR rm.id = r.assigned_room_id
              WHERE {$where}
-             ORDER BY r.created_at DESC",
+             ORDER BY r.registered_at DESC",
             $args,
             $page,
             $perPage
