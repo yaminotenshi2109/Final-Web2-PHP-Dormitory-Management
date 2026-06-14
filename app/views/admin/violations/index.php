@@ -127,7 +127,7 @@
                                                   action="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>/dismiss"
                                                   onsubmit="return confirm('Xác nhận hủy vi phạm này?')"
                                                   style="display:inline">
-                                                <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+                                                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
                                                 <button type="submit" class="btn btn-outline btn-sm">🚫 Hủy</button>
                                             </form>
                                         <?php endif; ?>
@@ -183,7 +183,7 @@
             </div>
             <div class="card-body">
                 <form id="form-add-violation" novalidate>
-                    <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+                    <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
 
                     <div class="form-group">
                         <label class="form-label" for="fv-student-id">
@@ -287,7 +287,7 @@
             alert.style.display   = 'none';
 
             var data = {
-                _csrf:          form.querySelector('[name="_csrf"]').value,
+                _csrf_token:    form.querySelector('[name="_csrf_token"]').value,
                 student_id:     form.querySelector('[name="student_id"]').value.trim(),
                 violation_type: form.querySelector('[name="violation_type"]').value,
                 description:    form.querySelector('[name="description"]').value.trim(),

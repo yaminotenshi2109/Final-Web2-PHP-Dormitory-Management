@@ -135,7 +135,7 @@ $filterPriority = $_GET['priority'] ?? '';
                                               action="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/<?= (int)$req['id'] ?>/resolve"
                                               onsubmit="return confirm('Đánh dấu yêu cầu #<?= (int)$req['id'] ?> là đã giải quyết?')"
                                               style="display:inline">
-                                            <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+                                            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
                                             <button type="submit" class="btn btn-primary btn-sm">✅ Giải quyết</button>
                                         </form>
                                     <?php endif; ?>
@@ -145,7 +145,7 @@ $filterPriority = $_GET['priority'] ?? '';
                                               action="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/<?= (int)$req['id'] ?>/close"
                                               onsubmit="return confirm('Đóng yêu cầu bảo trì #<?= (int)$req['id'] ?>?')"
                                               style="display:inline">
-                                            <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+                                            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
                                             <button type="submit" class="btn btn-outline btn-sm">🔒 Đóng</button>
                                         </form>
                                     <?php endif; ?>

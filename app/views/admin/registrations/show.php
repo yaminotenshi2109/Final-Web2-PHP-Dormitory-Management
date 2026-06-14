@@ -145,8 +145,9 @@ function autoAllocate() {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('🚀 Tự động xếp phòng thành công!');
-            location.reload();
+            alert('🚀 Tự động xếp phòng thành công! Phòng ' + json.data.room_number + ' (' + json.data.building_name + ')');
+            // Redirect to admin dashboard
+            window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/dashboard';
         } else {
             alert('❌ Lỗi: ' + json.message);
         }
@@ -174,7 +175,8 @@ function manualAllocate() {
     .then(json => {
         if (json.success) {
             alert('✅ Gán phòng thủ công thành công!');
-            location.reload();
+            // Redirect to admin dashboard
+            window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/dashboard';
         } else {
             alert('❌ Lỗi: ' + json.message);
         }
@@ -202,7 +204,8 @@ function rejectRegistration() {
     .then(json => {
         if (json.success) {
             alert('❌ Đã từ chối đơn đăng ký thành công!');
-            location.reload();
+            // Redirect to admin registrations list
+            window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/registrations';
         } else {
             alert('❌ Lỗi: ' + json.message);
         }

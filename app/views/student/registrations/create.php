@@ -73,7 +73,7 @@ function oldValue(array $old, string $field, string $default = ''): string {
             <?php endif; ?>
 
             <form action="/Final-Web2-PHP-Dormitory-Management/public/student/registrations" method="POST" id="registrationForm">
-                <input type="hidden" name="_token" value="<?= htmlspecialchars($csrfToken) ?>">
+                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
                 <input type="hidden" name="_method" value="POST">
 
                 <!-- Preferred Building -->

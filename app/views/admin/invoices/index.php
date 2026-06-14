@@ -186,7 +186,7 @@ $currentYear = (int)date('Y');
                                               action="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= (int)$inv['id'] ?>/mark-paid"
                                               onsubmit="return confirm('Xác nhận đánh dấu hóa đơn #<?= (int)$inv['id'] ?> là đã thanh toán?')"
                                               style="display:inline">
-                                            <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+                                            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
                                             <button type="submit" class="btn btn-primary btn-sm">✅ Đã thu</button>
                                         </form>
                                     <?php endif; ?>

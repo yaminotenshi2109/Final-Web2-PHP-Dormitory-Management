@@ -131,7 +131,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
                                               action="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations/<?= (int)$reg['id'] ?>/approve"
                                               onsubmit="return confirm('Xác nhận duyệt đăng ký này?')"
                                               style="display:inline">
-                                            <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+                                            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
                                             <button type="submit" class="btn btn-primary btn-sm">✅ Duyệt</button>
                                         </form>
 
@@ -193,7 +193,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
             </div>
             <div class="card-body">
                 <form id="form-reject-registration" method="POST" action="">
-                    <input type="hidden" name="_csrf" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+                    <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
                     <div class="form-group">
                         <label class="form-label" for="reject-reason">
                             Lý do từ chối <span style="color:#ef4444">*</span>

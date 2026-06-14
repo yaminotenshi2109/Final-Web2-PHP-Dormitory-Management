@@ -267,16 +267,57 @@
                 <a href="/register">Đăng ký tại đây</a>
             </div>
 
-            <div class="login-footer" style="margin-top: 1rem; border-top: none;">
-                <small>
-                    Demo: 
-                    <strong>admin@ktx.edu.vn / Admin@123</strong>
-                </small>
+            <!-- Demo Accounts Section -->
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 0.5px solid #D3D1C7;">
+                <div style="font-size: 12px; font-weight: 600; color: #3d3d3a; margin-bottom: 1rem; text-align: center;">
+                    Tài khoản Demo
+                </div>
+                
+                <!-- Admin Demo -->
+                <div style="margin-bottom: 1rem; padding: 1rem; background: #F0F7FF; border: 1px solid #378ADD; border-radius: 6px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 18px;">🛡️</span>
+                        <span style="font-size: 12px; font-weight: 600; color: #042C53;">Quản Trị Viên (Admin)</span>
+                    </div>
+                    <div style="font-size: 12px; color: #042C53; margin-bottom: 6px;">
+                        <strong>Email:</strong> admin@ktx.edu.vn
+                    </div>
+                    <div style="font-size: 12px; color: #042C53; margin-bottom: 10px;">
+                        <strong>Mật khẩu:</strong> Admin@123
+                    </div>
+                    <button type="button" class="btn-login" style="background: #378ADD; font-size: 12px; padding: 0.6rem;" onclick="demoLogin('admin@ktx.edu.vn', 'Admin@123')">
+                        Đăng nhập Admin →
+                    </button>
+                </div>
+
+                <!-- Student Demo -->
+                <div style="padding: 1rem; background: #F0FFF4; border: 1px solid #10b981; border-radius: 6px;">
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                        <span style="font-size: 18px;">🎓</span>
+                        <span style="font-size: 12px; font-weight: 600; color: #065F46;">Sinh Viên (Student)</span>
+                    </div>
+                    <div style="font-size: 12px; color: #065F46; margin-bottom: 6px;">
+                        <strong>Email:</strong> student@ktx.edu.vn
+                    </div>
+                    <div style="font-size: 12px; color: #065F46; margin-bottom: 10px;">
+                        <strong>Mật khẩu:</strong> Student@123
+                    </div>
+                    <button type="button" class="btn-login" style="background: #10b981; font-size: 12px; padding: 0.6rem;" onclick="demoLogin('student@ktx.edu.vn', 'Student@123')">
+                        Đăng nhập Sinh Viên →
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-
+    
     <script>
+        // Demo Login Helper
+        function demoLogin(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            document.getElementById('submitBtn').click();
+        }
+
         function handleLogin(e) {
             e.preventDefault();
             

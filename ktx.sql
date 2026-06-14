@@ -697,3 +697,40 @@ COMMIT;
 --       - students tách khỏi users: thông tin sinh viên KHÔNG phụ thuộc
 --         vào username hay email (thuộc tính của users).
 -- ============================================================
+
+
+
+-- ============================================================
+-- MIGRATION: Fix room_registrations table schema
+-- Add preference columns and make room_id nullable
+-- ============================================================
+
+-- Make room_id nullable (students submit preferences, admin assigns room later)
+ALTER TABLE `room_registrations` 
+MODIFY COLUMN `room_id` INT UNSIGNED NULL DEFAULT NULL;
+
+-- Add preferred_building_id column for student preferences
+ALTER TABLE `room_registrations`
+ADD COLUMN `preferred_building_id` INT UNSIGNED NULL DEFAULT NULL 
+    AFTER `room_id`;
+
+-- Add preferred_room_type column for room type preference
+ALTER TABLE `room_registrations`
+ADD COLUMN `preferred_room_type` VARCHAR(20) NULL DEFAULT NULL
+    AFTER `preferred_building_id`;
+
+-- Drop old foreign key if it exists (allowing NULL room_id)
+ALTER TABLE `room_registrations`
+DROP FOREIGN KEY `fk_reg_room`;
+
+-- Add new foreign key for preferred_building_id
+ALTER TABLE `room_registrations`
+ADD CONSTRAINT `fk_reg_preferred_building`
+  FOREIGN KEY (`preferred_building_id`) REFERENCES `buildings`(`id`)
+  ON UPDATE CASCADE ON DELETE SET NULL;
+
+-- Optional: Re-add foreign key for room_id with nullable support
+ALTER TABLE `room_registrations`
+ADD CONSTRAINT `fk_reg_room_new`
+  FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`)
+  ON UPDATE CASCADE ON DELETE SET NULL;

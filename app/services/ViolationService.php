@@ -285,7 +285,7 @@ class ViolationService
             );
 
             $student = $db->selectOne(
-                "SELECT s.user_id, s.full_name FROM students s WHERE id = ?",
+                "SELECT s.user_id, s.full_name FROM students s WHERE s.id = ?",
                 [$contract['student_id']]
             );
 
@@ -342,7 +342,7 @@ class ViolationService
         string $violationType
     ): void {
         $student = $this->db->selectOne(
-            "SELECT s.user_id, s.full_name FROM students s WHERE id = ?",
+            "SELECT s.user_id, s.full_name FROM students s WHERE s.id = ?",
             [$studentId]
         );
 

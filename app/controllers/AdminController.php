@@ -35,14 +35,14 @@ class AdminController extends BaseController
             SELECT r.*, s.full_name AS student_name, s.student_code, rm.room_number, b.name AS building_name
             FROM room_registrations r
             JOIN students s ON s.id = r.student_id
-            LEFT JOIN rooms rm ON rm.id = r.assigned_room_id
-            LEFT JOIN buildings b ON b.id = r.preferred_building_id
-            ORDER BY r.created_at DESC LIMIT 5
+            LEFT JOIN rooms rm ON rm.id = r.room_id
+            LEFT JOIN buildings b ON b.id = rm.building_id
+            ORDER BY r.registered_at DESC LIMIT 5
         ");
 
         // 3. Vi phạm gần đây
         $recent_violations = $this->db->select("
-            SELECT v.*, s.full_name AS student_name, rm.room_number, v.recorded_at AS created_at
+            SELECT v.*, s.full_name AS student_name, rm.room_number, v.recorded_at
             FROM violation_records v
             JOIN students s ON s.id = v.student_id
             JOIN contracts c ON c.id = v.contract_id
