@@ -50,10 +50,10 @@ $router->group('/student', function (Router $r) {
     $r->post('/profile',  'StudentController@updateProfile');
 
     // Đăng ký phòng
-    $r->get('/registrations',         'RegistrationController@index')->name('registration.index');
-    $r->get('/registrations/create',  'RegistrationController@create')->name('registration.create');
-    $r->post('/registrations',        'RegistrationController@store')->name('registration.store');
-    $r->delete('/registrations/:id',  'RegistrationController@cancel')->name('registration.cancel')
+    $r->get('/registrations',         'RegistrationController@studentList')->name('registration.index');
+    $r->get('/registrations/create',  'RegistrationController@studentCreate')->name('registration.create');
+    $r->post('/registrations',        'RegistrationController@studentStore')->name('registration.store');
+    $r->delete('/registrations/:id',  'RegistrationController@studentCancel')->name('registration.cancel')
         ->where('id', '\d+');
 
     // Hợp đồng
