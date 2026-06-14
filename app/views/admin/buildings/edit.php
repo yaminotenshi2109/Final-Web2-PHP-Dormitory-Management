@@ -3,6 +3,12 @@
  * app/views/admin/buildings/edit.php
  * Admin — Chỉnh sửa tòa nhà
  * Variables: $title, $building, $_csrfToken, $_errors, $_old
+ * 
+ * @var string $title
+ * @var array $building
+ * @var string $_csrfToken
+ * @var array $_errors
+ * @var array $_old
  */
 
 $id      = (int)$building['id'];

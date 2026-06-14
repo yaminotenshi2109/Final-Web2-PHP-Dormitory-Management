@@ -3,6 +3,9 @@
  * app/views/admin/contracts/show.php
  * Admin — Chi tiết hợp đồng
  * Variables: $title, $contract
+ * @var string $title
+ * @var array $contract
+ * @var string $_csrfToken
  */
 
 $studentName = htmlspecialchars($contract['student_name']);
