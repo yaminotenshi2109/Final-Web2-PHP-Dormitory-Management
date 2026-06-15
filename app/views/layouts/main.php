@@ -42,15 +42,74 @@ function navLink(string $href, string $icon, string $label, string $current, str
 <title><?= htmlspecialchars($title ?? 'KTX Management') ?> — KTX System</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
 <link rel="stylesheet" href="<?= getDynamicUrl('/assets/css/app.css') ?>">
+<style>
+  .no-sidebar .main-content {
+    margin-left: 0 !important;
+  }
+  .public-navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .public-navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .public-navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: var(--txt-primary);
+    font-weight: 700;
+  }
+  .public-navbar-logo .logo-icon {
+    font-size: 20px;
+  }
+  .public-navbar-links {
+    display: flex;
+    gap: 24px;
+  }
+  .public-navbar-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--txt-secondary);
+    transition: color var(--t);
+  }
+  .public-navbar-links a:hover {
+    color: var(--brand);
+  }
+  .public-navbar-actions {
+    display: flex;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .public-navbar-links {
+      display: none;
+    }
+  }
+</style>
 </head>
 <body>
 
 <!-- Sidebar overlay (mobile) -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<div class="layout">
+<div class="layout<?= !$_auth ? ' no-sidebar' : '' ?>">
 
   <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <?php if ($_auth): ?>
   <aside class="sidebar" id="sidebar">
 
     <!-- Logo -->
@@ -131,11 +190,13 @@ function navLink(string $href, string $icon, string $label, string $current, str
     </div>
 
   </aside>
+  <?php endif; ?>
 
   <!-- ── Main ────────────────────────────────────────────── -->
   <div class="main-content">
 
-    <!-- Topbar -->
+    <!-- Header -->
+    <?php if ($_auth): ?>
     <header class="topbar">
       <button class="topbar-toggle" id="sidebarToggle" aria-label="Menu">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -178,6 +239,24 @@ function navLink(string $href, string $icon, string $label, string $current, str
         </div>
       </div>
     </header>
+    <?php else: ?>
+    <header class="public-navbar">
+      <div class="public-navbar-container">
+        <a href="<?= getDynamicUrl('/') ?>" class="public-navbar-logo">
+          <span class="logo-icon">🏠</span>
+          <strong>KTX System</strong>
+        </a>
+        <nav class="public-navbar-links">
+          <a href="<?= getDynamicUrl('/') ?>">Trang chủ</a>
+          <a href="<?= getDynamicUrl('/') ?>#features">Tính năng</a>
+          <a href="<?= getDynamicUrl('/about') ?>">Giới thiệu</a>
+        </nav>
+        <div class="public-navbar-actions">
+          <a href="<?= getDynamicUrl('/auth/login') ?>" class="btn btn-primary btn-sm">🔑 Đăng nhập</a>
+        </div>
+      </div>
+    </header>
+    <?php endif; ?>
 
     <!-- Flash messages -->
     <div style="padding: 0 24px; padding-top: 16px;">
