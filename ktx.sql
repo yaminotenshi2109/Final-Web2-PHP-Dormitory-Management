@@ -681,7 +681,3 @@ VALUES
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
-<<<<<<< HEAD
-
-=======
->>>>>>> 57c5a74 (Update files)
