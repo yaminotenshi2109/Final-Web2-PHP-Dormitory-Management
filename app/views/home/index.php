@@ -155,7 +155,7 @@
 </div>
 
 </div>
-=======
+
 <style>
   /* Premium Landing Page Custom Styles */
   .landing-wrapper {
@@ -205,7 +205,9 @@
   .hero-left h1 span {
     background: linear-gradient(135deg, #a5b4fc 0%, #c7d2fe 100%);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
+    color: transparent;
   }
   
   .hero-left p {
@@ -936,4 +938,4 @@
   // Run calculation once on load
   document.addEventListener('DOMContentLoaded', calculateCost);
 </script>
->>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
+ 
