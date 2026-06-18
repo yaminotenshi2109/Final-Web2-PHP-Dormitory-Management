@@ -55,14 +55,9 @@ class RegistrationController extends BaseController
         }
 
         $registrations = $this->db->select(
-<<<<<<< HEAD
-            "SELECT r.*, r.registered_at AS created_at, b.name AS building_name, b.gender_type,
-                    rm.room_number, rm.floor, rm.capacity
-=======
             "SELECT r.*, 
                     pb.name AS preferred_building_name, pb.gender_type,
                     rm.room_number, rm.floor, rm.capacity, b.name AS assigned_building_name
->>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
              FROM room_registrations r
              LEFT JOIN buildings pb ON pb.id = r.preferred_building_id
              LEFT JOIN rooms rm ON rm.id = r.room_id OR rm.id = r.assigned_room_id

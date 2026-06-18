@@ -1,61 +1,77 @@
 <?php
-/**
- * student/registrations/create.php — Tạo đơn đăng ký phòng
- * Variables: $title, $available_rooms[], $buildings[], $_errors, $_old, $_csrfToken
- */
+// Views: student/registrations/create.php
+// Variables: $title, $buildings, $_old, $_errors, $_csrfToken, $current_semester
+
+$buildings       = $buildings ?? [];
+$old             = $_old ?? [];
+$errors          = $_errors ?? [];
+$csrfToken       = $_csrfToken ?? '';
+$currentSemester = $current_semester ?? [];
+
+$semLabel = '';
+if (!empty($currentSemester)) {
+    $sem = $currentSemester['semester'] ?? '';
+    $yr  = $currentSemester['year'] ?? '';
+    $semLabel = match((string)$sem) {
+        '1' => "Học kỳ 1",
+        '2' => "Học kỳ 2",
+        '3' => "Học kỳ hè",
+        default => "Học kỳ $sem"
+    };
+    if ($yr) $semLabel .= " — Năm học $yr";
+}
+
+function fieldError(array $errors, string $field): string {
+    if (isset($errors[$field])) {
+        return '<div class="form-error">⚠️ ' . htmlspecialchars($errors[$field]) . '</div>';
+    }
+    return '';
+}
+
+function oldValue(array $old, string $field, string $default = ''): string {
+    return htmlspecialchars($old[$field] ?? $default);
+}
 ?>
 
+<!-- Page Header -->
 <div class="page-header">
-  <div><h1 class="page-title">📋 Đăng ký phòng KTX</h1><p class="page-subtitle">Chọn phòng và gửi đơn đăng ký</p></div>
-  <a href="<?= getDynamicUrl('/student/registrations') ?>" class="btn btn-ghost">← Quay lại</a>
+    <div>
+        <h1 class="page-title">➕ Đăng ký phòng mới</h1>
+        <p class="page-subtitle">Điền thông tin để đăng ký ở ký túc xá</p>
+    </div>
+    <div class="page-actions">
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/student/registrations" class="btn btn-ghost">← Quay lại</a>
+    </div>
 </div>
 
-<div class="grid-2">
-  <!-- Form -->
-  <div class="card">
-    <div class="card-header"><div class="card-title">Thông tin đăng ký</div></div>
-    <div class="card-body">
-      <form method="POST" action="<?= getDynamicUrl('/student/registrations') ?>">
-        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+<div style="max-width:600px;margin:0 auto;">
 
-        <div class="form-group">
-          <label class="form-label" for="building_id">Chọn tòa nhà <span class="req">*</span></label>
-          <select id="building_id" name="building_id" class="form-control" required>
-            <option value="">— Chọn tòa nhà —</option>
-            <?php foreach ($buildings ?? [] as $bl): ?>
-              <option value="<?= $bl['id'] ?>" <?= ($_old['building_id'] ?? '') == $bl['id'] ? 'selected' : '' ?>><?= htmlspecialchars($bl['name']) ?> (<?= ucfirst($bl['gender_type'] ?? '') ?>)</option>
-            <?php endforeach; ?>
-          </select>
+    <!-- Semester Info Alert -->
+    <?php if ($semLabel): ?>
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:16px 18px;margin-bottom:24px;display:flex;gap:12px;align-items:flex-start;">
+            <span style="font-size:22px;flex-shrink:0;">📅</span>
+            <div>
+                <div style="font-weight:700;color:#1e40af;font-size:14px;margin-bottom:2px;">Học kỳ đang nhận đăng ký</div>
+                <div style="color:#1d4ed8;font-size:15px;font-weight:600;"><?= htmlspecialchars($semLabel) ?></div>
+                <div style="color:#3b82f6;font-size:12.5px;margin-top:4px;">Đơn của bạn sẽ được xử lý theo học kỳ này.</div>
+            </div>
         </div>
+    <?php endif; ?>
 
-        <div class="form-group">
-          <label class="form-label" for="room_id">Chọn phòng <span class="req">*</span></label>
-          <select id="room_id" name="room_id" class="form-control" required>
-            <option value="">— Chọn phòng —</option>
-            <?php foreach ($available_rooms ?? [] as $r): ?>
-              <option value="<?= $r['id'] ?>" <?= ($_old['room_id'] ?? '') == $r['id'] ? 'selected' : '' ?>>
-                <?= htmlspecialchars($r['room_number']) ?> — Tầng <?= $r['floor'] ?? 0 ?> (<?= $r['current_occupants'] ?? 0 ?>/<?= $r['capacity'] ?? 0 ?>) — <?= number_format($r['price_per_month'] ?? 0, 0, ',', '.') ?>đ/tháng
-              </option>
-            <?php endforeach; ?>
-          </select>
-          <?php if (!empty($_errors['room_id'] ?? '')): ?><div class="form-error">⚠ <?= htmlspecialchars($_errors['room_id']) ?></div><?php endif; ?>
+    <!-- Form Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">📝 Thông tin đăng ký</h3>
+            <p style="font-size:13px;color:#6b7280;margin:4px 0 0 0;">Tất cả các trường đều không bắt buộc — BQL sẽ phân phòng phù hợp cho bạn.</p>
         </div>
+        <div class="card-body">
+            <?php if (!empty($errors['general'])): ?>
+                <div class="alert alert-danger" style="background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;">
+                    <span style="font-size:18px;">❌</span>
+                    <div style="color:#b91c1c;font-size:14px;"><?= htmlspecialchars($errors['general']) ?></div>
+                </div>
+            <?php endif; ?>
 
-<<<<<<< HEAD
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label" for="semester">Học kỳ <span class="req">*</span></label>
-            <select id="semester" name="semester" class="form-control" required>
-              <option value="1" <?= ($_old['semester'] ?? '') === '1' ? 'selected' : '' ?>>Học kỳ 1</option>
-              <option value="2" <?= ($_old['semester'] ?? '') === '2' ? 'selected' : '' ?>>Học kỳ 2</option>
-              <option value="3" <?= ($_old['semester'] ?? '') === '3' ? 'selected' : '' ?>>Hè</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="academic_year">Năm học <span class="req">*</span></label>
-            <input type="text" id="academic_year" name="academic_year" class="form-control" placeholder="2025-2026" value="<?= htmlspecialchars($_old['academic_year'] ?? date('Y') . '-' . (date('Y') + 1)) ?>" required>
-          </div>
-=======
             <form action="/Final-Web2-PHP-Dormitory-Management/public/student/registrations" method="POST" id="registrationForm">
                 <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($csrfToken) ?>">
                 <input type="hidden" name="_method" value="POST">
@@ -171,38 +187,38 @@
                     </a>
                 </div>
             </form>
->>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
         </div>
+    </div>
 
-        <div class="form-group">
-          <label class="form-label" for="note">Ghi chú</label>
-          <textarea id="note" name="note" class="form-control" placeholder="Lý do đăng ký, yêu cầu đặc biệt..." rows="3"><?= htmlspecialchars($_old['note'] ?? '') ?></textarea>
+    <!-- Help Card -->
+    <div class="card mt-16" style="border:1px dashed #cbd5e1;background:#f8fafc;">
+        <div class="card-body" style="padding:16px 20px;">
+            <h4 style="font-weight:700;font-size:14px;color:#374151;margin-bottom:10px;">❓ Cần hỗ trợ?</h4>
+            <p style="font-size:13px;color:#6b7280;margin:0;">
+                Liên hệ Ban Quản lý Ký túc xá tại phòng 101 — Toà A, hoặc gọi <strong>028 xxxx xxxx</strong>
+                trong giờ hành chính (7:30 – 17:00, Thứ Hai đến Thứ Sáu).
+            </p>
         </div>
+    </div>
 
-        <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
-          <a href="<?= getDynamicUrl('/student/registrations') ?>" class="btn btn-ghost">Hủy</a>
-          <button type="submit" class="btn btn-primary">📋 Gửi đăng ký</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- Info panel -->
-  <div>
-    <div class="card mb-16">
-      <div class="card-header"><div class="card-title">ℹ️ Hướng dẫn</div></div>
-      <div class="card-body" style="font-size:13px;line-height:1.8;color:var(--txt-secondary)">
-        <ol style="padding-left:18px;list-style:decimal">
-          <li>Chọn tòa nhà phù hợp với giới tính</li>
-          <li>Chọn phòng còn trống</li>
-          <li>Gửi đơn và chờ admin duyệt</li>
-          <li>Sau khi được duyệt, hợp đồng sẽ được tạo tự động</li>
-        </ol>
-      </div>
-    </div>
-    <div class="alert alert-info">
-      <span class="alert-icon">💡</span>
-      <div class="alert-content"><p class="alert-msg">Đơn đăng ký sẽ được xử lý trong vòng 2-3 ngày làm việc.</p></div>
-    </div>
-  </div>
 </div>
+
+<script>
+function updateCharCount(el) {
+    const count = el.value.length;
+    const el2 = document.getElementById('charCount');
+    if (el2) el2.textContent = count + '/500';
+    el2.style.color = count > 450 ? '#ef4444' : '#94a3b8';
+}
+
+// Initialize count
+const notesEl = document.getElementById('notes');
+if (notesEl) updateCharCount(notesEl);
+
+// Prevent double submit
+document.getElementById('registrationForm').addEventListener('submit', function() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Đang gửi...';
+});
+</script>

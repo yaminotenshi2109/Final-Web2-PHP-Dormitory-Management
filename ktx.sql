@@ -682,6 +682,7 @@ VALUES
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 -- ============================================================
@@ -737,3 +738,8 @@ ADD CONSTRAINT `fk_reg_room_new`
   FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`)
   ON UPDATE CASCADE ON DELETE SET NULL;
 >>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
+=======
+
+=======
+>>>>>>> 57c5a74 (Update files)
+>>>>>>> parent of 3d3c1fb (Fix merge conflict in ktx.sql)
