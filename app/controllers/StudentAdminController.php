@@ -30,62 +30,50 @@ class StudentAdminController extends BaseController
             $args[] = "%{$search}%";
         }
 
-        $result = $this->db->paginate("
-            SELECT s.*, u.email, u.status AS user_status,
-                   rm.room_number, b.name AS building_name
-            FROM students s
-            JOIN users u ON u.id = s.user_id
-            LEFT JOIN contracts c ON c.student_id = s.id AND c.status = 'active'
-            LEFT JOIN rooms rm ON rm.id = c.room_id
-            LEFT JOIN buildings b ON b.id = rm.building_id
-            WHERE {$where}
-            ORDER BY s.student_code
-        ", $args, $page, $perPage);
+        $result = $this->db->paginate(
+            "SELECT s.*, u.email, u.status AS user_status,\n                   rm.room_number, b.name AS building_name\n            FROM students s\n            JOIN users u ON u.id = s.user_id\n            LEFT JOIN contracts c ON c.student_id = s.id AND c.status = 'active'\n            LEFT JOIN rooms rm ON rm.id = c.room_id\n            LEFT JOIN buildings b ON b.id = rm.building_id\n            WHERE {$where}\n            ORDER BY s.student_code",
+            $args,
+            $page,
+            $perPage
+        );
 
         $this->view('admin/students/index', [
             'title'      => 'Quản lý sinh viên',
             'students'   => $result['data'],
             'pagination' => $result,
-            'search'     => $search
+            'search'     => $search,
         ]);
     }
 
     public function show(array $params = []): void
     {
         $id = (int)$params['id'];
-        $student = $this->db->selectOne("
-            SELECT s.*, u.email, u.status AS user_status
-            FROM students s
-            JOIN users u ON u.id = s.user_id
-            WHERE s.id = ?
-        ", [$id]);
+        $student = $this->db->selectOne(
+            "SELECT s.*, u.email, u.status AS user_status\n            FROM students s\n            JOIN users u ON u.id = s.user_id\n            WHERE s.id = ?",
+            [$id]
+        );
 
         if (!$student) {
             $this->abort(404, 'Không tìm thấy sinh viên.');
         }
 
         // Lấy lịch sử hợp đồng
-        $contracts = $this->db->select("
-            SELECT c.*, rm.room_number, b.name AS building_name
-            FROM contracts c
-            JOIN rooms rm ON rm.id = c.room_id
-            JOIN buildings b ON b.id = rm.building_id
-            WHERE c.student_id = ?
-            ORDER BY c.created_at DESC
-        ", [$id]);
+        $contracts = $this->db->select(
+            "SELECT c.*, rm.room_number, b.name AS building_name\n            FROM contracts c\n            JOIN rooms rm ON rm.id = c.room_id\n            JOIN buildings b ON b.id = rm.building_id\n            WHERE c.student_id = ?\n            ORDER BY c.created_at DESC",
+            [$id]
+        );
 
-        // Lấy lịch sử vi phạm
-        $violations = $this->db->select("
-            SELECT * FROM violation_records
-            WHERE student_id = ?
-            ORDER BY recorded_at DESC
-        ", [$id]);
+        // Lấy lịch sử vi phạm (alias recorded_at as created_at)
+        $violations = $this->db->select(
+            "SELECT *, recorded_at AS created_at FROM violation_records\n            WHERE student_id = ?\n            ORDER BY recorded_at DESC",
+            [$id]
+        );
 
         $this->view('admin/students/show', [
             'title'      => 'Chi tiết sinh viên: ' . htmlspecialchars($student['full_name']),
             'student'    => $student,
             'contracts'  => $contracts,
-            'violations' => $violations
+            'violations' => $violations,
         ]);
     }
 
@@ -98,12 +86,12 @@ class StudentAdminController extends BaseController
             $this->abort(404, 'Không tìm thấy sinh viên.');
         }
 
-        $violations = $this->db->select("
-            SELECT * FROM violation_records
-            WHERE student_id = ?
-            ORDER BY recorded_at DESC
-        ", [$id]);
+        $violations = $this->db->select(
+            "SELECT *, recorded_at AS created_at FROM violation_records\n            WHERE student_id = ?\n            ORDER BY recorded_at DESC",
+            [$id]
+        );
 
         $this->jsonOk($violations, 'Lấy danh sách vi phạm của sinh viên.');
     }
 }
+?>

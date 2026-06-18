@@ -42,7 +42,7 @@ class AdminController extends BaseController
 
         // 3. Vi phạm gần đây
         $recent_violations = $this->db->select("
-            SELECT v.*, s.full_name AS student_name, rm.room_number, v.recorded_at
+            SELECT v.*, v.recorded_at AS created_at, s.full_name AS student_name, rm.room_number
             FROM violation_records v
             JOIN students s ON s.id = v.student_id
             JOIN contracts c ON c.id = v.contract_id

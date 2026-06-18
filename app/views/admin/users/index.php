@@ -27,9 +27,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
         <p class="page-subtitle">Tổng cộng <?= number_format($total) ?> tài khoản trong hệ thống</p>
     </div>
     <div class="page-actions">
-        <button class="btn btn-outline btn-sm" onclick="exportUsers()">
-            📥 Xuất Excel
-        </button>
+
         <button class="btn btn-primary" data-modal-open="modalAddUser">
             ➕ Thêm người dùng
         </button>
@@ -658,15 +656,7 @@ function submitResetPassword(e) {
     .catch(err => showKtxToast('error', 'Lỗi kết nối: ' + err.message));
 }
 
-/* ── Export ─────────────────────────────────────────────────── */
-function exportUsers() {
-    const q      = document.getElementById('searchInput')?.value ?? '';
-    const role   = document.getElementById('roleFilter')?.value  ?? '';
-    const status = document.getElementById('statusFilter')?.value ?? '';
-    window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/api/users/export?q=' + encodeURIComponent(q)
-                         + '&role=' + encodeURIComponent(role)
-                         + '&status=' + encodeURIComponent(status);
-}
+
 
 /* ── Toast helper (fallback if window.ktx not available) ────── */
 function showKtxToast(type, msg) {

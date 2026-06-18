@@ -40,8 +40,8 @@ $st = $v['status'] ?? 'active'; [$bClass, $bLabel] = $statusMap[$st] ?? ['badge-
     <div class="card-header"><div class="card-title">Sinh viên</div></div>
     <div class="card-body">
       <div style="display:flex;align-items:center;gap:14px">
-        <div class="avatar avatar-lg"><?= mb_strtoupper(mb_substr($v['student_name'] ?? 'S', 0, 1)) ?></div>
-        <div><div style="font-weight:700;font-size:16px"><?= htmlspecialchars($v['student_name'] ?? '') ?></div><div style="color:var(--txt-muted);font-size:13px"><?= htmlspecialchars($v['student_code'] ?? '') ?></div></div>
+        <div class="avatar avatar-lg"><?= mb_strtoupper(mb_substr($v['full_name'] ?? 'S', 0, 1)) ?></div>
+        <div><div style="font-weight:700;font-size:16px"><?= htmlspecialchars($v['full_name'] ?? '') ?></div><div style="color:var(--txt-muted);font-size:13px"><?= htmlspecialchars($v['student_code'] ?? '') ?></div></div>
       </div>
     </div>
   </div>

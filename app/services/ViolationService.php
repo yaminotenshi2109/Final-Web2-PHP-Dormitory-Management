@@ -144,7 +144,7 @@ class ViolationService
                     'severity'        => $severity,
                     'status'          => 'active',
                     'recorded_by'     => $recordedBy,
-                    'created_at'      => date('Y-m-d H:i:s'),
+                    'recorded_at'     => date('Y-m-d H:i:s'),
                 ]);
 
                 // Step 4: Evaluate student status

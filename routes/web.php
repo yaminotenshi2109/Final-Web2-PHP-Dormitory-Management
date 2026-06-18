@@ -182,6 +182,7 @@ $router->group('/api', function (Router $r) {
 
     // Violations
     $r->get('/violations',         'ViolationApiController@index');
+    $r->get('/student/violations', 'ViolationApiController@studentViolationsApi');
     $r->post('/violations',        'ViolationApiController@store');
     $r->delete('/violations/:id',  'ViolationApiController@destroy')->where('id', '\d+');
     $r->post('/violations/:id/appeal', 'ViolationApiController@appeal')->where('id', '\d+');

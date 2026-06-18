@@ -4,6 +4,45 @@
 /** @var array $_errors */
 /** @var string $_csrfToken */
 /** @var array $_flash */
+
+// Automatically initialize missing student profiles for registered student users
+try {
+    $db = Database::getInstance();
+    $missingUsers = $db->select("
+        SELECT u.id, u.username 
+        FROM users u 
+        LEFT JOIN students s ON s.user_id = u.id 
+        WHERE u.role = 'student' AND s.id IS NULL
+    ");
+    foreach ($missingUsers as $user) {
+        $userId = (int)$user['id'];
+        $username = $user['username'];
+        $studentCode = 'SV' . date('Y') . str_pad((string)$userId, 4, '0', STR_PAD_LEFT);
+        $idCard = 'CCCD' . str_pad((string)$userId, 8, '0', STR_PAD_LEFT);
+        
+        $db->insert('students', [
+            'user_id'      => $userId,
+            'student_code' => $studentCode,
+            'full_name'    => $username,
+            'gender'       => 'male',
+            'dob'          => '2000-01-01',
+            'faculty'      => '',
+            'program'      => 'Đại trà',
+            'phone'        => '',
+            'hometown'     => '',
+            'id_card'      => $idCard,
+        ]);
+        
+        $db->insert('notifications', [
+            'user_id' => $userId,
+            'title'   => 'Tài khoản được tạo',
+            'message' => 'Tài khoản của bạn đã được tạo thành công. Vui lòng cập nhật thông tin hồ sơ.',
+            'type'    => 'system',
+        ]);
+    }
+} catch (\Throwable $e) {
+    error_log('[AutoStudentProfile] Error: ' . $e->getMessage());
+}
 ?>
 <div class="auth-card">
     <!-- Logo -->

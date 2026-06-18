@@ -404,7 +404,7 @@ class AuthController extends BaseController
         if (!empty($errors)) {
             $this->withOldInput(['username' => $data['username'], 'email' => $data['email']]);
             $this->withErrors($errors, '/auth/register');
-        }
+            return;}
 
         try {
             $hash   = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);

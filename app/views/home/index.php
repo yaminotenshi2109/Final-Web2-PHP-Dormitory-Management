@@ -112,6 +112,28 @@
     justify-content: flex-end;
   }
   
+  .hero-container.no-auth {
+    grid-template-columns: 1fr;
+    text-align: center;
+    justify-items: center;
+  }
+  
+  .hero-container.no-auth .hero-left {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .hero-container.no-auth .hero-left p {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .hero-container.no-auth .hero-btns {
+    justify-content: center;
+  }
+  
   /* Glassmorphism demo login card */
   .demo-login-card {
     background: rgba(255, 255, 255, 0.06);
@@ -519,44 +541,33 @@
   <!-- │ HERO SECTION                                 │ -->
   <!-- └──────────────────────────────────────────────┘ -->
   <section class="hero-section">
-    <div class="hero-container">
+    <div class="hero-container <?= !empty($_auth) ? 'has-auth' : 'no-auth' ?>">
       <div class="hero-left">
         <h1>Hệ thống quản lý<br><span>Ký túc xá thông minh</span></h1>
         <p>Quản lý phòng ở, hợp đồng, hóa đơn và vi phạm một cách hiệu quả, minh bạch và tiện lợi cho sinh viên và ban quản lý.</p>
         <div class="hero-btns">
-          <a href="<?= getDynamicUrl('/auth/login') ?>" class="btn-hero-primary">🔐 Vào trang đăng nhập</a>
+          <?php if (!empty($_auth)): ?>
+            <a href="<?= getDynamicUrl($_auth['role'] === 'admin' ? '/admin/dashboard' : '/student/dashboard') ?>" class="btn-hero-primary">💻 Vào trang quản lý</a>
+          <?php else: ?>
+            <a href="<?= getDynamicUrl('/auth/login') ?>" class="btn-hero-primary">🔐 Vào trang đăng nhập</a>
+          <?php endif; ?>
           <a href="#features" class="btn-hero-outline">📖 Tìm hiểu thêm</a>
         </div>
       </div>
       
-      <div class="hero-right">
-        <div class="demo-login-card">
-          <h3>🚀 Trải nghiệm nhanh</h3>
-          <p>Bấm chọn vai trò để tự động đăng nhập nhanh bằng tài khoản Demo:</p>
-          
-          <form id="demoLoginForm" method="POST" action="<?= getDynamicUrl('/auth/login') ?>">
-            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-            <input type="hidden" name="email" id="demoEmail">
-            <input type="hidden" name="password" id="demoPassword">
-            
-            <button type="button" class="demo-login-btn admin" onclick="submitDemo('admin@ktx.edu.vn', 'Admin@123')">
-              <span class="btn-icon">🛡️</span>
-              <div class="btn-info">
-                <strong>Quản Trị Viên (Admin)</strong>
-                <span>Duyệt đăng ký, hóa đơn, báo cáo</span>
-              </div>
-            </button>
-            
-            <button type="button" class="demo-login-btn student" onclick="submitDemo('student@ktx.edu.vn', 'Student@123')">
-              <span class="btn-icon">🎓</span>
-              <div class="btn-info">
-                <strong>Sinh Viên (Student)</strong>
-                <span>Đăng ký phòng, xem hóa đơn, bảo trì</span>
-              </div>
-            </button>
-          </form>
+      <?php if (!empty($_auth)): ?>
+        <div class="hero-right">
+          <div class="demo-login-card">
+            <h3 style="display: flex; align-items: center; gap: 8px;">👋 Chào mừng trở lại!</h3>
+            <p>Bạn đã đăng nhập hệ thống thành công với vai trò <strong><?= $_auth['role'] === 'admin' ? 'Quản trị viên' : 'Sinh viên' ?></strong>.</p>
+            <div style="margin-top: 24px;">
+              <a href="<?= getDynamicUrl($_auth['role'] === 'admin' ? '/admin/dashboard' : '/student/dashboard') ?>" class="btn-hero-primary" style="width: 100%; justify-content: center; text-decoration: none;">
+                💻 Vào trang quản lý
+              </a>
+            </div>
+          </div>
         </div>
-      </div>
+      <?php endif; ?>
     </div>
   </section>
 
@@ -718,22 +729,25 @@
   <!-- └──────────────────────────────────────────────┘ -->
   <section class="cta-section">
     <div class="cta-content">
-      <h2>Trải nghiệm hệ thống ngay hôm nay</h2>
-      <p>Đăng nhập để bắt đầu trải nghiệm đầy đủ các tính năng quản lý Ký túc xá thông minh.</p>
-      <a href="<?= getDynamicUrl('/auth/login') ?>" class="btn-hero-primary" style="text-decoration:none">
-        🚀 Bắt đầu ngay
-      </a>
+      <?php if (!empty($_auth)): ?>
+        <h2>Bắt đầu khám phá các tính năng</h2>
+        <p>Truy cập vào trang quản lý của bạn để theo dõi thông tin phòng ở, hóa đơn và hợp đồng.</p>
+        <a href="<?= getDynamicUrl($_auth['role'] === 'admin' ? '/admin/dashboard' : '/student/dashboard') ?>" class="btn-hero-primary" style="text-decoration:none">
+          💻 Vào trang quản lý
+        </a>
+      <?php else: ?>
+        <h2>Trải nghiệm hệ thống ngay hôm nay</h2>
+        <p>Đăng nhập để bắt đầu trải nghiệm đầy đủ các tính năng quản lý Ký túc xá thông minh.</p>
+        <a href="<?= getDynamicUrl('/auth/login') ?>" class="btn-hero-primary" style="text-decoration:none">
+          🚀 Bắt đầu ngay
+        </a>
+      <?php endif; ?>
     </div>
   </section>
 </div>
 
 <script>
-  // Dynamic Demo Login Form Submissions
-  function submitDemo(email, password) {
-    document.getElementById('demoEmail').value = email;
-    document.getElementById('demoPassword').value = password;
-    document.getElementById('demoLoginForm').submit();
-  }
+
 
   // Room Fee Estimator Calculation Logic
   function calculateCost() {

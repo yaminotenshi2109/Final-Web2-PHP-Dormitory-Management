@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>404 — Không tìm thấy trang | KTX System</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Final-Web2-PHP-Dormitory-Management/public/assets/css/app.css">
     <style>
         body {
@@ -16,6 +17,8 @@
             margin: 0;
             padding: 2rem 1rem;
             box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            color: #1e293b;
         }
 
         .error-page {
@@ -60,13 +63,13 @@
         .error-title {
             font-size: 1.6rem;
             font-weight: 700;
-            color: #fff;
+            color: #111827;
             margin: 0 0 0.75rem;
         }
 
         .error-message {
             font-size: 1rem;
-            color: rgba(255,255,255,0.55);
+            color: #374151;
             margin: 0 0 2rem;
             line-height: 1.6;
         }
@@ -105,16 +108,16 @@
         }
 
         .error-btn-outline {
-            background: rgba(255,255,255,0.07);
-            color: rgba(255,255,255,0.75);
-            border: 1px solid rgba(255,255,255,0.18);
+            background: rgba(0,0,0,0.05);
+            color: #374151;
+            border: 1px solid rgba(0,0,0,0.15);
             backdrop-filter: blur(8px);
         }
 
         .error-btn-outline:hover {
-            background: rgba(255,255,255,0.12);
+            background: rgba(0,0,0,0.1);
             transform: translateY(-2px);
-            color: #fff;
+            color: #111827;
         }
 
         .error-content {

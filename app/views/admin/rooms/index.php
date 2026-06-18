@@ -49,7 +49,7 @@ $typeLabels = [
     </div>
     <div class="page-actions">
         <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms/map" class="btn btn-outline btn-sm">🗺️ Sơ đồ phòng</a>
-        <button class="btn btn-outline btn-sm" onclick="exportRooms()">📥 Xuất Excel</button>
+
         <button class="btn btn-primary" data-modal-open="modalAddRoom">➕ Thêm phòng</button>
     </div>
 </div>
@@ -680,16 +680,7 @@ function deleteRoom(id, roomNumber) {
     .catch(err => showKtxToast('error', 'Lỗi kết nối: ' + err.message));
 }
 
-/* ── Export ─────────────────────────────────────────────────── */
-function exportRooms() {
-    const q        = document.getElementById('searchInput')?.value ?? '';
-    const building = document.getElementById('buildingFilter')?.value ?? '';
-    const status   = document.getElementById('statusFilter')?.value ?? '';
-    window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/api/rooms/export'
-                         + '?q=' + encodeURIComponent(q)
-                         + '&building=' + encodeURIComponent(building)
-                         + '&status='   + encodeURIComponent(status);
-}
+
 
 /* ── Toast helper ───────────────────────────────────────────── */
 function showKtxToast(type, msg) {
