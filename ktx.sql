@@ -681,9 +681,6 @@ VALUES
 
 SET FOREIGN_KEY_CHECKS = 1;
 COMMIT;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
 -- ============================================================
 -- GHI CHÚ CHUẨN HÓA 3NF

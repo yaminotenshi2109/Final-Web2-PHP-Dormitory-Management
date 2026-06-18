@@ -254,7 +254,7 @@ class RoomAllocationService
         }, $rooms);
 
         // Sắp xếp theo score (cao nhất trước)
-        usort($scored, function ($a, $b) {
+        usort($scored, function (array $a, array $b) {
             // Score chính (priority logic)
             if ($a['score'] !== $b['score']) {
                 return $b['score'] <=> $a['score'];
@@ -283,7 +283,7 @@ class RoomAllocationService
      *   • Tình trạng lấp đầy của phòng
      *   • Giá phòng
      *
-     * @return float Score (0-1000)
+     * @return array Room array with score added
      */
     private function scoreRoom(array $room, int $priority): array
     {

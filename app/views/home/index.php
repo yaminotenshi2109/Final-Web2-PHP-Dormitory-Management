@@ -4,7 +4,6 @@
  * Redesigned Premium Landing Page — public, no auth required
  */
 ?>
-<<<<<<< HEAD
 <div class="home-layout">
 
 <!-- Navigation -->

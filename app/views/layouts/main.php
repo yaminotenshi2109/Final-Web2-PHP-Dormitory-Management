@@ -38,7 +38,6 @@ function navLink(string $href, string $icon, string $label, string $current, str
 <html lang="vi">
 
 <head>
-<<<<<<< HEAD
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -56,72 +55,6 @@ function navLink(string $href, string $icon, string $label, string $current, str
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-=======
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="csrf-token" content="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-<title><?= htmlspecialchars($title ?? 'KTX Management') ?> — KTX System</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
-<link rel="stylesheet" href="<?= getDynamicUrl('/assets/css/app.css') ?>">
-<style>
-  .no-sidebar .main-content {
-    margin-left: 0 !important;
-  }
-  .public-navbar {
-    background: #ffffff;
-    border-bottom: 1px solid var(--border);
-    height: 64px;
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    box-shadow: var(--shadow-sm);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .public-navbar-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  .public-navbar-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 16px;
-    color: var(--txt-primary);
-    font-weight: 700;
-  }
-  .public-navbar-logo .logo-icon {
-    font-size: 20px;
-  }
-  .public-navbar-links {
-    display: flex;
-    gap: 24px;
-  }
-  .public-navbar-links a {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--txt-secondary);
-    transition: color var(--t);
-  }
-  .public-navbar-links a:hover {
-    color: var(--brand);
-  }
-  .public-navbar-actions {
-    display: flex;
-    align-items: center;
-  }
-  @media (max-width: 768px) {
-    .public-navbar-links {
-      display: none;
-    }
-  }
-</style>
->>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
 </head>
 
 <body>
@@ -130,7 +63,6 @@ function navLink(string $href, string $icon, string $label, string $current, str
   $isPublicPage = in_array($currentUri, ['/', '/about']);
   ?>
 
-<<<<<<< HEAD
   <?php if ($isPublicPage): ?>
     <!-- Flash messages for public pages -->
     <?php if (!empty($_flash)): ?>

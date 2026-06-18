@@ -1,19 +1,7 @@
 <?php
 /**
-<<<<<<< HEAD
  * admin/buildings/edit.php — Sửa tòa nhà
  * Variables: $title, $building, $_errors, $_old, $_csrfToken
-=======
- * app/views/admin/buildings/edit.php
- * Admin — Chỉnh sửa tòa nhà
- * Variables: $title, $building, $_csrfToken, $_errors, $_old
- * 
- * @var string $title
- * @var array $building
- * @var string $_csrfToken
- * @var array $_errors
- * @var array $_old
->>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
  */
 $b = $building ?? [];
 ?>

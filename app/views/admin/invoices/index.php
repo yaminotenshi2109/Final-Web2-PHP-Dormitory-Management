@@ -21,13 +21,10 @@ $statusMap = ['unpaid'=>['badge-warning','⏳ Chưa trả'],'paid'=>['badge-succ
 </div>
 
 <div class="card">
-<<<<<<< HEAD
   <div class="filter-bar">
     <div class="filter-search">
       <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" class="form-control" placeholder="Tìm theo tên sinh viên...">
-=======
-    <div class="card-body" style="padding:0">
         <?php if (!empty($invoices)): ?>
             <div class="table-wrapper">
                 <table>

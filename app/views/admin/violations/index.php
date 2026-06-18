@@ -20,101 +20,18 @@ $statusMap = ['active'=>['badge-danger','🔴 Chưa xử lý'],'appealed'=>['bad
 </div>
 
 <div class="card">
-<<<<<<< HEAD
   <div class="filter-bar">
     <div class="filter-search">
       <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" class="form-control" placeholder="Tìm theo tên SV, loại vi phạm...">
-=======
-    <div class="card-body" style="padding:0">
-        <?php if (!empty($violations)): ?>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width:50px">#</th>
-                            <th>Sinh viên</th>
-                            <th>Loại vi phạm</th>
-                            <th style="text-align:center">Điểm trừ</th>
-                            <th style="text-align:center">Mức độ</th>
-                            <th style="text-align:center">Trạng thái</th>
-                            <th>Ngày ghi</th>
-                            <th style="text-align:center">Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $page    = $pagination['current_page'] ?? 1;
-                        $perPage = $pagination['per_page'] ?? 20;
-                        $offset  = ($page - 1) * $perPage;
-                        foreach ($violations as $i => $v):
-                            $statusMap = [
-                                'active'    => ['label' => 'Đang hiệu lực', 'class' => 'badge-danger'],
-                                'appealed'  => ['label' => 'Đang khiếu nại', 'class' => 'badge-warning'],
-                                'dismissed' => ['label' => 'Đã hủy',         'class' => 'badge-neutral'],
-                            ];
-                            $s = $statusMap[$v['status'] ?? ''] ?? ['label' => $v['status'] ?? '—', 'class' => 'badge-neutral'];
-
-                            $severityMap = [
-                                1 => ['label' => 'Nhẹ',      'class' => 'badge-info'],
-                                2 => ['label' => 'Trung bình','class' => 'badge-warning'],
-                                3 => ['label' => 'Nặng',     'class' => 'badge-danger'],
-                            ];
-                            $sev = $severityMap[(int)($v['severity'] ?? 0)] ?? ['label' => '—', 'class' => 'badge-neutral'];
-                        ?>
-                            <tr>
-                                <td><?= $offset + $i + 1 ?></td>
-                                <td>
-                                    <div style="font-weight:600"><?= htmlspecialchars($v['full_name'] ?? '—') ?></div>
-                                    <div style="font-size:0.78rem;color:var(--text-muted)"><?= htmlspecialchars($v['student_code'] ?? '') ?></div>
-                                </td>
-                                <td><?= htmlspecialchars($v['violation_type'] ?? '—') ?></td>
-                                <td style="text-align:center">
-                                    <span style="color:#ef4444;font-weight:700;font-size:1rem">
-                                        ⚠️ <?= (int)($v['penalty_points'] ?? 0) ?>
-                                    </span>
-                                </td>
-                                <td style="text-align:center">
-                                    <span class="badge <?= $sev['class'] ?>"><?= $sev['label'] ?></span>
-                                </td>
-                                <td style="text-align:center">
-                                    <span class="badge <?= $s['class'] ?>"><?= $s['label'] ?></span>
-                                </td>
-                                <td>
-                                    <?php
-                                    $dt = $v['created_at'] ?? '';
-                                    echo $dt ? htmlspecialchars(date('d/m/Y', strtotime($dt))) : '—';
-                                    ?>
-                                </td>
-                                <td style="text-align:center">
-                                    <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-                                        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>"
-                                           class="btn btn-ghost btn-sm">👁 Chi tiết</a>
-                                        <?php if (($v['status'] ?? '') !== 'dismissed'): ?>
-                                            <form method="POST"
-                                                  action="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>/dismiss"
-                                                  onsubmit="return confirm('Xác nhận hủy vi phạm này?')"
-                                                  style="display:inline">
-                                                <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-                                                <button type="submit" class="btn btn-outline btn-sm">🚫 Hủy</button>
-                                            </form>
-                                        <?php endif; ?>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php else: ?>
-            <div class="empty-state">
-                <div class="empty-state-icon">✅</div>
-                <div class="empty-state-title">Không có vi phạm nào</div>
-                <div class="empty-state-desc">Không tìm thấy bản ghi vi phạm phù hợp với bộ lọc hiện tại.</div>
-            </div>
-        <?php endif; ?>
->>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
     </div>
+    <select class="form-control" style="width:auto;min-width:140px">
+      <option value="">Tất cả trạng thái</option>
+      <option value="active">Chưa xử lý</option>
+      <option value="appealed">Khiếu nại</option>
+      <option value="dismissed">Bác bỏ</option>
+    </select>
+  </div>
     <select class="form-control" style="width:auto;min-width:140px">
       <option value="">Tất cả trạng thái</option>
       <option value="active" <?= ($filters['status'] ?? '') === 'active' ? 'selected' : '' ?>>Chưa xử lý</option>
@@ -156,8 +73,6 @@ $statusMap = ['active'=>['badge-danger','🔴 Chưa xử lý'],'appealed'=>['bad
     <div class="empty-state"><div class="empty-icon">🎉</div><div class="empty-title">Không có vi phạm</div><div class="empty-msg">Tuyệt vời! Không có vi phạm nào cần xử lý.</div></div>
   <?php endif; ?>
 </div>
-<<<<<<< HEAD
-=======
 
 <!-- Pagination -->
 <?php if (!empty($pagination) && ($pagination['total_pages'] ?? 1) > 1): ?>
@@ -343,4 +258,3 @@ $statusMap = ['active'=>['badge-danger','🔴 Chưa xử lý'],'appealed'=>['bad
     }
 })();
 </script>
->>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
