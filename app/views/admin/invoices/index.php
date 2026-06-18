@@ -21,10 +21,118 @@ $statusMap = ['unpaid'=>['badge-warning','⏳ Chưa trả'],'paid'=>['badge-succ
 </div>
 
 <div class="card">
+<<<<<<< HEAD
   <div class="filter-bar">
     <div class="filter-search">
       <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input type="text" class="form-control" placeholder="Tìm theo tên sinh viên...">
+=======
+    <div class="card-body" style="padding:0">
+        <?php if (!empty($invoices)): ?>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:50px">#</th>
+                            <th>Sinh viên</th>
+                            <th>Phòng</th>
+                            <th style="text-align:center">Tháng/Năm</th>
+                            <th style="text-align:right">Tiền phòng</th>
+                            <th style="text-align:right">Điện + Nước</th>
+                            <th style="text-align:right">Tổng</th>
+                            <th>Hạn nộp</th>
+                            <th style="text-align:center">Trạng thái</th>
+                            <th style="text-align:center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        $page    = $pagination['current_page'] ?? 1;
+                        $perPage = $pagination['per_page'] ?? 20;
+                        $offset  = ($page - 1) * $perPage;
+
+                        foreach ($invoices as $i => $inv):
+                            $statusMap = [
+                                'unpaid'    => ['label' => 'Chưa thanh toán', 'class' => 'badge-warning'],
+                                'paid'      => ['label' => 'Đã thanh toán',   'class' => 'badge-success'],
+                                'overdue'   => ['label' => 'Quá hạn',         'class' => 'badge-danger'],
+                                'cancelled' => ['label' => 'Đã hủy',          'class' => 'badge-neutral'],
+                            ];
+                            $st = $statusMap[$inv['status'] ?? ''] ?? ['label' => $inv['status'] ?? '—', 'class' => 'badge-neutral'];
+
+                            $elecWater = (float)($inv['electricity_fee'] ?? 0) + (float)($inv['water_fee'] ?? 0);
+                            $dueDate   = $inv['due_date'] ?? '';
+                            $isPastDue = $dueDate && strtotime($dueDate) < time() && ($inv['status'] ?? '') === 'unpaid';
+                        ?>
+                        <tr>
+                            <td><?= $offset + $i + 1 ?></td>
+                            <td>
+                                <div style="font-weight:600"><?= htmlspecialchars($inv['full_name'] ?? '—') ?></div>
+                                <?php if (!empty($inv['paid_at'])): ?>
+                                    <div style="font-size:0.75rem;color:var(--text-muted)">
+                                        Thanh toán: <?= htmlspecialchars(date('d/m/Y', strtotime($inv['paid_at']))) ?>
+                                    </div>
+                                <?php endif; ?>
+                            </td>
+                            <td>
+                                <span style="font-weight:600"><?= htmlspecialchars($inv['room_number'] ?? '—') ?></span>
+                                <div style="font-size:0.78rem;color:var(--text-muted)"><?= htmlspecialchars($inv['building_name'] ?? '') ?></div>
+                            </td>
+                            <td style="text-align:center">
+                                <?= sprintf('%02d/%d', (int)($inv['month'] ?? 0), (int)($inv['year'] ?? 0)) ?>
+                            </td>
+                            <td style="text-align:right">
+                                <?= number_format((float)($inv['base_rent'] ?? 0), 0, ',', '.') ?>₫
+                            </td>
+                            <td style="text-align:right">
+                                <?= number_format($elecWater, 0, ',', '.') ?>₫
+                            </td>
+                            <td style="text-align:right;font-weight:700;color:var(--primary)">
+                                <?= number_format((float)($inv['total_amount'] ?? 0), 0, ',', '.') ?>₫
+                            </td>
+                            <td>
+                                <?php if ($dueDate): ?>
+                                    <span style="<?= $isPastDue ? 'color:#ef4444;font-weight:600' : '' ?>">
+                                        <?= htmlspecialchars(date('d/m/Y', strtotime($dueDate))) ?>
+                                    </span>
+                                <?php else: ?>
+                                    —
+                                <?php endif; ?>
+                            </td>
+                            <td style="text-align:center">
+                                <span class="badge <?= $st['class'] ?>"><?= $st['label'] ?></span>
+                            </td>
+                            <td style="text-align:center">
+                                <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
+                                    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= (int)$inv['id'] ?>"
+                                       class="btn btn-ghost btn-sm">👁 Xem</a>
+                                    <?php if (($inv['status'] ?? '') === 'unpaid' || ($inv['status'] ?? '') === 'overdue'): ?>
+                                        <form method="POST"
+                                              action="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= (int)$inv['id'] ?>/mark-paid"
+                                              onsubmit="return confirm('Xác nhận đánh dấu hóa đơn #<?= (int)$inv['id'] ?> là đã thanh toán?')"
+                                              style="display:inline">
+                                            <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+                                            <button type="submit" class="btn btn-primary btn-sm">✅ Đã thu</button>
+                                        </form>
+                                    <?php endif; ?>
+                                </div>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php else: ?>
+            <div class="empty-state">
+                <div class="empty-state-icon">🧾</div>
+                <div class="empty-state-title">Không có hóa đơn nào</div>
+                <div class="empty-state-desc">Không tìm thấy hóa đơn phù hợp với bộ lọc hiện tại.</div>
+                <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/generate" class="btn btn-primary" style="margin-top:1rem">
+                    ➕ Tạo hóa đơn mới
+                </a>
+            </div>
+        <?php endif; ?>
+>>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
     </div>
     <select class="form-control" style="width:auto;min-width:140px">
       <option value="">Tất cả trạng thái</option>

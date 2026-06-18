@@ -2,6 +2,9 @@
     RewriteEngine On
     RewriteBase /Final-Web2-PHP-Dormitory-Management/
 
+    # Rewrite assets to public/assets
+    RewriteRule ^assets/(.*)$ public/assets/$1 [L]
+
     # Rewrite empty path to public/
     RewriteRule ^$ public/ [L]
 

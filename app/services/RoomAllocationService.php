@@ -376,7 +376,7 @@ class RoomAllocationService
 
             // 5. Gửi thông báo
             $student = $db->selectOne(
-                "SELECT s.user_id, s.full_name FROM students WHERE id = ?",
+                "SELECT s.user_id, s.full_name FROM students s WHERE s.id = ?",
                 [$studentId]
             );
 

@@ -354,8 +354,11 @@ class BillingController extends BaseController
      * ───────────────────────────────────────────────────────────
      */
 
+<<<<<<< HEAD
     protected function isAdmin(): bool
     {
         return $this->auth('role') === 'admin';
     }
+=======
+>>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
 }

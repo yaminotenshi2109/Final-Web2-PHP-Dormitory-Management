@@ -22,6 +22,7 @@ $st = $r['status'] ?? 'pending'; [$bClass, $bLabel] = $statusMap[$st] ?? ['badge
   </div>
 </div>
 
+<<<<<<< HEAD
 <div class="grid-2">
   <div class="card">
     <div class="card-header"><div class="card-title">Thông tin đăng ký</div></div>
@@ -63,3 +64,90 @@ $st = $r['status'] ?? 'pending'; [$bClass, $bLabel] = $statusMap[$st] ?? ['badge
     </div>
   </div>
 </div>
+=======
+<script>
+function autoAllocate() {
+    if (!confirm('Xác nhận tự động xếp phòng cho sinh viên này?')) return;
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/registrations/<?= $id ?>/auto-allocate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': token
+        },
+        body: JSON.stringify({ method: 'auto' })
+    })
+    .then(r => r.json())
+    .then(json => {
+        if (json.success) {
+            alert('🚀 Tự động xếp phòng thành công! Phòng ' + json.data.room_number + ' (' + json.data.building_name + ')');
+            // Redirect to admin dashboard
+            window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/dashboard';
+        } else {
+            alert('❌ Lỗi: ' + json.message);
+        }
+    })
+    .catch(err => alert('Lỗi kết nối: ' + err.message));
+}
+
+function manualAllocate() {
+    const roomId = document.getElementById('manualRoomSelect').value;
+    if (!roomId) { alert('Vui lòng chọn phòng trống!'); return; }
+    
+    if (!confirm('Xác nhận gán sinh viên vào phòng đã chọn?')) return;
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/registrations/<?= $id ?>/manual-allocate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': token
+        },
+        body: JSON.stringify({ room_id: roomId })
+    })
+    .then(r => r.json())
+    .then(json => {
+        if (json.success) {
+            alert('✅ Gán phòng thủ công thành công!');
+            // Redirect to admin dashboard
+            window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/dashboard';
+        } else {
+            alert('❌ Lỗi: ' + json.message);
+        }
+    })
+    .catch(err => alert('Lỗi kết nối: ' + err.message));
+}
+
+function rejectRegistration() {
+    const reason = document.getElementById('rejectReasonInput').value.trim();
+    if (!reason) { alert('Vui lòng nhập lý do từ chối đơn!'); return; }
+    
+    if (!confirm('Xác nhận từ chối đơn đăng ký này?')) return;
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/registrations/<?= $id ?>/reject', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': token
+        },
+        body: JSON.stringify({ reason: reason })
+    })
+    .then(r => r.json())
+    .then(json => {
+        if (json.success) {
+            alert('❌ Đã từ chối đơn đăng ký thành công!');
+            // Redirect to admin registrations list
+            window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/registrations';
+        } else {
+            alert('❌ Lỗi: ' + json.message);
+        }
+    })
+    .catch(err => alert('Lỗi kết nối: ' + err.message));
+}
+</script>
+>>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb

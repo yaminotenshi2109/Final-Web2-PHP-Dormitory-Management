@@ -332,7 +332,7 @@ class AuthController extends BaseController
 
     public function showLogin(array $params = []): void
     {
-        $this->view('auth/login', ['title' => 'Đăng nhập'], false);
+        $this->view('auth/login', ['title' => 'Đăng nhập'], 'auth');
     }
 
     public function login(array $params = []): void
@@ -380,7 +380,7 @@ class AuthController extends BaseController
 
     public function showRegister(array $params = []): void
     {
-        $this->view('auth/register', ['title' => 'Đăng ký'], false);
+        $this->view('auth/register', ['title' => 'Đăng ký'], 'auth');
     }
 
     public function register(array $params = []): void

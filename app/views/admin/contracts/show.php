@@ -1,7 +1,16 @@
 <?php
 /**
+<<<<<<< HEAD
  * admin/contracts/show.php — Chi tiết hợp đồng
  * Variables: $title, $contract, $_csrfToken
+=======
+ * app/views/admin/contracts/show.php
+ * Admin — Chi tiết hợp đồng
+ * Variables: $title, $contract
+ * @var string $title
+ * @var array $contract
+ * @var string $_csrfToken
+>>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
  */
 $c = $contract ?? [];
 $statusMap = ['active'=>['badge-success','✅ Hiệu lực'],'expired'=>['badge-neutral','⏰ Hết hạn'],'terminated'=>['badge-danger','🚫 Chấm dứt'],'under_review'=>['badge-warning','⚠️ Xem xét']];

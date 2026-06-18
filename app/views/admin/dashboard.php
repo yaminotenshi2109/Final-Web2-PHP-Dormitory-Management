@@ -5,6 +5,11 @@
  *  Admin dashboard — tổng quan hệ thống KTX
  *  Variables: $title, $stats[], $recent_registrations[], $recent_violations[]
  * ─────────────────────────────────────────────────────────────
+ * @var string $title
+ * @var array $stats
+ * @var array $recent_registrations
+ * @var array $recent_violations
+ * @var array $occupancyPct
  */
 
 // Helpers for occupancy ratio
