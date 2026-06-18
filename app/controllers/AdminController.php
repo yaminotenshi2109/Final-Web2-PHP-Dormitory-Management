@@ -32,11 +32,12 @@ class AdminController extends BaseController
 
         // 2. Đơn đăng ký gần đây
         $recent_registrations = $this->db->select("
-            SELECT r.*, s.full_name AS student_name, s.student_code, rm.room_number, b.name AS building_name
+            SELECT r.*, r.registered_at AS created_at,
+                   s.full_name AS student_name, s.student_code, rm.room_number, b.name AS building_name
             FROM room_registrations r
             JOIN students s ON s.id = r.student_id
-            LEFT JOIN rooms rm ON rm.id = r.room_id
-            LEFT JOIN buildings b ON b.id = rm.building_id
+            LEFT JOIN rooms rm ON (rm.id = r.room_id OR rm.id = r.assigned_room_id)
+            LEFT JOIN buildings b ON (b.id = rm.building_id OR (rm.id IS NULL AND b.id = r.preferred_building_id))
             ORDER BY r.registered_at DESC LIMIT 5
         ");
 

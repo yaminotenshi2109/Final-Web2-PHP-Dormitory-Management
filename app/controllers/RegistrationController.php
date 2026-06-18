@@ -169,6 +169,7 @@ class RegistrationController extends BaseController
                     'preferred_room_type'    => $data['preferred_room_type'] ?? null,
                     'notes'                  => $data['notes'] ?? null,
                     'status'                 => 'pending',
+                    'registered_at'          => date('Y-m-d H:i:s'),
                 ]);
             });
 
@@ -314,7 +315,7 @@ class RegistrationController extends BaseController
         }
 
         $result = $this->db->paginate(
-            "SELECT r.*, s.full_name, s.gender, s.priority_level,
+            "SELECT r.*, r.registered_at AS created_at, s.full_name, s.gender, s.priority_level,
                     b.name AS building_name,
                     rm.room_number, rm.floor
              FROM room_registrations r
@@ -516,6 +517,68 @@ class RegistrationController extends BaseController
      *  HELPER METHODS
      * ───────────────────────────────────────────────────────────
      */
+
+    /**
+     * DELETE /student/registrations/:id
+     * Hủy đơn đăng ký phòng của sinh viên
+     */
+    public function cancel(array $params = []): void
+    {
+        $this->requireAuth();
+        $this->verifyCsrf();
+
+        $id = (int)$params['id'];
+        $userId = $this->auth('id');
+
+        // Lấy hồ sơ sinh viên
+        $student = $this->db->selectOne("SELECT id FROM students WHERE user_id = ?", [$userId]);
+        if (!$student) {
+            $this->jsonError('Không tìm thấy hồ sơ sinh viên', 404);
+        }
+
+        // Lấy đơn đăng ký
+        $registration = $this->db->selectOne(
+            "SELECT * FROM room_registrations WHERE id = ?",
+            [$id]
+        );
+
+        if (!$registration) {
+            $this->jsonError('Đơn đăng ký không tồn tại', 404);
+        }
+
+        if ((int)$registration['student_id'] !== (int)$student['id']) {
+            $this->jsonError('Bạn không có quyền hủy đơn đăng ký này', 403);
+        }
+
+        if (strtolower($registration['status']) !== 'pending') {
+            $this->jsonError('Chỉ có thể hủy đơn đăng ký đang chờ xử lý', 409);
+        }
+
+        try {
+            $this->db->update(
+                'room_registrations',
+                [
+                    'status' => 'cancelled',
+                    'reviewed_at' => date('Y-m-d H:i:s'),
+                ],
+                'id = ?',
+                [$id]
+            );
+
+            // Gửi thông báo
+            $this->db->insert('notifications', [
+                'user_id' => $userId,
+                'title'   => 'Đơn đăng ký phòng đã hủy',
+                'message' => 'Đơn đăng ký phòng của bạn đã được hủy thành công.',
+                'type'    => 'registration',
+            ]);
+
+            $this->jsonOk(null, 'Hủy đơn đăng ký thành công.');
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+            $this->jsonError('Lỗi khi hủy đơn đăng ký', 500);
+        }
+    }
 
     /**
      * Lấy học kỳ hiện tại

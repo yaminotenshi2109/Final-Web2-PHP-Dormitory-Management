@@ -1,107 +1,32 @@
 <?php
 /**
- * Admin – Danh sách hóa đơn
- * Variables: $title, $invoices (array), $pagination
+ * admin/invoices/index.php — Hóa đơn
+ * Variables: $title, $invoices[], $stats, $filters
  */
-
-// Compute summary stats
-$totalCount    = count($invoices ?? []);
-$unpaidCount   = 0;
-$totalCollected = 0;
-foreach ($invoices ?? [] as $inv) {
-    if (($inv['status'] ?? '') === 'unpaid' || ($inv['status'] ?? '') === 'overdue') {
-        $unpaidCount++;
-    }
-    if (($inv['status'] ?? '') === 'paid') {
-        $totalCollected += (float)($inv['total_amount'] ?? 0);
-    }
-}
-
-// Filters from GET
-$filterMonth  = $_GET['month']  ?? '';
-$filterYear   = $_GET['year']   ?? '';
-$filterStatus = $_GET['status'] ?? '';
-
-$currentYear = (int)date('Y');
+$statusMap = ['unpaid'=>['badge-warning','⏳ Chưa trả'],'paid'=>['badge-success','✅ Đã trả'],'overdue'=>['badge-danger','🔴 Quá hạn'],'cancelled'=>['badge-neutral','🚫 Đã hủy']];
 ?>
 
-<!-- Page Header -->
 <div class="page-header">
-    <div>
-        <h1 class="page-title">🧾 <?= htmlspecialchars($title ?? 'Quản lý hóa đơn') ?></h1>
-        <p class="page-subtitle">Quản lý thu tiền phòng và các khoản phí dịch vụ</p>
-    </div>
-    <div class="page-actions">
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/generate" class="btn btn-primary">
-            ➕ Tạo hóa đơn
-        </a>
-    </div>
+  <div><h1 class="page-title">🧾 Quản lý Hóa đơn</h1><p class="page-subtitle">Theo dõi hóa đơn tiền phòng, điện, nước</p></div>
+  <div class="page-actions">
+    <form method="POST" action="<?= getDynamicUrl('/admin/invoices/generate') ?>" style="display:inline"><input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>"><button type="submit" class="btn btn-primary" onclick="return confirm('Tạo hóa đơn cho tháng này?')">⚡ Tạo hóa đơn tháng</button></form>
+  </div>
 </div>
 
-<!-- Summary Cards -->
-<div class="stat-grid" style="margin-bottom:1.5rem">
-    <div class="stat-card" style="--stat-color:#6366f1;--stat-icon-bg:#eef2ff">
-        <div class="stat-icon">📄</div>
-        <div class="stat-info">
-            <div class="stat-value"><?= $totalCount ?></div>
-            <div class="stat-label">Tổng hóa đơn</div>
-        </div>
-    </div>
-    <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fffbeb">
-        <div class="stat-icon">⏳</div>
-        <div class="stat-info">
-            <div class="stat-value"><?= $unpaidCount ?></div>
-            <div class="stat-label">Chưa thanh toán</div>
-        </div>
-    </div>
-    <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#ecfdf5">
-        <div class="stat-icon">💰</div>
-        <div class="stat-info">
-            <div class="stat-value"><?= number_format($totalCollected, 0, ',', '.') ?>₫</div>
-            <div class="stat-label">Đã thu (trang này)</div>
-        </div>
-    </div>
+<div class="stat-grid mb-24">
+  <div class="stat-card" style="--stat-color:#6366f1;--stat-icon-bg:#eef2ff"><div class="stat-icon">🧾</div><div><div class="stat-value"><?= number_format($stats['total'] ?? 0) ?></div><div class="stat-label">Tổng hóa đơn</div></div></div>
+  <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7"><div class="stat-icon">⏳</div><div><div class="stat-value"><?= number_format($stats['unpaid'] ?? 0) ?></div><div class="stat-label">Chưa thanh toán</div></div></div>
+  <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#d1fae5"><div class="stat-icon">💰</div><div><div class="stat-value"><?= number_format($stats['total_revenue'] ?? 0, 0, ',', '.') ?>đ</div><div class="stat-label">Đã thu</div></div></div>
+  <div class="stat-card" style="--stat-color:#ef4444;--stat-icon-bg:#fee2e2"><div class="stat-icon">🔴</div><div><div class="stat-value"><?= number_format($stats['overdue'] ?? 0) ?></div><div class="stat-label">Quá hạn</div></div></div>
 </div>
 
-<!-- Filter Bar -->
-<div class="filter-bar">
-    <form method="GET" action="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="filter-bar-form">
-        <div class="filter-group">
-            <select name="month" class="form-control">
-                <option value="">-- Tháng --</option>
-                <?php for ($m = 1; $m <= 12; $m++): ?>
-                    <option value="<?= $m ?>" <?= (string)$filterMonth === (string)$m ? 'selected' : '' ?>>
-                        Tháng <?= $m ?>
-                    </option>
-                <?php endfor; ?>
-            </select>
-        </div>
-        <div class="filter-group">
-            <select name="year" class="form-control">
-                <option value="">-- Năm --</option>
-                <?php for ($y = $currentYear; $y >= $currentYear - 5; $y--): ?>
-                    <option value="<?= $y ?>" <?= (string)$filterYear === (string)$y ? 'selected' : '' ?>>
-                        <?= $y ?>
-                    </option>
-                <?php endfor; ?>
-            </select>
-        </div>
-        <div class="filter-group">
-            <select name="status" class="form-control">
-                <option value="">-- Tất cả trạng thái --</option>
-                <option value="unpaid"    <?= $filterStatus === 'unpaid'    ? 'selected' : '' ?>>Chưa thanh toán</option>
-                <option value="paid"      <?= $filterStatus === 'paid'      ? 'selected' : '' ?>>Đã thanh toán</option>
-                <option value="overdue"   <?= $filterStatus === 'overdue'   ? 'selected' : '' ?>>Quá hạn</option>
-                <option value="cancelled" <?= $filterStatus === 'cancelled' ? 'selected' : '' ?>>Đã hủy</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Lọc</button>
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-outline">Đặt lại</a>
-    </form>
-</div>
-
-<!-- Invoices Table -->
 <div class="card">
+<<<<<<< HEAD
+  <div class="filter-bar">
+    <div class="filter-search">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="form-control" placeholder="Tìm theo tên sinh viên...">
+=======
     <div class="card-body" style="padding:0">
         <?php if (!empty($invoices)): ?>
             <div class="table-wrapper">
@@ -207,30 +132,49 @@ $currentYear = (int)date('Y');
                 </a>
             </div>
         <?php endif; ?>
+>>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
     </div>
-</div>
+    <select class="form-control" style="width:auto;min-width:140px">
+      <option value="">Tất cả trạng thái</option>
+      <option value="unpaid" <?= ($filters['status'] ?? '') === 'unpaid' ? 'selected' : '' ?>>Chưa trả</option>
+      <option value="paid" <?= ($filters['status'] ?? '') === 'paid' ? 'selected' : '' ?>>Đã trả</option>
+      <option value="overdue" <?= ($filters['status'] ?? '') === 'overdue' ? 'selected' : '' ?>>Quá hạn</option>
+    </select>
+  </div>
 
-<!-- Pagination -->
-<?php if (!empty($pagination) && ($pagination['total_pages'] ?? 1) > 1): ?>
-    <div class="pagination">
-        <?php
-        $cur   = (int)($pagination['current_page'] ?? 1);
-        $total = (int)($pagination['total_pages'] ?? 1);
-        $qs    = http_build_query(array_filter([
-            'month'  => $filterMonth,
-            'year'   => $filterYear,
-            'status' => $filterStatus,
-        ]));
-        ?>
-        <?php if ($cur > 1): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
-        <?php endif; ?>
-        <?php for ($p = max(1, $cur - 2); $p <= min($total, $cur + 2); $p++): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices?page=<?= $p ?>&<?= $qs ?>"
-               class="page-link <?= $p === $cur ? 'active' : '' ?>"><?= $p ?></a>
-        <?php endfor; ?>
-        <?php if ($cur < $total): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
-        <?php endif; ?>
+  <?php if (!empty($invoices)): ?>
+    <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
+      <table>
+        <thead><tr><th>Sinh viên</th><th>Tháng</th><th>Tiền phòng</th><th>Điện</th><th>Nước</th><th>Tổng</th><th>Hạn nộp</th><th>Trạng thái</th><th style="text-align:right">Thao tác</th></tr></thead>
+        <tbody>
+          <?php foreach ($invoices as $inv): ?>
+            <?php $st = $inv['status'] ?? 'unpaid'; [$bClass, $bLabel] = $statusMap[$st] ?? ['badge-neutral', $st]; ?>
+            <tr>
+              <td>
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div class="avatar avatar-sm"><?= mb_strtoupper(mb_substr($inv['student_name'] ?? 'S', 0, 1)) ?></div>
+                  <span style="font-weight:600"><?= htmlspecialchars($inv['student_name'] ?? '') ?></span>
+                </div>
+              </td>
+              <td style="font-weight:600"><?= ($inv['month'] ?? '') . '/' . ($inv['year'] ?? '') ?></td>
+              <td><?= number_format($inv['base_rent'] ?? 0, 0, ',', '.') ?>đ</td>
+              <td><?= number_format($inv['electricity_fee'] ?? 0, 0, ',', '.') ?>đ</td>
+              <td><?= number_format($inv['water_fee'] ?? 0, 0, ',', '.') ?>đ</td>
+              <td style="font-weight:800;color:var(--brand)"><?= number_format($inv['total_amount'] ?? 0, 0, ',', '.') ?>đ</td>
+              <td style="font-size:12px;color:var(--txt-muted)"><?= !empty($inv['due_date']) ? date('d/m/Y', strtotime($inv['due_date'])) : '—' ?></td>
+              <td><span class="badge <?= $bClass ?>"><?= $bLabel ?></span></td>
+              <td style="text-align:right">
+                <a href="<?= getDynamicUrl('/admin/invoices/' . ($inv['id'] ?? '')) ?>" class="btn btn-ghost btn-sm">Xem</a>
+                <?php if ($st === 'unpaid' || $st === 'overdue'): ?>
+                  <form method="POST" action="<?= getDynamicUrl('/admin/invoices/' . ($inv['id'] ?? '') . '/pay') ?>" style="display:inline"><input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>"><button type="submit" class="btn btn-success btn-sm">💰 Đã trả</button></form>
+                <?php endif; ?>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
-<?php endif; ?>
+  <?php else: ?>
+    <div class="empty-state"><div class="empty-icon">🧾</div><div class="empty-title">Chưa có hóa đơn</div></div>
+  <?php endif; ?>
+</div>

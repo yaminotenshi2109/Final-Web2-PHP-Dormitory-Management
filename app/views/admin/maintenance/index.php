@@ -1,50 +1,29 @@
 <?php
 /**
- * Admin – Danh sách yêu cầu bảo trì
- * Variables: $title, $requests (array), $pagination
+ * admin/maintenance/index.php — Bảo trì
+ * Variables: $title, $requests[], $stats, $filters
  */
-
-$filterStatus   = $_GET['status']   ?? '';
-$filterPriority = $_GET['priority'] ?? '';
+$statusMap = ['open'=>['badge-danger','🔴 Mở'],'in_progress'=>['badge-warning','🔧 Đang xử lý'],'resolved'=>['badge-success','✅ Đã xử lý'],'closed'=>['badge-neutral','✔️ Đóng'],'rejected'=>['badge-neutral','❌ Từ chối']];
+$priorityMap = ['low'=>['badge-info','Thấp'],'medium'=>['badge-warning','Trung bình'],'high'=>['badge-danger','Cao'],'urgent'=>['badge-danger','🔥 Khẩn cấp']];
 ?>
 
-<!-- Page Header -->
 <div class="page-header">
-    <div>
-        <h1 class="page-title">🔧 <?= htmlspecialchars($title ?? 'Quản lý bảo trì') ?></h1>
-        <p class="page-subtitle">Xử lý các yêu cầu sửa chữa và bảo trì cơ sở vật chất ký túc xá</p>
-    </div>
+  <div><h1 class="page-title">🔧 Quản lý Bảo trì</h1><p class="page-subtitle">Theo dõi yêu cầu sửa chữa, bảo trì phòng</p></div>
 </div>
 
-<!-- Filter Bar -->
-<div class="filter-bar">
-    <form method="GET" action="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance" class="filter-bar-form">
-        <div class="filter-group">
-            <select name="status" class="form-control">
-                <option value="">-- Tất cả trạng thái --</option>
-                <option value="open"        <?= $filterStatus === 'open'        ? 'selected' : '' ?>>Mới mở</option>
-                <option value="in_progress" <?= $filterStatus === 'in_progress' ? 'selected' : '' ?>>Đang xử lý</option>
-                <option value="resolved"    <?= $filterStatus === 'resolved'    ? 'selected' : '' ?>>Đã giải quyết</option>
-                <option value="closed"      <?= $filterStatus === 'closed'      ? 'selected' : '' ?>>Đã đóng</option>
-                <option value="rejected"    <?= $filterStatus === 'rejected'    ? 'selected' : '' ?>>Đã từ chối</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <select name="priority" class="form-control">
-                <option value="">-- Tất cả mức ưu tiên --</option>
-                <option value="low"    <?= $filterPriority === 'low'    ? 'selected' : '' ?>>Thấp</option>
-                <option value="medium" <?= $filterPriority === 'medium' ? 'selected' : '' ?>>Trung bình</option>
-                <option value="high"   <?= $filterPriority === 'high'   ? 'selected' : '' ?>>Cao</option>
-                <option value="urgent" <?= $filterPriority === 'urgent' ? 'selected' : '' ?>>Khẩn cấp</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Lọc</button>
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance" class="btn btn-outline">Đặt lại</a>
-    </form>
+<div class="stat-grid mb-24">
+  <div class="stat-card" style="--stat-color:#ef4444;--stat-icon-bg:#fee2e2"><div class="stat-icon">🔴</div><div><div class="stat-value"><?= number_format($stats['open'] ?? 0) ?></div><div class="stat-label">Đang mở</div></div></div>
+  <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7"><div class="stat-icon">🔧</div><div><div class="stat-value"><?= number_format($stats['in_progress'] ?? 0) ?></div><div class="stat-label">Đang xử lý</div></div></div>
+  <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#d1fae5"><div class="stat-icon">✅</div><div><div class="stat-value"><?= number_format($stats['resolved'] ?? 0) ?></div><div class="stat-label">Đã xử lý</div></div></div>
 </div>
 
-<!-- Maintenance Requests Table -->
 <div class="card">
+<<<<<<< HEAD
+  <div class="filter-bar">
+    <div class="filter-search">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="form-control" placeholder="Tìm theo tiêu đề, phòng...">
+=======
     <div class="card-body" style="padding:0">
         <?php if (!empty($requests)): ?>
             <div class="table-wrapper">
@@ -163,29 +142,49 @@ $filterPriority = $_GET['priority'] ?? '';
                 <div class="empty-state-desc">Hiện tại không có yêu cầu bảo trì phù hợp với bộ lọc hiện tại.</div>
             </div>
         <?php endif; ?>
+>>>>>>> cab58fd2b4b300bab02822a36621ded10784ddfb
     </div>
-</div>
+    <select class="form-control" style="width:auto;min-width:140px">
+      <option value="">Tất cả trạng thái</option>
+      <option value="open" <?= ($filters['status'] ?? '') === 'open' ? 'selected' : '' ?>>Đang mở</option>
+      <option value="in_progress" <?= ($filters['status'] ?? '') === 'in_progress' ? 'selected' : '' ?>>Đang xử lý</option>
+      <option value="resolved" <?= ($filters['status'] ?? '') === 'resolved' ? 'selected' : '' ?>>Đã xử lý</option>
+    </select>
+    <select class="form-control" style="width:auto;min-width:120px">
+      <option value="">Mức độ</option>
+      <option value="urgent" <?= ($filters['priority'] ?? '') === 'urgent' ? 'selected' : '' ?>>Khẩn cấp</option>
+      <option value="high" <?= ($filters['priority'] ?? '') === 'high' ? 'selected' : '' ?>>Cao</option>
+      <option value="medium" <?= ($filters['priority'] ?? '') === 'medium' ? 'selected' : '' ?>>TB</option>
+      <option value="low" <?= ($filters['priority'] ?? '') === 'low' ? 'selected' : '' ?>>Thấp</option>
+    </select>
+  </div>
 
-<!-- Pagination -->
-<?php if (!empty($pagination) && ($pagination['total_pages'] ?? 1) > 1): ?>
-    <div class="pagination">
-        <?php
-        $cur   = (int)($pagination['current_page'] ?? 1);
-        $total = (int)($pagination['total_pages'] ?? 1);
-        $qs    = http_build_query(array_filter([
-            'status'   => $filterStatus,
-            'priority' => $filterPriority,
-        ]));
-        ?>
-        <?php if ($cur > 1): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
-        <?php endif; ?>
-        <?php for ($p = max(1, $cur - 2); $p <= min($total, $cur + 2); $p++): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance?page=<?= $p ?>&<?= $qs ?>"
-               class="page-link <?= $p === $cur ? 'active' : '' ?>"><?= $p ?></a>
-        <?php endfor; ?>
-        <?php if ($cur < $total): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
-        <?php endif; ?>
+  <?php if (!empty($requests)): ?>
+    <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
+      <table>
+        <thead><tr><th>Tiêu đề</th><th>Phòng</th><th>Người báo</th><th>Mức độ</th><th>Ngày báo</th><th>Trạng thái</th><th style="text-align:right">Thao tác</th></tr></thead>
+        <tbody>
+          <?php foreach ($requests as $rq): ?>
+            <?php $st = $rq['status'] ?? 'open'; [$sClass, $sLabel] = $statusMap[$st] ?? ['badge-neutral', $st]; $pr = $rq['priority'] ?? 'medium'; [$pClass, $pLabel] = $priorityMap[$pr] ?? ['badge-neutral', $pr]; ?>
+            <tr>
+              <td><div style="font-weight:600"><?= htmlspecialchars($rq['title'] ?? '') ?></div><div class="sub"><?= htmlspecialchars(mb_strimwidth($rq['description'] ?? '', 0, 50, '...')) ?></div></td>
+              <td style="font-weight:700"><?= htmlspecialchars($rq['room_number'] ?? '') ?><div class="sub"><?= htmlspecialchars($rq['building_name'] ?? '') ?></div></td>
+              <td><?= htmlspecialchars($rq['reporter_name'] ?? '') ?></td>
+              <td><span class="badge <?= $pClass ?>"><?= $pLabel ?></span></td>
+              <td style="font-size:12px;color:var(--txt-muted)"><?= !empty($rq['reported_at']) ? date('d/m/Y', strtotime($rq['reported_at'])) : '—' ?></td>
+              <td><span class="badge <?= $sClass ?>"><?= $sLabel ?></span></td>
+              <td style="text-align:right">
+                <a href="<?= getDynamicUrl('/admin/maintenance/' . ($rq['id'] ?? '')) ?>" class="btn btn-ghost btn-sm">Xem</a>
+                <?php if ($st === 'open' || $st === 'in_progress'): ?>
+                  <form method="POST" action="<?= getDynamicUrl('/admin/maintenance/' . ($rq['id'] ?? '') . '/resolve') ?>" style="display:inline"><input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>"><button type="submit" class="btn btn-success btn-sm">✅ Xử lý</button></form>
+                <?php endif; ?>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
     </div>
-<?php endif; ?>
+  <?php else: ?>
+    <div class="empty-state"><div class="empty-icon">🔧</div><div class="empty-title">Không có yêu cầu bảo trì</div></div>
+  <?php endif; ?>
+</div>

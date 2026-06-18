@@ -1,44 +1,23 @@
 <?php
 /**
- * Admin – Danh sách đăng ký ở KTX
- * Variables: $title, $registrations (array), $pagination, $status, $semester
+ * admin/registrations/index.php — Đăng ký phòng
+ * Variables: $title, $registrations[], $stats, $filters
  */
-
-$filterStatus   = $status   ?? ($_GET['status']   ?? '');
-$filterSemester = $semester ?? ($_GET['semester']  ?? '');
+$statusMap = ['pending'=>['badge-warning','⏳ Chờ duyệt'],'approved'=>['badge-success','✅ Đã duyệt'],'rejected'=>['badge-danger','❌ Từ chối'],'cancelled'=>['badge-neutral','🚫 Đã hủy']];
 ?>
 
-<!-- Page Header -->
 <div class="page-header">
-    <div>
-        <h1 class="page-title">📋 <?= htmlspecialchars($title ?? 'Quản lý đăng ký ở KTX') ?></h1>
-        <p class="page-subtitle">Duyệt và quản lý hồ sơ đăng ký ký túc xá của sinh viên</p>
-    </div>
+  <div>
+    <h1 class="page-title">📋 Đăng ký phòng</h1>
+    <p class="page-subtitle">Quản lý đơn đăng ký phòng của sinh viên</p>
+  </div>
 </div>
 
-<!-- Filter Bar -->
-<div class="filter-bar">
-    <form method="GET" action="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="filter-bar-form">
-        <div class="filter-group">
-            <select name="status" class="form-control">
-                <option value="">-- Tất cả trạng thái --</option>
-                <option value="pending"   <?= $filterStatus === 'pending'   ? 'selected' : '' ?>>Chờ duyệt</option>
-                <option value="approved"  <?= $filterStatus === 'approved'  ? 'selected' : '' ?>>Đã duyệt</option>
-                <option value="rejected"  <?= $filterStatus === 'rejected'  ? 'selected' : '' ?>>Đã từ chối</option>
-                <option value="cancelled" <?= $filterStatus === 'cancelled' ? 'selected' : '' ?>>Đã hủy</option>
-            </select>
-        </div>
-        <div class="filter-group">
-            <select name="semester" class="form-control">
-                <option value="">-- Tất cả học kỳ --</option>
-                <option value="1" <?= $filterSemester === '1' ? 'selected' : '' ?>>Học kỳ 1</option>
-                <option value="2" <?= $filterSemester === '2' ? 'selected' : '' ?>>Học kỳ 2</option>
-                <option value="3" <?= $filterSemester === '3' ? 'selected' : '' ?>>Học kỳ hè</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Lọc</button>
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-outline">Đặt lại</a>
-    </form>
+<div class="stat-grid mb-24">
+  <div class="stat-card" style="--stat-color:#6366f1;--stat-icon-bg:#eef2ff"><div class="stat-icon">📋</div><div><div class="stat-value"><?= number_format($stats['total'] ?? 0) ?></div><div class="stat-label">Tổng đơn</div></div></div>
+  <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7"><div class="stat-icon">⏳</div><div><div class="stat-value"><?= number_format($stats['pending'] ?? 0) ?></div><div class="stat-label">Chờ duyệt</div></div></div>
+  <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#d1fae5"><div class="stat-icon">✅</div><div><div class="stat-value"><?= number_format($stats['approved'] ?? 0) ?></div><div class="stat-label">Đã duyệt</div></div></div>
+  <div class="stat-card" style="--stat-color:#ef4444;--stat-icon-bg:#fee2e2"><div class="stat-icon">❌</div><div><div class="stat-value"><?= number_format($stats['rejected'] ?? 0) ?></div><div class="stat-label">Từ chối</div></div></div>
 </div>
 
 <!-- Registrations Table -->
@@ -218,38 +197,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
             </div>
         </div>
     </div>
+  <?php else: ?>
+    <div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Không có đơn đăng ký</div><div class="empty-msg">Chưa có đơn nào phù hợp với bộ lọc.</div></div>
+  <?php endif; ?>
 </div>
-
-<script>
-function openRejectModal(registrationId) {
-    var modal  = document.getElementById('modal-reject-registration');
-    var form   = document.getElementById('form-reject-registration');
-    var err    = document.getElementById('reject-reason-error');
-    var reason = document.getElementById('reject-reason');
-
-    form.action = '/Final-Web2-PHP-Dormitory-Management/public/admin/registrations/' + registrationId + '/reject';
-    reason.value = '';
-    err.style.display = 'none';
-    modal.style.display = 'flex';
-}
-
-function closeRejectModal() {
-    document.getElementById('modal-reject-registration').style.display = 'none';
-}
-
-function submitReject() {
-    var reason = document.getElementById('reject-reason');
-    var err    = document.getElementById('reject-reason-error');
-
-    if (!reason.value.trim()) {
-        err.style.display = 'block';
-        reason.focus();
-        return;
-    }
-    err.style.display = 'none';
-
-    if (confirm('Xác nhận từ chối hồ sơ đăng ký này?')) {
-        document.getElementById('form-reject-registration').submit();
-    }
-}
-</script>

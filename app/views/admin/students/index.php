@@ -1,140 +1,85 @@
 <?php
 /**
- * app/views/admin/students/index.php
- * Admin — Danh sách sinh viên
- * Variables: $title, $students[], $pagination[], $search
+ * admin/students/index.php — Danh sách sinh viên
+ * Variables: $title, $students[], $stats, $filters, $pagination
  */
-
-$currentPage = (int)($pagination['current_page'] ?? 1);
-$lastPage    = (int)($pagination['last_page']    ?? 1);
-$total       = (int)($pagination['total']        ?? 0);
-$from        = (int)($pagination['from']         ?? 0);
-$to          = (int)($pagination['to']           ?? 0);
-$searchQ     = htmlspecialchars($search ?? '');
+$genderMap = ['male'=>'👨 Nam','female'=>'👩 Nữ'];
+$priorityMap = [0=>'Bình thường',1=>'Chính sách',2=>'Ưu tiên cao'];
+$priorityBadge = [0=>'badge-neutral',1=>'badge-info',2=>'badge-purple'];
 ?>
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🎓 Quản lý sinh viên</h1>
-    <p class="page-subtitle">Tổng cộng <?= number_format($total) ?> hồ sơ sinh viên trong hệ thống</p>
+    <h1 class="page-title">🎓 Quản lý Sinh viên</h1>
+    <p class="page-subtitle">Danh sách sinh viên trong hệ thống KTX</p>
+  </div>
+  <div class="page-actions">
+    <a href="<?= getDynamicUrl('/admin/students/create') ?>" class="btn btn-primary">+ Thêm sinh viên</a>
+  </div>
+</div>
+
+<div class="stat-grid mb-24">
+  <div class="stat-card" style="--stat-color:#8b5cf6;--stat-icon-bg:#ede9fe">
+    <div class="stat-icon">🎓</div>
+    <div><div class="stat-value"><?= number_format($stats['total'] ?? 0) ?></div><div class="stat-label">Tổng sinh viên</div></div>
+  </div>
+  <div class="stat-card" style="--stat-color:#3b82f6;--stat-icon-bg:#eff6ff">
+    <div class="stat-icon">👨</div>
+    <div><div class="stat-value"><?= number_format($stats['male'] ?? 0) ?></div><div class="stat-label">Nam</div></div>
+  </div>
+  <div class="stat-card" style="--stat-color:#ec4899;--stat-icon-bg:#fce7f3">
+    <div class="stat-icon">👩</div>
+    <div><div class="stat-value"><?= number_format($stats['female'] ?? 0) ?></div><div class="stat-label">Nữ</div></div>
   </div>
 </div>
 
 <div class="card">
-  <!-- Search/Filter bar -->
   <div class="filter-bar">
     <div class="filter-search">
-      <span class="search-icon">🔍</span>
-      <input type="text" 
-             id="studentSearch" 
-             class="form-control" 
-             placeholder="Tìm tên, MSV, số điện thoại..." 
-             value="<?= $searchQ ?>"
-             onkeydown="if(event.key==='Enter') doSearch()">
+      <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="form-control" placeholder="Tìm theo tên, mã SV..." value="<?= htmlspecialchars($filters['search'] ?? '') ?>">
     </div>
-    <button class="btn btn-primary btn-sm" onclick="doSearch()">Tìm kiếm</button>
-    <?php if ($searchQ): ?>
-      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
-    <?php endif; ?>
-    <span style="margin-left:auto;font-size:12px;color:var(--txt-muted);">
-      Hiển thị <?= $from ?>–<?= $to ?> / <?= number_format($total) ?>
-    </span>
+    <select class="form-control" style="width:auto;min-width:130px">
+      <option value="">Tất cả giới tính</option>
+      <option value="male" <?= ($filters['gender'] ?? '') === 'male' ? 'selected' : '' ?>>Nam</option>
+      <option value="female" <?= ($filters['gender'] ?? '') === 'female' ? 'selected' : '' ?>>Nữ</option>
+    </select>
   </div>
 
-  <!-- Table -->
-  <div class="table-wrapper">
-    <table>
-      <thead>
-        <tr>
-          <th>Mã SV</th>
-          <th>Họ và tên</th>
-          <th>Giới tính</th>
-          <th>Khoa</th>
-          <th>Số điện thoại</th>
-          <th>Phòng ở</th>
-          <th>Trạng thái TK</th>
-          <th style="width:80px;text-align:center;">Thao tác</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if (!empty($students)): ?>
+  <?php if (!empty($students)): ?>
+    <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
+      <table>
+        <thead><tr><th>Sinh viên</th><th>Mã SV</th><th>Giới tính</th><th>Khoa</th><th>SĐT</th><th>Ưu tiên</th><th style="text-align:right">Thao tác</th></tr></thead>
+        <tbody>
           <?php foreach ($students as $s): ?>
-            <?php 
-              $genderLabel = $s['gender'] === 'male' ? 'Nam' : ($s['gender'] === 'female' ? 'Nữ' : 'Khác');
-              $initial = mb_strtoupper(mb_substr($s['full_name'] ?? 'S', 0, 1));
-            ?>
             <tr>
-              <td><strong style="color:var(--txt-primary);"><?= htmlspecialchars($s['student_code']) ?></strong></td>
               <td>
-                <div style="display:flex;align-items:center;gap:9px;">
-                  <div class="avatar avatar-sm"><?= $initial ?></div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div class="avatar avatar-md"><?= mb_strtoupper(mb_substr($s['full_name'] ?? 'S', 0, 1)) ?></div>
                   <div>
-                    <div style="font-weight:600;"><?= htmlspecialchars($s['full_name']) ?></div>
-                    <div class="sub"><?= htmlspecialchars($s['email']) ?></div>
+                    <div style="font-weight:700"><?= htmlspecialchars($s['full_name'] ?? '') ?></div>
+                    <div class="sub"><?= htmlspecialchars($s['email'] ?? '') ?></div>
                   </div>
                 </div>
               </td>
-              <td style="color:var(--txt-secondary);"><?= $genderLabel ?></td>
-              <td style="color:var(--txt-secondary);"><?= htmlspecialchars($s['faculty']) ?></td>
-              <td style="color:var(--txt-secondary);"><?= htmlspecialchars($s['phone']) ?></td>
-              <td>
-                <?php if (!empty($s['room_number'])): ?>
-                  <span class="badge badge-info">🚪 <?= htmlspecialchars($s['building_name']) ?> - <?= htmlspecialchars($s['room_number']) ?></span>
-                <?php else: ?>
-                  <span class="badge badge-neutral">Chưa xếp phòng</span>
-                <?php endif; ?>
-              </td>
-              <td>
-                <?php if ($s['user_status'] === 'active'): ?>
-                  <span class="badge badge-success">✅ Hoạt động</span>
-                <?php else: ?>
-                  <span class="badge badge-danger">🔴 Khóa</span>
-                <?php endif; ?>
-              </td>
-              <td>
-                <div style="display:flex;justify-content:center;">
-                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students/<?= (int)$s['id'] ?>" class="btn btn-ghost btn-sm" title="Chi tiết">👁️ Chi tiết</a>
-                </div>
+              <td style="font-family:monospace;font-weight:600"><?= htmlspecialchars($s['student_code'] ?? '') ?></td>
+              <td><?= $genderMap[$s['gender'] ?? ''] ?? '—' ?></td>
+              <td><?= htmlspecialchars($s['faculty'] ?? '') ?></td>
+              <td><?= htmlspecialchars($s['phone'] ?? '') ?></td>
+              <td><span class="badge <?= $priorityBadge[$s['priority_level'] ?? 0] ?? 'badge-neutral' ?>"><?= $priorityMap[$s['priority_level'] ?? 0] ?? 'N/A' ?></span></td>
+              <td style="text-align:right">
+                <a href="<?= getDynamicUrl('/admin/students/' . ($s['id'] ?? '')) ?>" class="btn btn-ghost btn-sm">Xem</a>
+                <a href="<?= getDynamicUrl('/admin/students/' . ($s['id'] ?? '') . '/edit') ?>" class="btn btn-outline btn-sm">Sửa</a>
               </td>
             </tr>
           <?php endforeach; ?>
-        <?php else: ?>
-          <tr>
-            <td colspan="8">
-              <div class="empty-state">
-                <div class="empty-icon">🎓</div>
-                <div class="empty-title">Không tìm thấy sinh viên</div>
-                <div class="empty-msg">Thử tìm kiếm với từ khóa khác hoặc chưa có sinh viên nào.</div>
-              </div>
-            </td>
-          </tr>
-        <?php endif; ?>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Pagination -->
-  <?php if ($lastPage > 1): ?>
-    <div class="card-footer" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-      <span class="pagination-info">Trang <?= $currentPage ?> / <?= $lastPage ?></span>
-      <div class="pagination" style="margin-left:auto;">
-        <?php if ($currentPage > 1): ?>
-          <a href="?page=<?= $currentPage - 1 ?>&q=<?= $searchQ ?>" class="page-link">‹</a>
-        <?php endif; ?>
-        <?php for ($p = 1; $p <= $lastPage; $p++): ?>
-          <a href="?page=<?= $p ?>&q=<?= $searchQ ?>" class="page-link <?= $p === $currentPage ? 'active' : '' ?>"><?= $p ?></a>
-        <?php endfor; ?>
-        <?php if ($currentPage < $lastPage): ?>
-          <a href="?page=<?= $currentPage + 1 ?>&q=<?= $searchQ ?>" class="page-link">›</a>
-        <?php endif; ?>
-      </div>
+        </tbody>
+      </table>
     </div>
+    <?php if (!empty($pagination)): ?>
+      <div class="card-footer"><?php include __DIR__ . '/../../components/pagination.php'; ?></div>
+    <?php endif; ?>
+  <?php else: ?>
+    <div class="empty-state"><div class="empty-icon">🎓</div><div class="empty-title">Chưa có sinh viên</div><div class="empty-msg">Sinh viên sẽ xuất hiện khi đăng ký tài khoản.</div></div>
   <?php endif; ?>
 </div>
-
-<script>
-function doSearch() {
-    const q = document.getElementById('studentSearch').value;
-    window.location.href = '?q=' + encodeURIComponent(q) + '&page=1';
-}
-</script>

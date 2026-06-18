@@ -84,7 +84,56 @@ $statusBadge = match($status) {
       📥 Tải hóa đơn (PDF)
     </a>
     <?php if ($status !== 'paid'): ?>
-      <button class="btn btn-primary" onclick="alert('Vui lòng liên hệ Văn phòng ban quản lý KTX để nộp tiền hoặc chuyển khoản theo cú pháp:\n[Dong tien KTX Phong <?= htmlspecialchars($invoice['room_number']) ?> Month <?= $month ?>]')">💳 Thanh toán trực tuyến</button>
+      <button class="btn btn-primary" onclick="window.ktx.openModal('paymentModal')">💳 Thanh toán trực tuyến</button>
     <?php endif; ?>
   </div>
 </div>
+
+<!-- Payment Modal -->
+<div class="modal-overlay" id="paymentModal">
+    <div class="modal" style="max-width: 440px;">
+        <div class="modal-header">
+            <h3 class="modal-title">💳 Thanh toán hóa đơn</h3>
+            <button class="modal-close-btn" onclick="window.ktx.closeModal('paymentModal')">&times;</button>
+        </div>
+        <div class="modal-body" style="display:flex; flex-direction:column; gap:16px; align-items:center; text-align:center;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(99, 102, 241, 0.1); color: var(--brand); display: flex; align-items: center; justify-content: center; margin-bottom: 8px;">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
+                    <line x1="2" y1="10" x2="22" y2="10"/>
+                </svg>
+            </div>
+            
+            <p style="font-size:14px; color:var(--txt-secondary); line-height:1.5;">
+                Vui lòng chuyển khoản ngân hàng hoặc nộp trực tiếp tại <strong>Văn phòng Ban Quản lý KTX (Phòng 101 - Tòa A)</strong>.
+            </p>
+            
+            <div style="width:100%; text-align:left; background:var(--page-bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px; display:flex; flex-direction:column; gap:8px; font-size:13.5px; margin-top:8px; transition: background-color var(--t), border-color var(--t);">
+                <div>Ngân hàng: <strong>BIDV (Chi nhánh Gia Định)</strong></div>
+                <div>Số tài khoản: <strong>1241 0000 987654</strong></div>
+                <div>Chủ tài khoản: <strong>BQL KTX STUDENT SYSTEM</strong></div>
+                <div>Số tiền: <strong style="color:var(--danger);"><?= number_format($total) ?> ₫</strong></div>
+                <div>Cú pháp chuyển khoản: <br>
+                    <code style="display:inline-block; margin-top:4px; padding:4px 8px; background:var(--card-bg); border:1px solid var(--border); border-radius:4px; font-weight:700; font-family:monospace; color:var(--brand); transition: background-color var(--t), border-color var(--t);">
+                        KTX<?= htmlspecialchars($invoice['room_number']) ?> T<?= $month ?> <?= $id ?>
+                    </code>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer" style="display:flex; gap:12px; justify-content:flex-end; width:100%;">
+            <button onclick="window.ktx.closeModal('paymentModal')" class="btn btn-outline" style="flex:1;">Đóng</button>
+            <button onclick="copySyntax()" class="btn btn-primary" style="flex:1;">Sao chép cú pháp</button>
+        </div>
+    </div>
+</div>
+
+<script>
+function copySyntax() {
+    const text = 'KTX<?= htmlspecialchars($invoice['room_number']) ?> T<?= $month ?> <?= $id ?>';
+    navigator.clipboard.writeText(text).then(() => {
+        window.ktx?.toast('Đã sao chép cú pháp chuyển khoản.', 'success');
+    }).catch(err => {
+        window.ktx?.toast('Không thể sao chép tự động.', 'error');
+    });
+}
+</script>
