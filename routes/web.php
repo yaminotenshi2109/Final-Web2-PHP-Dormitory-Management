@@ -142,6 +142,7 @@ $router->group('/admin', function (Router $r) {
     $r->get('/maintenance/:id',       'MaintenanceAdminController@show')->where('id', '\d+');
     $r->post('/maintenance/:id/resolve','MaintenanceAdminController@resolve')->where('id', '\d+');
     $r->post('/maintenance/:id/close', 'MaintenanceAdminController@close')->where('id', '\d+');
+    $r->get('/services',              'MaintenanceAdminController@index');
 
     // ── Thông báo ──────────────────────────────────────
     $r->get('/notifications',       'NotificationController@adminIndex');
@@ -151,6 +152,7 @@ $router->group('/admin', function (Router $r) {
     $r->get('/reports/revenue',     'ReportController@revenue')->name('report.revenue');
     $r->get('/reports/occupancy',   'ReportController@occupancy');
     $r->get('/reports/violations',  'ReportController@violations');
+    $r->get('/reports',             'ReportController@revenue');
 
 }, ['auth', 'admin']);
 
