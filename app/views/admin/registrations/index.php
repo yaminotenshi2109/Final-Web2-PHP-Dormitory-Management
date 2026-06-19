@@ -145,7 +145,7 @@ $statusMap = ['pending'=>['badge-warning','⏳ Chờ duyệt'],'approved'=>['bad
         $cur   = (int)($pagination['current_page'] ?? 1);
         $total = (int)($pagination['total_pages'] ?? 1);
         $qs    = http_build_query(array_filter([
-            'status'   => $filterStatus,
+            'status'   => $filterStatus ?? '',,
             'semester' => $filterSemester,
         ]));
         ?>
