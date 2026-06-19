@@ -197,7 +197,4 @@ $statusMap = ['pending'=>['badge-warning','⏳ Chờ duyệt'],'approved'=>['bad
             </div>
         </div>
     </div>
-  <?php else: ?>
-    <div class="empty-state"><div class="empty-icon">📋</div><div class="empty-title">Không có đơn đăng ký</div><div class="empty-msg">Chưa có đơn nào phù hợp với bộ lọc.</div></div>
-  <?php endif; ?>
 </div>
