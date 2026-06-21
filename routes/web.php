@@ -53,6 +53,7 @@ $router->group('/student', function (Router $r) {
     $r->get('/registrations',         'RegistrationController@studentList')->name('registration.index');
     $r->get('/registrations/create',  'RegistrationController@studentCreate')->name('registration.create');
     $r->post('/registrations',        'RegistrationController@studentStore')->name('registration.store');
+    $r->get('/registrations/:id',     'RegistrationController@studentShow')->where('id', '\d+');
     $r->delete('/registrations/:id',  'RegistrationController@studentCancel')->name('registration.cancel')
         ->where('id', '\d+');
 
@@ -205,6 +206,12 @@ $router->group('/api', function (Router $r) {
     $r->post('/notifications/:id/read',    'NotificationApiController@markRead')
         ->where('id', '\d+');
     $r->post('/notifications/read-all',    'NotificationApiController@markAllRead');
+
+    // Registration API for admin actions
+    $r->post('/registrations/:id/auto-allocate',   'RegistrationController@autoAllocate')->where('id', '\d+');
+    $r->post('/registrations/:id/manual-allocate', 'RegistrationController@manualAllocate')->where('id', '\d+');
+    $r->post('/registrations/:id/reject',          'RegistrationController@reject')->where('id', '\d+');
+    $r->get('/registrations/stats',                'RegistrationController@stats');
 
     // Dashboard stats
     $r->get('/stats/dashboard',    'StatsApiController@dashboard');

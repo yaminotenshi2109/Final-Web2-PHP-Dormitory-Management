@@ -113,7 +113,11 @@ class RegistrationController extends BaseController
         );
 
         if ($existing) {
-            $this->jsonError('Bạn đã có đơn đăng ký trong học kỳ này', 409);
+            if ($this->isAjax()) {
+                $this->jsonError('Bạn đã có đơn đăng ký trong học kỳ này', 409);
+            }
+            $this->flash('error', 'Bạn đã có đơn đăng ký trong học kỳ này.');
+            $this->redirect('/student/registrations');
         }
 
         $data = $this->only([
@@ -148,7 +152,12 @@ class RegistrationController extends BaseController
         }
 
         if (!empty($errors)) {
-            $this->jsonError('Dữ liệu không hợp lệ', 422, $errors);
+            if ($this->isAjax()) {
+                $this->jsonError('Dữ liệu không hợp lệ', 422, $errors);
+            }
+            $this->withOldInput($data);
+            $this->withErrors($errors, '/student/registrations/create');
+            return;
         }
 
         try {
@@ -182,19 +191,73 @@ class RegistrationController extends BaseController
                 'type'    => 'registration',
             ]);
 
-            $this->jsonOk(
-                ['registration_id' => $registrationId],
-                'Tạo đơn đăng ký thành công',
-                201
-            );
+            if ($this->isAjax()) {
+                $this->jsonOk(
+                    ['registration_id' => $registrationId],
+                    'Tạo đơn đăng ký thành công',
+                    201
+                );
+                return;
+            }
+
+            $this->flash('success', 'Tạo đơn đăng ký thành công');
+            $this->redirect('/student/registrations');
         } catch (\Throwable $e) {
             error_log('[RegistrationController::studentStore] ' . $e->getMessage() . ' | ' . $e->getFile() . ':' . $e->getLine());
-            $this->jsonError('Lỗi khi tạo đơn đăng ký: ' . ($e->getMessage() ?? 'Unknown error'), 500);
+            if ($this->isAjax()) {
+                $this->jsonError('Lỗi khi tạo đơn đăng ký: ' . ($e->getMessage() ?? 'Unknown error'), 500);
+                return;
+            }
+
+            error_log('[RegistrationController::studentStore] ' . $e->getMessage() . ' | ' . $e->getFile() . ':' . $e->getLine());
+            $this->flash('error', 'Lỗi khi tạo đơn đăng ký. Vui lòng thử lại.');
+            $this->back();
         }
     }
 
     /**
-     * GET /student/registrations/create
+     * GET /student/registrations/:id
+     * Xem chi tiết đơn đăng ký của sinh viên
+     */
+    public function studentShow(array $params = []): void
+    {
+        $this->requireAuth();
+
+        $userId = $this->auth('id');
+        $student = $this->db->selectOne(
+            "SELECT id FROM students WHERE user_id = ?",
+            [$userId]
+        );
+
+        if (!$student) {
+            $this->abort(404, 'Không tìm thấy hồ sơ sinh viên');
+        }
+
+        $registrationId = (int)($params['id'] ?? 0);
+        $registration = $this->db->selectOne(
+            "SELECT r.*, 
+                    pb.name AS preferred_building_name, 
+                    rm.room_number, rm.floor, rm.capacity, 
+                    b.name AS assigned_building_name
+             FROM room_registrations r
+             LEFT JOIN buildings pb ON pb.id = r.preferred_building_id
+             LEFT JOIN rooms rm ON rm.id = r.room_id OR rm.id = r.assigned_room_id
+             LEFT JOIN buildings b ON b.id = rm.building_id
+             WHERE r.id = ? AND r.student_id = ?",
+            [$registrationId, $student['id']]
+        );
+
+        if (!$registration) {
+            $this->abort(404, 'Không tìm thấy đơn đăng ký');
+        }
+
+        $this->view('student/registrations/show', [
+            'title'        => 'Chi tiết đơn đăng ký',
+            'registration' => $registration,
+        ]);
+    }
+
+    /**
      * Hiển thị form tạo đơn đăng ký phòng
      */
     public function studentCreate(array $params = []): void

@@ -147,7 +147,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
             <div class="stat-label">Vi phạm chưa xử lý</div>
         </div>
         <?php if (($stats['open_violations'] ?? 0) > 0): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?status=open"
+            <a href="<?= getDynamicUrl('/admin/violations?status=active') ?>"
                style="font-size:11px;color:#ef4444;font-weight:600;text-decoration:underline;margin-top:4px">
                 Xem ngay →
             </a>
@@ -272,7 +272,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                 <div class="card-title">⚠️ Vi phạm gần đây</div>
                 <div class="card-subtitle">Các trường hợp vi phạm mới nhất</div>
             </div>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="btn btn-ghost btn-sm">Xem tất cả →</a>
+            <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-ghost btn-sm">Xem tất cả →</a>
         </div>
 
         <?php if (!empty($recent_violations)): ?>
@@ -299,10 +299,12 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                             <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
                                 <?php
                                     $vBadge = match($vStatus) {
-                                        'open'     => ['badge-danger',  '🔴 Chưa xử lý'],
-                                        'resolved' => ['badge-success', '✅ Đã xử lý'],
-                                        'pending'  => ['badge-warning', '⏳ Đang xem xét'],
-                                        default    => ['badge-neutral', $vStatus],
+                                        'active'    => ['badge-danger',  '🔴 Chưa xử lý'],
+                                        'resolved'  => ['badge-success', '✅ Đã xử lý'],
+                                        'pending'   => ['badge-warning', '⏳ Đang xem xét'],
+                                        'appealed'  => ['badge-warning', '⚠️ Đang khiếu nại'],
+                                        'dismissed' => ['badge-neutral', '✅ Đã hủy'],
+                                        default     => ['badge-neutral', $vStatus],
                                     };
                                 ?>
                                 <span class="badge <?= $vBadge[0] ?>"><?= $vBadge[1] ?></span>
@@ -329,7 +331,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 
         <?php if (!empty($recent_violations) && ($stats['open_violations'] ?? 0) > 0): ?>
             <div class="card-footer" style="text-align:center">
-                <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?status=open"
+                <a href="<?= getDynamicUrl('/admin/violations?status=active') ?>"
                    class="btn btn-danger btn-sm">
                     ⚠️ Xử lý <?= $stats['open_violations'] ?> vi phạm
                 </a>
@@ -350,7 +352,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
             <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-outline">🎓 Quản lý sinh viên</a>
             <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-outline">📄 Hợp đồng</a>
             <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-outline">💰 Hóa đơn</a>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="btn btn-outline">⚠️ Vi phạm</a>
+            <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-outline">⚠️ Vi phạm</a>
             <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users" class="btn btn-outline">👤 Tài khoản</a>
             <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/services" class="btn btn-outline">🔧 Dịch vụ</a>
             <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-primary">📊 Báo cáo tổng hợp</a>
