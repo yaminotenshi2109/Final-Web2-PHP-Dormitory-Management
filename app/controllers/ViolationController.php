@@ -106,13 +106,14 @@ class ViolationController extends BaseController
         }
 
         $result = $this->db->paginate(
-            "SELECT v.*, v.recorded_at AS created_at, s.full_name, s.student_code, u.username
+            "SELECT v.*, s.full_name, s.student_code, u.username,
+                    c.id AS contract_id
              FROM violation_records v
              JOIN students s ON s.id = v.student_id
              JOIN users u ON u.id = s.user_id
              LEFT JOIN contracts c ON c.student_id = s.id AND c.status = 'active'
              WHERE {$where}
-             ORDER BY v.recorded_at DESC",
+             ORDER BY v.created_at DESC",
             $args,
             $page,
             $perPage
@@ -176,60 +177,6 @@ class ViolationController extends BaseController
             'contract'    => $contract,
             'types'       => self::VIOLATION_TYPES,
         ]);
-    }
-
-    /**
-     * POST /admin/violations/:id/dismiss
-     * Bác bỏ / hủy vi phạm (Admin)
-     */
-    public function dismiss(array $params = []): void
-    {
-        $this->requireAdmin();
-        $this->verifyCsrf();
-
-        $id = (int)$params['id'];
-
-        $violation = $this->db->selectOne(
-            "SELECT * FROM violation_records WHERE id = ?",
-            [$id]
-        );
-
-        if (!$violation) {
-            $this->abort(404, 'Vi phạm không tồn tại');
-        }
-
-        try {
-            $this->db->update(
-                'violation_records',
-                ['status' => 'dismissed'],
-                'id = ?',
-                [$id]
-            );
-
-            // Notify student
-            $student = $this->db->selectOne(
-                "SELECT s.user_id FROM students s WHERE s.id = ?",
-                [$violation['student_id']]
-            );
-
-            if ($student) {
-                $this->db->insert('notifications', [
-                    'user_id' => $student['user_id'],
-                    'title'   => 'Vi phạm đã được hủy bỏ',
-                    'message' => "Vi phạm #{$id} ({$violation['violation_type']}) đã được admin hủy bỏ.",
-                    'type'    => 'violation',
-                ]);
-            }
-
-            $_SESSION['_flash'] = ['success' => 'Đã hủy vi phạm thành công.'];
-            header('Location: /Final-Web2-PHP-Dormitory-Management/public/admin/violations');
-            exit;
-        } catch (\Throwable $e) {
-            error_log($e->getMessage());
-            $_SESSION['_flash'] = ['error' => 'Lỗi: ' . $e->getMessage()];
-            header('Location: /Final-Web2-PHP-Dormitory-Management/public/admin/violations');
-            exit;
-        }
     }
 
     /**
@@ -327,7 +274,7 @@ class ViolationController extends BaseController
         $id = (int)$params['id'];
 
         $violation = $this->db->selectOne(
-            "SELECT *, recorded_at AS created_at FROM violation_records WHERE id = ?",
+            "SELECT * FROM violation_records WHERE id = ?",
             [$id]
         );
 
@@ -381,7 +328,7 @@ class ViolationController extends BaseController
             }
 
             $updated = $this->db->selectOne(
-                "SELECT *, recorded_at AS created_at FROM violation_records WHERE id = ?",
+                "SELECT * FROM violation_records WHERE id = ?",
                 [$id]
             );
 
@@ -404,7 +351,7 @@ class ViolationController extends BaseController
         $id = (int)$params['id'];
 
         $violation = $this->db->selectOne(
-            "SELECT *, recorded_at AS created_at FROM violation_records WHERE id = ?",
+            "SELECT * FROM violation_records WHERE id = ?",
             [$id]
         );
 
@@ -534,7 +481,7 @@ class ViolationController extends BaseController
         $reason = $this->request('reason', '');
 
         $violation = $this->db->selectOne(
-            "SELECT *, recorded_at AS created_at FROM violation_records WHERE id = ?",
+            "SELECT * FROM violation_records WHERE id = ?",
             [$id]
         );
 
@@ -591,7 +538,7 @@ class ViolationController extends BaseController
         $id = (int)$params['id'];
 
         $violation = $this->db->selectOne(
-            "SELECT *, recorded_at AS created_at FROM violation_records WHERE id = ?",
+            "SELECT * FROM violation_records WHERE id = ?",
             [$id]
         );
 
@@ -809,10 +756,10 @@ class ViolationController extends BaseController
 
             // Monthly trend
             'monthly_trend' => $this->db->select(
-                "SELECT DATE_FORMAT(recorded_at, '%Y-%m') as month, COUNT(*) as count
+                "SELECT DATE_FORMAT(created_at, '%Y-%m') as month, COUNT(*) as count
                  FROM violation_records
-                 WHERE recorded_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
-                 GROUP BY DATE_FORMAT(recorded_at, '%Y-%m')
+                 WHERE created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+                 GROUP BY DATE_FORMAT(created_at, '%Y-%m')
                  ORDER BY month"
             ),
 
@@ -855,10 +802,10 @@ class ViolationController extends BaseController
         $format = $this->request('format', 'csv');
 
         $violations = $this->db->select(
-            "SELECT v.*, v.recorded_at AS created_at, s.full_name, s.student_code
+            "SELECT v.*, s.full_name, s.student_code
              FROM violation_records v
              JOIN students s ON s.id = v.student_id
-             ORDER BY v.recorded_at DESC"
+             ORDER BY v.created_at DESC"
         );
 
         if ($format === 'csv') {

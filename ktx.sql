@@ -89,6 +89,7 @@ CREATE TABLE `students` (
 -- Người phụ trách: Thành viên 1
 -- Quan hệ : 1-N với rooms
 -- ============================================================
+
 CREATE TABLE `buildings` (
   `id`           INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   `name`         VARCHAR(100)  NOT NULL COMMENT 'Tên tòa nhà (A1, B2...)',
@@ -108,7 +109,6 @@ CREATE TABLE `buildings` (
   DEFAULT CHARSET=utf8mb4
   COLLATE=utf8mb4_unicode_ci
   COMMENT='Tòa nhà KTX – gender_type kiểm soát room allocation logic';
-
 
 -- ============================================================
 -- BẢNG 4: rooms
@@ -756,3 +756,4 @@ ALTER TABLE `room_registrations`
 ADD CONSTRAINT `fk_reg_room_new`
   FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`)
   ON UPDATE CASCADE ON DELETE SET NULL;
+
