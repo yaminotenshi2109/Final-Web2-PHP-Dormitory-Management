@@ -1,68 +1,191 @@
 <?php
 /**
- * admin/maintenance/show.php — Chi tiết bảo trì
- * Variables: $title, $request, $_csrfToken
+ * app/views/admin/maintenance/show.php
+ * Admin — Chi tiết sự cố bảo trì
+ * Variables: $title, $request
  */
-$rq = $request ?? [];
-$statusMap = ['open'=>['badge-danger','🔴 Mở'],'in_progress'=>['badge-warning','🔧 Đang xử lý'],'resolved'=>['badge-success','✅ Đã xử lý'],'closed'=>['badge-neutral','✔️ Đóng'],'rejected'=>['badge-neutral','❌ Từ chối']];
-$priorityMap = ['low'=>['badge-info','Thấp'],'medium'=>['badge-warning','Trung bình'],'high'=>['badge-danger','Cao'],'urgent'=>['badge-danger','🔥 Khẩn cấp']];
-$st = $rq['status'] ?? 'open'; [$sClass, $sLabel] = $statusMap[$st] ?? ['badge-neutral', $st];
-$pr = $rq['priority'] ?? 'medium'; [$pClass, $pLabel] = $priorityMap[$pr] ?? ['badge-neutral', $pr];
+
+$id          = (int)$request['id'];
+$roomNumber  = htmlspecialchars($request['room_number']);
+$building    = htmlspecialchars($request['building_name']);
+$reporter    = htmlspecialchars($request['reporter_name'] ?? $request['reporter_username']);
+$phone       = htmlspecialchars($request['reporter_phone'] ?? '—');
+$issueTitle  = htmlspecialchars($request['title']);
+$desc        = htmlspecialchars($request['description']);
+$priority    = $request['priority'] ?? 'medium';
+$status      = $request['status'] ?? 'open';
+$resolution  = htmlspecialchars($request['resolution'] ?? '');
+
+$priorityBadge = match($priority) {
+    'low'    => 'badge-neutral',
+    'medium' => 'badge-info',
+    'high'   => 'badge-warning',
+    'urgent' => 'badge-danger',
+    default  => 'badge-neutral'
+};
+$priorityLabel = match($priority) {
+    'low'    => 'Thấp',
+    'medium' => 'Trung bình',
+    'high'   => 'Cao',
+    'urgent' => 'Khẩn cấp 🚨',
+    default  => $priority
+};
+
+$statusBadge = match($status) {
+    'open'        => 'badge-danger',
+    'in_progress' => 'badge-warning',
+    'resolved'    => 'badge-success',
+    'closed'      => 'badge-neutral',
+    default       => 'badge-neutral'
+};
+$statusLabel = match($status) {
+    'open'        => 'Chưa xử lý',
+    'in_progress' => 'Đang xử lý',
+    'resolved'    => 'Đã xử lý',
+    'closed'      => 'Đã đóng',
+    default       => $status
+};
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">🔧 Yêu cầu #<?= $rq['id'] ?? '' ?></h1><p class="page-subtitle"><?= htmlspecialchars($rq['title'] ?? '') ?></p></div>
-  <div class="page-actions">
-    <a href="<?= getDynamicUrl('/admin/maintenance') ?>" class="btn btn-ghost">← Quay lại</a>
-    <?php if ($st === 'open'): ?>
-      <form method="POST" action="<?= getDynamicUrl('/admin/maintenance/' . ($rq['id'] ?? '') . '/in-progress') ?>" style="display:inline"><input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>"><button type="submit" class="btn btn-outline">🔧 Bắt đầu xử lý</button></form>
-    <?php endif; ?>
-    <?php if ($st === 'open' || $st === 'in_progress'): ?>
-      <form method="POST" action="<?= getDynamicUrl('/admin/maintenance/' . ($rq['id'] ?? '') . '/resolve') ?>" style="display:inline"><input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>"><button type="submit" class="btn btn-success">✅ Đã xử lý</button></form>
-    <?php endif; ?>
-  </div>
-</div>
-
-<div class="grid-2">
-  <div class="card">
-    <div class="card-header"><div class="card-title">Chi tiết yêu cầu</div></div>
-    <div class="card-body">
-      <div style="display:flex;gap:8px;margin-bottom:16px"><span class="badge <?= $sClass ?>"><?= $sLabel ?></span><span class="badge <?= $pClass ?>"><?= $pLabel ?></span></div>
-      <table style="width:100%;font-size:14px">
-        <tr><td style="padding:10px 0;color:var(--txt-muted);width:120px">Tiêu đề</td><td style="font-weight:700"><?= htmlspecialchars($rq['title'] ?? '') ?></td></tr>
-        <tr><td style="padding:10px 0;color:var(--txt-muted)">Mô tả</td><td><?= nl2br(htmlspecialchars($rq['description'] ?? '')) ?></td></tr>
-        <tr><td style="padding:10px 0;color:var(--txt-muted)">Phòng</td><td style="font-weight:600"><?= htmlspecialchars($rq['room_number'] ?? '') ?> — <?= htmlspecialchars($rq['building_name'] ?? '') ?></td></tr>
-        <tr><td style="padding:10px 0;color:var(--txt-muted)">Ngày báo</td><td><?= !empty($rq['reported_at']) ? date('d/m/Y H:i', strtotime($rq['reported_at'])) : '—' ?></td></tr>
-        <?php if (!empty($rq['resolved_at'])): ?>
-          <tr><td style="padding:10px 0;color:var(--txt-muted)">Ngày xử lý</td><td style="color:var(--success)"><?= date('d/m/Y H:i', strtotime($rq['resolved_at'])) ?></td></tr>
-        <?php endif; ?>
-      </table>
-    </div>
-  </div>
-
   <div>
-    <div class="card mb-16">
-      <div class="card-header"><div class="card-title">Người báo cáo</div></div>
-      <div class="card-body">
-        <div style="display:flex;align-items:center;gap:14px">
-          <div class="avatar avatar-lg"><?= mb_strtoupper(mb_substr($rq['reporter_name'] ?? 'U', 0, 1)) ?></div>
-          <div><div style="font-weight:700"><?= htmlspecialchars($rq['reporter_name'] ?? '') ?></div><div style="color:var(--txt-muted);font-size:13px"><?= htmlspecialchars($rq['reporter_code'] ?? '') ?></div></div>
-        </div>
+    <h1 class="page-title">🔧 Chi tiết sự cố bảo trì</h1>
+    <p class="page-subtitle">Sự cố báo cáo tại Phòng <?= $roomNumber ?> (Tòa <?= $building ?>)</p>
+  </div>
+  <div class="page-actions">
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+  </div>
+</div>
+
+<div class="grid-2" style="grid-template-columns: 1.8fr 1fr; gap: 24px;">
+  <!-- Left Side: Issue Details & Resolution -->
+  <div style="display:flex;flex-direction:column;gap:24px;">
+    <!-- Issue Card -->
+    <div class="card" style="padding:24px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <span class="badge <?= $priorityBadge ?>" style="font-size:11px;font-weight:700;"><?= $priorityLabel ?></span>
+        <span class="badge <?= $statusBadge ?>"><?= $statusLabel ?></span>
+      </div>
+      
+      <h2 style="font-size:18px;font-weight:800;color:var(--txt-primary);margin-bottom:12px;"><?= $issueTitle ?></h2>
+      <p style="color:var(--txt-secondary);line-height:1.6;font-size:14px;white-space:pre-wrap;"><?= $desc ?></p>
+      
+      <div style="font-size:11px;color:var(--txt-muted);margin-top:16px;border-top:1px solid var(--border);padding-top:12px;">
+        🕐 Báo cáo lúc: <?= date('d/m/Y H:i', strtotime($request['reported_at'])) ?>
       </div>
     </div>
 
-    <!-- Admin notes form -->
-    <div class="card">
-      <div class="card-header"><div class="card-title">💬 Ghi chú xử lý</div></div>
-      <div class="card-body">
-        <form method="POST" action="<?= getDynamicUrl('/admin/maintenance/' . ($rq['id'] ?? '') . '/note') ?>">
+    <!-- Resolution Card -->
+    <div class="card" style="padding:24px;">
+      <h3 style="font-size:15px;font-weight:800;color:var(--txt-primary);margin-bottom:16px;">🛠️ Phương án xử lý sự cố</h3>
+      
+      <?php if ($status === 'open' || $status === 'in_progress'): ?>
+        <form id="formResolve" onsubmit="submitResolve(event)">
           <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-          <div class="form-group">
-            <textarea name="admin_notes" class="form-control" rows="3" placeholder="Ghi chú kết quả xử lý..."><?= htmlspecialchars($rq['admin_notes'] ?? '') ?></textarea>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Giải pháp / Cách thức sửa chữa <span class="req">*</span></label>
+            <textarea name="resolution" class="form-control" rows="4" placeholder="Ví dụ: Đã cử thợ điện đến thay bóng đèn mới..." required><?= $resolution ?></textarea>
           </div>
-          <button type="submit" class="btn btn-outline btn-sm">💾 Lưu ghi chú</button>
+          <div style="display:flex;justify-content:flex-end;">
+            <button type="submit" class="btn btn-primary">🔧 Xác nhận đã xử lý xong</button>
+          </div>
         </form>
+      <?php else: ?>
+        <div style="background:var(--bg-neutral);padding:16px;border-radius:var(--radius-sm);font-size:13.5px;line-height:1.5;">
+          <div style="font-weight:700;margin-bottom:6px;">Phương án đã thực hiện:</div>
+          <p style="color:var(--txt-secondary);margin:0;"><?= $resolution ?: 'Không có mô tả chi tiết.' ?></p>
+          <?php if (!empty($request['resolved_at'])): ?>
+            <div style="font-size:11px;color:var(--txt-muted);margin-top:12px;border-top:1px solid var(--border);padding-top:8px;">
+              ✅ Xử lý xong ngày: <?= date('d/m/Y H:i', strtotime($request['resolved_at'])) ?>
+            </div>
+          <?php endif; ?>
+        </div>
+        
+        <?php if ($status === 'resolved'): ?>
+          <div style="display:flex;justify-content:flex-end;margin-top:16px;">
+            <button class="btn btn-neutral" onclick="closeRequest(<?= $id ?>)">🔒 Đóng yêu cầu bảo trì</button>
+          </div>
+        <?php endif; ?>
+      <?php endif; ?>
+    </div>
+  </div>
+
+  <!-- Right Side: Reporter & Room info -->
+  <div class="card" style="padding:20px;height:fit-content;">
+    <h3 style="font-size:14px;font-weight:800;color:var(--txt-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:10px;">📋 Người báo cáo & Địa điểm</h3>
+    
+    <div style="display:flex;flex-direction:column;gap:12px;font-size:13.5px;">
+      <div>
+        <span style="color:var(--txt-muted);">Sinh viên:</span>
+        <strong style="color:var(--txt-primary);display:block;margin-top:2px;"><?= $reporter ?></strong>
+      </div>
+      <div>
+        <span style="color:var(--txt-muted);">Số điện thoại:</span>
+        <strong style="color:var(--txt-primary);display:block;margin-top:2px;"><?= $phone ?></strong>
+      </div>
+      <hr style="border:0;border-top:1px solid var(--border);margin:8px 0;">
+      <div>
+        <span style="color:var(--txt-muted);">Tòa nhà:</span>
+        <strong style="color:var(--txt-primary);display:block;margin-top:2px;">Tòa <?= $building ?></strong>
+      </div>
+      <div>
+        <span style="color:var(--txt-muted);">Số phòng:</span>
+        <strong style="color:var(--txt-primary);display:block;margin-top:2px;">Phòng <?= $roomNumber ?></strong>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+function submitResolve(e) {
+    e.preventDefault();
+    const form = document.getElementById('formResolve');
+    const data = new FormData(form);
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/<?= $id ?>/resolve', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': token
+        },
+        body: JSON.stringify(Object.fromEntries(data))
+    })
+    .then(r => r.json())
+    .then(json => {
+        if (json.success) {
+            alert('✅ Đã cập nhật trạng thái xử lý thành công!');
+            location.reload();
+        } else {
+            alert('❌ Lỗi: ' + json.message);
+        }
+    })
+    .catch(err => alert('Lỗi kết nối: ' + err.message));
+}
+
+function closeRequest(id) {
+    if (!confirm('Bạn có chắc chắn muốn đóng yêu cầu bảo trì này?\nHành động này biểu thị sự cố đã được nghiệm thu và đóng vĩnh viễn.')) return;
+    
+    const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    
+    fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/' + id + '/close', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': token
+        }
+    })
+    .then(r => r.json())
+    .then(json => {
+        if (json.success) {
+            alert('✅ Đã đóng yêu cầu bảo trì thành công!');
+            location.reload();
+        } else {
+            alert('❌ Lỗi: ' + json.message);
+        }
+    })
+    .catch(err => alert('Lỗi kết nối: ' + err.message));
+}
+</script>

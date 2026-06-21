@@ -1,41 +1,6 @@
 /**
- * KTX Management System — Premium UI JavaScript v2.0
- * Features: Dark/Light mode, Scroll animations, Enhanced interactions
+ * KTX Management System — Main JS
  */
-
-// ── Theme (Dark/Light) ─────────────────────────────────────
-const THEME_KEY = 'ktx-theme';
-
-function getPreferredTheme() {
-  const stored = localStorage.getItem(THEME_KEY);
-  if (stored) return stored;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-function setTheme(theme) {
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem(THEME_KEY, theme);
-}
-
-// Apply theme immediately to avoid flash
-setTheme(getPreferredTheme());
-
-document.addEventListener('DOMContentLoaded', () => {
-  // Theme toggle buttons
-  document.querySelectorAll('.theme-toggle').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const current = document.documentElement.getAttribute('data-theme') || 'light';
-      setTheme(current === 'dark' ? 'light' : 'dark');
-    });
-  });
-});
-
-// Listen for system theme changes
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-  if (!localStorage.getItem(THEME_KEY)) {
-    setTheme(e.matches ? 'dark' : 'light');
-  }
-});
 
 // ── Sidebar toggle ──────────────────────────────────────────
 const sidebar  = document.getElementById('sidebar');
@@ -101,6 +66,7 @@ function closeModal(id) {
   overlay.classList.remove('open');
   document.body.style.overflow = '';
 }
+// Open via data-modal-open
 document.addEventListener('click', e => {
   const trigger = e.target.closest('[data-modal-open]');
   if (trigger) openModal(trigger.dataset.modalOpen);
@@ -108,11 +74,13 @@ document.addEventListener('click', e => {
   const close = e.target.closest('[data-modal-close]');
   if (close) closeModal(close.dataset.modalClose);
 
+  // Click outside modal content
   if (e.target.classList.contains('modal-overlay')) {
     e.target.classList.remove('open');
     document.body.style.overflow = '';
   }
 });
+// ESC to close
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     document.querySelectorAll('.modal-overlay.open').forEach(m => {
@@ -175,35 +143,19 @@ async function ktxFetch(url, options = {}) {
   return json;
 }
 
-// ── Toast notification (premium) ────────────────────────────
+// ── Toast notification ──────────────────────────────────────
 function toast(message, type = 'success') {
-  let container = document.querySelector('.toast-container');
-  if (!container) {
-    container = document.createElement('div');
-    container.className = 'toast-container';
-    document.body.appendChild(container);
-  }
-
   const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
   const div = document.createElement('div');
-  div.className = `toast toast-${type}`;
+  div.className = `alert alert-${type}`;
+  div.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;max-width:360px;box-shadow:var(--shadow-lg)';
   div.innerHTML = `
-    <span style="font-size:18px;flex-shrink:0;margin-top:1px">${icons[type] || '💬'}</span>
-    <div style="flex:1;min-width:0">
-      <div style="font-weight:600;font-size:13.5px;color:var(--txt-primary)">${message}</div>
-    </div>
-    <button onclick="this.closest('.toast').remove()" style="background:none;border:none;color:var(--txt-muted);cursor:pointer;padding:2px;font-size:16px;line-height:1;flex-shrink:0;transition:opacity .2s" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.5">×</button>
-    <div class="toast-progress"></div>
+    <span class="alert-icon">${icons[type] || '💬'}</span>
+    <div class="alert-content"><p class="alert-msg">${message}</p></div>
+    <button class="alert-close" onclick="this.closest('.alert').remove()">×</button>
   `;
-  container.appendChild(div);
-
-  // Auto-remove after animation
-  setTimeout(() => {
-    div.style.opacity = '0';
-    div.style.transform = 'translateX(20px)';
-    div.style.transition = 'all .3s ease';
-    setTimeout(() => div.remove(), 300);
-  }, 4500);
+  document.body.appendChild(div);
+  setTimeout(() => { div.style.opacity='0'; div.style.transform='translateX(16px)'; setTimeout(() => div.remove(), 300); }, 4000);
 }
 
 // ── Form submit with loading state ─────────────────────────
@@ -223,6 +175,7 @@ document.querySelectorAll('form[data-ajax]').forEach(form => {
       if (form.dataset.ajaxReset !== undefined) form.reset();
     } catch (err) {
       toast(err.message || 'Đã có lỗi xảy ra', 'error');
+      // Show field errors
       if (err.errors) {
         Object.entries(err.errors).forEach(([field, msgs]) => {
           const input = form.querySelector(`[name="${field}"]`);
@@ -248,87 +201,24 @@ document.addEventListener('input', e => {
   }
 });
 
-// ── Animate stat numbers ────────────────────────────────────
+// ── Animate stat numbers ─────────────────────────────────────
 function animateCount(el) {
   const target = parseInt(el.dataset.count || el.textContent.replace(/\D/g,''), 10);
-  if (isNaN(target) || target === 0) return;
-  el.textContent = '0';
+  if (isNaN(target)) return;
   const duration = 1200;
   const start = performance.now();
   const step = ts => {
     const progress = Math.min((ts - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+    const eased = 1 - Math.pow(1 - progress, 3);
     el.textContent = Math.round(eased * target).toLocaleString('vi-VN');
     if (progress < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
 }
-
-// ── Scroll animations (Intersection Observer) ───────────────
-const scrollObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      // Animate on scroll elements
-      if (entry.target.classList.contains('animate-on-scroll')) {
-        entry.target.classList.add('visible');
-      }
-      // Animate stat counters
-      if (entry.target.hasAttribute('data-count')) {
-        animateCount(entry.target);
-        scrollObserver.unobserve(entry.target);
-      }
-    }
-  });
-}, {
-  threshold: 0.15,
-  rootMargin: '0px 0px -50px 0px'
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => { if (entry.isIntersecting) { animateCount(entry.target); observer.unobserve(entry.target); } });
 });
-
-// Observe elements
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-count]').forEach(el => scrollObserver.observe(el));
-  document.querySelectorAll('.animate-on-scroll').forEach(el => scrollObserver.observe(el));
-
-  // Add stagger delay to feature cards
-  document.querySelectorAll('.feature-card.animate-on-scroll').forEach((card, i) => {
-    card.style.transitionDelay = `${i * 100}ms`;
-  });
-});
-
-// ── Home navbar scroll effect ───────────────────────────────
-const homeNav = document.querySelector('.home-nav');
-if (homeNav) {
-  let lastScroll = 0;
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    homeNav.classList.toggle('scrolled', scrollY > 50);
-    lastScroll = scrollY;
-  }, { passive: true });
-}
-
-// ── Keyboard shortcuts ──────────────────────────────────────
-document.addEventListener('keydown', e => {
-  // Ctrl/Cmd + K for search focus
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault();
-    const searchInput = document.querySelector('.filter-search input, .topbar-search input');
-    if (searchInput) searchInput.focus();
-  }
-});
-
-// ── Password toggle ─────────────────────────────────────────
-document.querySelectorAll('.password-toggle').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const input = btn.closest('.password-wrapper').querySelector('input');
-    if (input.type === 'password') {
-      input.type = 'text';
-      btn.textContent = '🙈';
-    } else {
-      input.type = 'password';
-      btn.textContent = '👁️';
-    }
-  });
-});
+document.querySelectorAll('[data-count]').forEach(el => observer.observe(el));
 
 // ── Format currency ─────────────────────────────────────────
 function formatVND(amount) {
@@ -336,4 +226,4 @@ function formatVND(amount) {
 }
 
 // ── Export functions to global ───────────────────────────────
-window.ktx = { openModal, closeModal, toast, ktxFetch, formatVND, setTheme };
+window.ktx = { openModal, closeModal, toast, ktxFetch, formatVND };

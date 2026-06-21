@@ -1,124 +1,295 @@
 <?php
 /**
  * app/views/layouts/main.php
- * Simplified main layout (cleaned up from merge conflicts)
+ * Main layout — sidebar + topbar + content area
  * Variables available: $content, $_auth, $_flash, $_errors, $_old, $_csrfToken
  */
 
-/**
- * @var string $content
- * @var array|null $_auth
- * @var array|null $_flash
- * @var array|null $_errors
- * @var array|null $_old
- * @var string|null $_csrfToken
- */
-
-$role = $_auth['role'] ?? 'student';
-$userName = $_auth['username'] ?? 'User';
+$role       = $_auth['role'] ?? 'student';
+$userName   = $_auth['username'] ?? 'User';
 $userInitial = strtoupper(mb_substr($userName, 0, 1));
-$isAdmin = $role === 'admin';
+$isAdmin    = $role === 'admin';
 
-// Normalize current URI
+// Current URI for active link detection (subfolder-aware)
 $currentUri = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-$scriptDir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
-$rootDir = rtrim(dirname($scriptDir), '/\\');
+$scriptDir  = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
+$rootDir    = rtrim(dirname($scriptDir), '/\\');
+
 if ($scriptDir !== '' && $scriptDir !== '/' && str_starts_with($currentUri, $scriptDir)) {
-  $currentUri = substr($currentUri, strlen($scriptDir));
+    $currentUri = substr($currentUri, strlen($scriptDir));
 } elseif ($rootDir !== '' && $rootDir !== '/' && $rootDir !== '\\' && str_starts_with($currentUri, $rootDir)) {
-  $currentUri = substr($currentUri, strlen($rootDir));
+    $currentUri = substr($currentUri, strlen($rootDir));
 }
 $currentUri = '/' . trim($currentUri, '/') ?: '/';
 
-function navLink(string $href, string $icon, string $label, string $current, string $badge = ''): string
-{
-  $dynamicHref = getDynamicUrl($href);
-  $active = ($href !== '/' && str_starts_with($current, $href)) ? ' active' : ($current === $href ? ' active' : '');
-  $badgeHtml = $badge ? "<span class=\"nav-badge\">{$badge}</span>" : '';
-  return "<a href=\"{$dynamicHref}\" class=\"sidebar-link{$active}\">"
-       . "<span class=\"nav-icon\">{$icon}</span><span>{$label}</span>{$badgeHtml}</a>";
+function navLink(string $href, string $icon, string $label, string $current, string $badge = ''): string {
+    $dynamicHref = getDynamicUrl($href);
+    $active = ($href !== '/' && str_starts_with($current, $href)) ? ' active' : ($current === $href ? ' active' : '');
+    $badgeHtml = $badge ? "<span class=\"nav-badge\">{$badge}</span>" : '';
+    return "<a href=\"{$dynamicHref}\" class=\"sidebar-link{$active}\">
+              <span class=\"nav-icon\">{$icon}</span>
+              <span>{$label}</span>
+              {$badgeHtml}
+            </a>";
 }
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="csrf-token" content="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-  <title><?= htmlspecialchars($title ?? 'KTX Management') ?> — KTX System</title>
-  <link rel="stylesheet" href="<?= getDynamicUrl('/assets/css/main.css') ?>">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="csrf-token" content="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+<title><?= htmlspecialchars($title ?? 'KTX Management') ?> — KTX System</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+<link rel="stylesheet" href="<?= getDynamicUrl('/assets/css/app.css') ?>">
+<style>
+  .no-sidebar .main-content {
+    margin-left: 0 !important;
+  }
+  .public-navbar {
+    background: #ffffff;
+    border-bottom: 1px solid var(--border);
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .public-navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .public-navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: var(--txt-primary);
+    font-weight: 700;
+  }
+  .public-navbar-logo .logo-icon {
+    font-size: 20px;
+  }
+  .public-navbar-links {
+    display: flex;
+    gap: 24px;
+  }
+  .public-navbar-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--txt-secondary);
+    transition: color var(--t);
+  }
+  .public-navbar-links a:hover {
+    color: var(--brand);
+  }
+  .public-navbar-actions {
+    display: flex;
+    align-items: center;
+  }
+  @media (max-width: 768px) {
+    .public-navbar-links {
+      display: none;
+    }
+  }
+</style>
 </head>
 <body>
 
-<?php // Flash messages helper ?>
-<?php if (!empty($_flash)): ?>
-  <div style="position:fixed;right:16px;top:16px;z-index:9999;max-width:420px">
-    <?php foreach ($_flash as $f): ?>
-      <?php $type = match ($f['type'] ?? 'info') {
-        'success' => ['alert-success', '✅'],
-        'error' => ['alert-error', '❌'],
-        'warning' => ['alert-warning', '⚠️'],
-        default => ['alert-info', 'ℹ️'],
-      }; ?>
-      <div class="alert <?= $type[0] ?>" style="margin-bottom:12px;">
-        <span class="alert-icon"><?= $type[1] ?></span>
-        <div class="alert-content"><p class="alert-msg"><?= htmlspecialchars($f['message'] ?? '') ?></p></div>
-        <button class="alert-close">×</button>
-      </div>
-    <?php endforeach; ?>
-  </div>
-<?php endif; ?>
+<!-- Sidebar overlay (mobile) -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<?php if (!empty($_auth)): ?>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="sidebar-logo"><strong>KTX System</strong></div>
-      <div class="sidebar-user"><div class="sidebar-avatar"><?= $userInitial ?></div>
-        <div class="sidebar-user-info"><div><?= htmlspecialchars($userName) ?></div><div><?= $isAdmin? 'Quản trị viên' : 'Sinh viên' ?></div></div>
-      </div>
-      <nav class="sidebar-nav">
-        <?php if ($isAdmin): ?>
-          <?= navLink('/admin/dashboard','📊','Dashboard',$currentUri) ?>
-          <?= navLink('/admin/users','👥','Người dùng',$currentUri) ?>
-        <?php else: ?>
-          <?= navLink('/student/dashboard','🏠','Trang chủ',$currentUri) ?>
-          <?= navLink('/student/profile','👤','Hồ sơ',$currentUri) ?>
-        <?php endif; ?>
-      </nav>
-    </aside>
+<div class="layout<?= !$_auth ? ' no-sidebar' : '' ?>">
 
-    <main class="main-content">
-      <header class="topbar">
-        <div class="topbar-left"><?= $isAdmin ? '⚙️ Admin' : '🎓 Sinh viên' ?> — <?= htmlspecialchars($title ?? '') ?></div>
-        <div class="topbar-right"> <a href="#">🔔</a> <span><?= htmlspecialchars($userName) ?></span> </div>
-      </header>
+  <!-- ── Sidebar ─────────────────────────────────────────── -->
+  <?php if ($_auth): ?>
+  <aside class="sidebar" id="sidebar">
 
-      <div class="page-content" style="padding:20px;">
-        <?= $content ?>
+    <!-- Logo -->
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🏠</div>
+      <div class="sidebar-logo-text">
+        <strong>KTX System</strong>
+        <span>Quản lý ký túc xá</span>
       </div>
-    </main>
-  </div>
-<?php else: ?>
-  <div class="public-layout">
-    <header class="public-header">
-      <a href="<?= getDynamicUrl('/') ?>"><strong>KTX System</strong></a>
-      <nav><a href="<?= getDynamicUrl('/') ?>">Trang chủ</a> <a href="<?= getDynamicUrl('/about') ?>">Giới thiệu</a></nav>
-      <div class="public-actions"><a href="<?= getDynamicUrl('/auth/login') ?>">Đăng nhập</a></div>
+    </div>
+
+    <!-- User info -->
+    <div class="sidebar-user">
+      <div class="sidebar-avatar"><?= $userInitial ?></div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name"><?= htmlspecialchars($userName) ?></div>
+        <div class="sidebar-user-role"><?= $isAdmin ? 'Quản trị viên' : 'Sinh viên' ?></div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+
+      <?php if ($isAdmin): ?>
+
+      <div class="sidebar-section-label">Tổng quan</div>
+      <?= navLink('/admin/dashboard', '📊', 'Dashboard', $currentUri) ?>
+
+      <div class="sidebar-section-label">Quản lý</div>
+      <?= navLink('/admin/users',     '👥', 'Người dùng',   $currentUri) ?>
+      <?= navLink('/admin/students',  '🎓', 'Sinh viên',    $currentUri) ?>
+      <?= navLink('/admin/buildings', '🏢', 'Tòa nhà',      $currentUri) ?>
+      <?= navLink('/admin/rooms',     '🚪', 'Phòng ở',      $currentUri) ?>
+
+      <div class="sidebar-section-label">Nghiệp vụ</div>
+      <?= navLink('/admin/registrations', '📋', 'Đăng ký phòng', $currentUri) ?>
+      <?= navLink('/admin/contracts',     '📄', 'Hợp đồng',      $currentUri) ?>
+      <?= navLink('/admin/utilities',     '⚡', 'Điện nước',      $currentUri) ?>
+      <?= navLink('/admin/invoices',      '🧾', 'Hóa đơn',       $currentUri) ?>
+      <?= navLink('/admin/violations',    '⚠️', 'Vi phạm',        $currentUri) ?>
+      <?= navLink('/admin/maintenance',   '🔧', 'Bảo trì',       $currentUri) ?>
+
+      <div class="sidebar-section-label">Hệ thống</div>
+      <?= navLink('/admin/notifications', '🔔', 'Thông báo',  $currentUri) ?>
+      <?= navLink('/admin/reports/revenue', '📈', 'Báo cáo', $currentUri) ?>
+
+      <?php else: /* Student nav */ ?>
+
+      <div class="sidebar-section-label">Của tôi</div>
+      <?= navLink('/student/dashboard',      '🏠', 'Trang chủ',    $currentUri) ?>
+      <?= navLink('/student/profile',        '👤', 'Hồ sơ',        $currentUri) ?>
+
+      <div class="sidebar-section-label">Phòng ở</div>
+      <?= navLink('/student/registrations',  '📋', 'Đăng ký phòng', $currentUri) ?>
+      <?= navLink('/student/contracts',      '📄', 'Hợp đồng',      $currentUri) ?>
+
+      <div class="sidebar-section-label">Thanh toán</div>
+      <?= navLink('/student/invoices',       '🧾', 'Hóa đơn',       $currentUri) ?>
+
+      <div class="sidebar-section-label">Khác</div>
+      <?= navLink('/student/violations',     '⚠️', 'Vi phạm',        $currentUri) ?>
+      <?= navLink('/student/maintenance',    '🔧', 'Bảo trì',        $currentUri) ?>
+      <?= navLink('/student/notifications',  '🔔', 'Thông báo',      $currentUri) ?>
+
+      <?php endif; ?>
+
+    </nav>
+
+    <!-- Footer -->
+    <div class="sidebar-footer">
+      <form method="POST" action="<?= getDynamicUrl('/logout') ?>" style="margin:0">
+        <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+        <button type="submit" class="sidebar-link" style="width:100%;background:none;border:none;text-align:left">
+          <span class="nav-icon">🚪</span>
+          <span>Đăng xuất</span>
+        </button>
+      </form>
+    </div>
+
+  </aside>
+  <?php endif; ?>
+
+  <!-- ── Main ────────────────────────────────────────────── -->
+  <div class="main-content">
+
+    <!-- Header -->
+    <?php if ($_auth): ?>
+    <header class="topbar">
+      <button class="topbar-toggle" id="sidebarToggle" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="6"  x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+
+      <div class="topbar-breadcrumb">
+        <span><?= $isAdmin ? '⚙️ Admin' : '🎓 Sinh viên' ?></span>
+        <span class="bc-sep">/</span>
+        <span class="bc-current"><?= htmlspecialchars($title ?? '') ?></span>
+      </div>
+
+      <div class="topbar-right">
+        <a href="<?= getDynamicUrl($isAdmin ? '/admin/notifications' : '/student/notifications') ?>" class="topbar-btn" title="Thông báo">
+          🔔
+          <span class="badge"></span>
+        </a>
+
+        <div class="dropdown">
+          <div class="topbar-user-pill" data-dropdown>
+            <div class="avatar avatar-sm"><?= $userInitial ?></div>
+            <span><?= htmlspecialchars($userName) ?></span>
+            <span style="color:var(--txt-muted);font-size:10px">▾</span>
+          </div>
+          <div class="dropdown-menu">
+            <a href="<?= getDynamicUrl($isAdmin ? '/admin/dashboard' : '/student/profile') ?>" class="dropdown-item">
+              👤 Hồ sơ
+            </a>
+            <div class="dropdown-divider"></div>
+            <form method="POST" action="<?= getDynamicUrl('/logout') ?>" style="margin:0">
+              <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
+              <button type="submit" class="dropdown-item danger" style="width:100%;background:none;border:none;text-align:left">
+                🚪 Đăng xuất
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </header>
+    <?php else: ?>
+    <header class="public-navbar">
+      <div class="public-navbar-container">
+        <a href="<?= getDynamicUrl('/') ?>" class="public-navbar-logo">
+          <span class="logo-icon">🏠</span>
+          <strong>KTX System</strong>
+        </a>
+        <nav class="public-navbar-links">
+          <a href="<?= getDynamicUrl('/') ?>">Trang chủ</a>
+          <a href="<?= getDynamicUrl('/') ?>#features">Tính năng</a>
+          <a href="<?= getDynamicUrl('/about') ?>">Giới thiệu</a>
+        </nav>
+        <div class="public-navbar-actions">
+          <a href="<?= getDynamicUrl('/auth/login') ?>" class="btn btn-primary btn-sm">🔑 Đăng nhập</a>
+        </div>
+      </div>
+    </header>
+    <?php endif; ?>
 
-    <main class="public-content" style="padding:20px; max-width:1100px;margin:0 auto;">
+    <!-- Flash messages -->
+    <div style="padding: 0 24px; padding-top: 16px;">
+      <?php foreach ($_flash ?? [] as $f): ?>
+        <?php
+          $type = match($f['type'] ?? 'info') {
+            'success' => ['alert-success', '✅'],
+            'error'   => ['alert-error',   '❌'],
+            'warning' => ['alert-warning', '⚠️'],
+            default   => ['alert-info',    'ℹ️'],
+          };
+        ?>
+        <div class="alert <?= $type[0] ?>">
+          <span class="alert-icon"><?= $type[1] ?></span>
+          <div class="alert-content"><p class="alert-msg"><?= htmlspecialchars($f['message']) ?></p></div>
+          <button class="alert-close">×</button>
+        </div>
+      <?php endforeach; ?>
+    </div>
+
+    <!-- Page content -->
+    <main class="page-body">
       <?= $content ?>
     </main>
-  </div>
-<?php endif; ?>
 
-<script>
-// Simple client-side behavior for alerts
-document.addEventListener('click', function (e) {
-  if (e.target.matches('.alert-close')) {
-    e.target.closest('.alert').remove();
-  }
-});
-</script>
+    <!-- Footer -->
+    <footer style="padding:16px 24px;border-top:1px solid var(--border);color:var(--txt-muted);font-size:12px;text-align:center">
+      © <?= date('Y') ?> Hệ thống Quản lý KTX. All rights reserved.
+    </footer>
+
+  </div>
+</div>
+
+<script src="<?= getDynamicUrl('/assets/js/app.js') ?>"></script>
 </body>
 </html>

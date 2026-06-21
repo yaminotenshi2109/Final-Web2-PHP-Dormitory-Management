@@ -1,121 +1,191 @@
 <?php
 /**
- * admin/students/show.php — Chi tiết sinh viên
- * Variables: $title, $student, $contracts[], $violations[], $invoices[]
+ * app/views/admin/students/show.php
+ * Admin — Chi tiết sinh viên
+ * Variables: $title, $student, $contracts[], $violations[]
  */
-$s = $student ?? [];
-$genderMap = ['male'=>'👨 Nam','female'=>'👩 Nữ'];
-$priorityMap = [0=>'Bình thường',1=>'Chính sách',2=>'Ưu tiên cao'];
-$priorityBadge = [0=>'badge-neutral',1=>'badge-info',2=>'badge-purple'];
-$contractStatusMap = ['active'=>['badge-success','✅ Hiệu lực'],'expired'=>['badge-neutral','⏰ Hết hạn'],'terminated'=>['badge-danger','🚫 Chấm dứt']];
-$violationStatusMap = ['active'=>['badge-danger','🔴 Chưa xử lý'],'appealed'=>['badge-warning','⚠️ Khiếu nại'],'dismissed'=>['badge-neutral','✅ Bác bỏ']];
+
+$name     = htmlspecialchars($student['full_name']);
+$code     = htmlspecialchars($student['student_code']);
+$gender   = $student['gender'] === 'male' ? 'Nam' : ($student['gender'] === 'female' ? 'Nữ' : 'Khác');
+$dob      = htmlspecialchars($student['dob']);
+$faculty  = htmlspecialchars($student['faculty']);
+$program  = htmlspecialchars($student['program']);
+$phone    = htmlspecialchars($student['phone']);
+$hometown = htmlspecialchars($student['hometown']);
+$idCard   = htmlspecialchars($student['id_card']);
+$priority = (int)$student['priority_level'];
+
+$priorities = [
+    0 => 'Thường',
+    1 => 'Chính sách⭐',
+    2 => 'Ưu tiên cao⭐⭐'
+];
 ?>
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🎓 <?= htmlspecialchars($s['full_name'] ?? '') ?></h1>
-    <p class="page-subtitle">Mã SV: <?= htmlspecialchars($s['student_code'] ?? '') ?></p>
+    <h1 class="page-title">🎓 Chi tiết sinh viên</h1>
+    <p class="page-subtitle">Hồ sơ cá nhân và lịch sử hoạt động của <?= $name ?></p>
   </div>
   <div class="page-actions">
-    <a href="<?= getDynamicUrl('/admin/students') ?>" class="btn btn-ghost">← Quay lại</a>
-    <a href="<?= getDynamicUrl('/admin/students/' . ($s['id'] ?? '') . '/edit') ?>" class="btn btn-outline">✏️ Sửa</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
   </div>
 </div>
 
-<div class="grid-2 mb-24">
-  <!-- Personal Info -->
-  <div class="card">
-    <div class="card-header"><div class="card-title">Thông tin cá nhân</div></div>
-    <div class="card-body">
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)">
-        <div class="avatar avatar-xl"><?= mb_strtoupper(mb_substr($s['full_name'] ?? 'S', 0, 1)) ?></div>
-        <div>
-          <div style="font-size:20px;font-weight:800"><?= htmlspecialchars($s['full_name'] ?? '') ?></div>
-          <div style="color:var(--txt-muted);font-size:13px;margin-top:2px"><?= htmlspecialchars($s['email'] ?? '') ?></div>
-          <span class="badge <?= $priorityBadge[$s['priority_level'] ?? 0] ?? 'badge-neutral' ?>" style="margin-top:6px"><?= $priorityMap[$s['priority_level'] ?? 0] ?? '' ?></span>
-        </div>
+<div class="grid-2" style="grid-template-columns: 1fr 2fr; gap: 24px;">
+  <!-- Left Column: Personal info card -->
+  <div class="card" style="padding: 24px;">
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div class="avatar" style="width: 80px; height: 80px; font-size: 28px; font-weight: 800; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #8b5cf6); color: #fff; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px; border: 3px solid var(--border);">
+        <?= mb_strtoupper(mb_substr($name, 0, 1)) ?>
       </div>
-      <table style="width:100%;font-size:14px">
-        <tr><td style="padding:8px 0;color:var(--txt-muted);width:130px">Mã sinh viên</td><td style="font-weight:600;font-family:monospace"><?= htmlspecialchars($s['student_code'] ?? '') ?></td></tr>
-        <tr><td style="padding:8px 0;color:var(--txt-muted)">Giới tính</td><td><?= $genderMap[$s['gender'] ?? ''] ?? '—' ?></td></tr>
-        <tr><td style="padding:8px 0;color:var(--txt-muted)">Ngày sinh</td><td><?= !empty($s['dob']) ? date('d/m/Y', strtotime($s['dob'])) : '—' ?></td></tr>
-        <tr><td style="padding:8px 0;color:var(--txt-muted)">CCCD</td><td><?= htmlspecialchars($s['id_card'] ?? '') ?></td></tr>
-        <tr><td style="padding:8px 0;color:var(--txt-muted)">Quê quán</td><td><?= htmlspecialchars($s['hometown'] ?? '') ?></td></tr>
-      </table>
+      <h3 style="font-size: 16px; font-weight: 700; color: var(--txt-primary); margin-bottom: 4px;"><?= $name ?></h3>
+      <p style="color: var(--txt-muted); font-size: 13px; margin: 0;">Mã SV: <?= $code ?></p>
     </div>
-  </div>
 
-  <!-- Academic Info -->
-  <div class="card">
-    <div class="card-header"><div class="card-title">Thông tin học tập</div></div>
-    <div class="card-body">
-      <table style="width:100%;font-size:14px">
-        <tr><td style="padding:10px 0;color:var(--txt-muted);width:130px">Khoa / Viện</td><td style="font-weight:600"><?= htmlspecialchars($s['faculty'] ?? '') ?></td></tr>
-        <tr><td style="padding:10px 0;color:var(--txt-muted)">Chương trình</td><td><?= htmlspecialchars($s['program'] ?? '') ?></td></tr>
-        <tr><td style="padding:10px 0;color:var(--txt-muted)">Số điện thoại</td><td style="font-weight:600"><?= htmlspecialchars($s['phone'] ?? '') ?></td></tr>
-        <tr><td style="padding:10px 0;color:var(--txt-muted)">Phòng hiện tại</td><td style="font-weight:700;color:var(--brand)"><?= htmlspecialchars($s['current_room'] ?? 'Chưa có') ?></td></tr>
-      </table>
-
-      <div style="margin-top:20px;padding:16px;background:var(--page-bg);border-radius:var(--radius-sm)">
-        <div style="font-size:13px;font-weight:600;margin-bottom:8px">Điểm phạt tích lũy</div>
-        <div style="display:flex;align-items:center;gap:12px">
-          <div style="font-size:32px;font-weight:900;color:<?= ($s['total_penalty'] ?? 0) > 10 ? 'var(--danger)' : 'var(--success)' ?>"><?= $s['total_penalty'] ?? 0 ?></div>
-          <div class="progress" style="flex:1;height:10px">
-            <div class="progress-bar <?= ($s['total_penalty'] ?? 0) > 15 ? 'danger' : (($s['total_penalty'] ?? 0) > 8 ? 'warning' : 'success') ?>" style="width:<?= min(100, ($s['total_penalty'] ?? 0) / 20 * 100) ?>%"></div>
-          </div>
-          <span style="font-size:12px;color:var(--txt-muted)">/20</span>
-        </div>
+    <div style="display: flex; flex-direction: column; gap: 14px; font-size: 13.5px; border-top: 1px solid var(--border); padding-top: 16px;">
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--txt-muted);">Giới tính:</span>
+        <strong style="color: var(--txt-primary);"><?= $gender ?></strong>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--txt-muted);">Ngày sinh:</span>
+        <strong style="color: var(--txt-primary);"><?= date('d/m/Y', strtotime($dob)) ?></strong>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--txt-muted);">Khoa/Viện:</span>
+        <strong style="color: var(--txt-primary);"><?= $faculty ?></strong>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--txt-muted);">Hệ đào tạo:</span>
+        <strong style="color: var(--txt-primary);"><?= $program ?></strong>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--txt-muted);">Diện ưu tiên:</span>
+        <span class="badge badge-info"><?= $priorities[$priority] ?? 'Thường' ?></span>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--txt-muted);">CCCD/CMND:</span>
+        <strong style="color: var(--txt-primary);"><?= $idCard ?></strong>
+      </div>
+      <div style="display: flex; justify-content: space-between;">
+        <span style="color: var(--txt-muted);">Số điện thoại:</span>
+        <strong style="color: var(--txt-primary);"><?= $phone ?></strong>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="color: var(--txt-muted);">Quê quán:</span>
+        <strong style="color: var(--txt-primary); line-height: 1.4;"><?= $hometown ?></strong>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Contracts Timeline -->
-<div class="card mb-24">
-  <div class="card-header"><div class="card-title">📄 Hợp đồng</div></div>
-  <?php if (!empty($contracts)): ?>
-    <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
-      <table>
-        <thead><tr><th>Phòng</th><th>Thời hạn</th><th>Phí/tháng</th><th>Trạng thái</th></tr></thead>
-        <tbody>
-          <?php foreach ($contracts as $c): ?>
-            <?php $cst = $c['status'] ?? 'active'; [$cClass, $cLabel] = $contractStatusMap[$cst] ?? ['badge-neutral', $cst]; ?>
+  <!-- Right Column: Tabs (Contracts + Violations) -->
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    
+    <!-- Lịch sử hợp đồng -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">📄 Lịch sử hợp đồng thuê phòng</h3>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
             <tr>
-              <td style="font-weight:700"><?= htmlspecialchars($c['room_number'] ?? '') ?></td>
-              <td><?= !empty($c['start_date']) ? date('d/m/Y', strtotime($c['start_date'])) : '' ?> → <?= !empty($c['end_date']) ? date('d/m/Y', strtotime($c['end_date'])) : '' ?></td>
-              <td style="font-weight:600"><?= number_format($c['monthly_fee'] ?? 0, 0, ',', '.') ?>đ</td>
-              <td><span class="badge <?= $cClass ?>"><?= $cLabel ?></span></td>
+              <th>Phòng</th>
+              <th>Thời hạn</th>
+              <th>Đơn giá</th>
+              <th>Trạng thái</th>
             </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <?php if (!empty($contracts)): ?>
+              <?php foreach ($contracts as $c): ?>
+                <?php 
+                  $cStatus = $c['status'] ?? '';
+                  $badge = match($cStatus) {
+                      'active'    => ['badge-success', 'Đang ở'],
+                      'expired'   => ['badge-neutral', 'Hết hạn'],
+                      'cancelled' => ['badge-danger',  'Đã hủy'],
+                      default     => ['badge-neutral', $cStatus]
+                  };
+                ?>
+                <tr>
+                  <td><strong><?= htmlspecialchars($c['building_name']) ?> - <?= htmlspecialchars($c['room_number']) ?></strong></td>
+                  <td style="font-size:12.5px;color:var(--txt-secondary);">
+                    <?= date('d/m/Y', strtotime($c['start_date'])) ?> – <?= date('d/m/Y', strtotime($c['end_date'])) ?>
+                  </td>
+                  <td style="font-weight:600;color:var(--txt-primary);"><?= number_format((float)$c['monthly_fee']) ?>đ</td>
+                  <td><span class="badge <?= $badge[0] ?>"><?= $badge[1] ?></span></td>
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="4">
+                  <div class="empty-state" style="padding: 24px;">
+                    <div class="empty-icon">📄</div>
+                    <div class="empty-title" style="font-size:13.5px;">Chưa có lịch sử hợp đồng</div>
+                  </div>
+                </td>
+              </tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
     </div>
-  <?php else: ?>
-    <div class="empty-state" style="padding:32px"><div class="empty-icon" style="font-size:36px">📄</div><div class="empty-title">Chưa có hợp đồng</div></div>
-  <?php endif; ?>
-</div>
 
-<!-- Violations -->
-<div class="card">
-  <div class="card-header"><div class="card-title">⚠️ Vi phạm</div></div>
-  <?php if (!empty($violations)): ?>
-    <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
-      <table>
-        <thead><tr><th>Loại</th><th>Điểm phạt</th><th>Ngày</th><th>Trạng thái</th></tr></thead>
-        <tbody>
-          <?php foreach ($violations as $v): ?>
-            <?php $vst = $v['status'] ?? 'active'; [$vClass, $vLabel] = $violationStatusMap[$vst] ?? ['badge-neutral', $vst]; ?>
+    <!-- Lịch sử vi phạm -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">⚠️ Lịch sử vi phạm</h3>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
             <tr>
-              <td style="font-weight:600"><?= htmlspecialchars($v['violation_type'] ?? '') ?></td>
-              <td><span style="font-weight:800;color:var(--danger)"><?= $v['penalty_points'] ?? 0 ?></span></td>
-              <td style="font-size:12px;color:var(--txt-muted)"><?= !empty($v['recorded_at']) ? date('d/m/Y', strtotime($v['recorded_at'])) : '—' ?></td>
-              <td><span class="badge <?= $vClass ?>"><?= $vLabel ?></span></td>
+              <th>Loại vi phạm</th>
+              <th>Mô tả</th>
+              <th>Điểm trừ</th>
+              <th>Ngày ghi nhận</th>
+              <th>Trạng thái</th>
             </tr>
-          <?php endforeach; ?>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <?php if (!empty($violations)): ?>
+              <?php foreach ($violations as $v): ?>
+                <?php 
+                  $vStatus = $v['status'] ?? 'active';
+                  $badge = match($vStatus) {
+                      'active'    => ['badge-danger', 'Vi phạm'],
+                      'appealed'  => ['badge-warning', 'Đang khiếu nại'],
+                      'dismissed' => ['badge-neutral', 'Đã bãi bỏ'],
+                      default     => ['badge-neutral', $vStatus]
+                  };
+                ?>
+                <tr>
+                  <td><strong><?= htmlspecialchars($v['violation_type']) ?></strong></td>
+                  <td style="font-size:12.5px;color:var(--txt-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="<?= htmlspecialchars($v['description']) ?>">
+                    <?= htmlspecialchars($v['description']) ?>
+                  </td>
+                  <td style="font-weight:700;color:var(--danger);">⚠️ -<?= (int)$v['penalty_points'] ?>đ</td>
+                  <td style="font-size:12px;color:var(--txt-muted);"><?= date('d/m/Y', strtotime($v['recorded_at'])) ?></td>
+                  <td><span class="badge <?= $badge[0] ?>"><?= $badge[1] ?></span></td>
+                </tr>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="5">
+                  <div class="empty-state" style="padding: 24px;">
+                    <div class="empty-icon">🎉</div>
+                    <div class="empty-title" style="font-size:13.5px;">Tuyệt vời! Không có lịch sử vi phạm nào</div>
+                  </div>
+                </td>
+              </tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
     </div>
-  <?php else: ?>
-    <div class="empty-state" style="padding:32px"><div class="empty-icon" style="font-size:36px">🎉</div><div class="empty-title">Không có vi phạm</div></div>
-  <?php endif; ?>
+
+  </div>
 </div>

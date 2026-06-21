@@ -21,22 +21,15 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 <!-- ── Page Header ──────────────────────────────────────────── -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">Dashboard</h1>
+        <h1 class="page-title">🏠 Dashboard</h1>
         <p class="page-subtitle">Tổng quan hệ thống Ký túc xá</p>
     </div>
     <div class="page-actions">
-        <span style="font-size:12px;color:var(--txt-muted);background:var(--card-bg);border:1px solid var(--border);padding:7px 14px;border-radius:var(--radius-sm);display:inline-flex;align-items:center;gap:6px">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <?= date('d/m/Y H:i') ?>
+        <span style="font-size:12px;color:var(--txt-muted);background:var(--card-bg);border:1px solid var(--border);padding:6px 12px;border-radius:var(--radius-sm);">
+            📅 <?= date('d/m/Y H:i') ?>
         </span>
-        <a href="<?= getDynamicUrl('/admin/reports/revenue') ?>" class="btn btn-outline btn-sm">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-            Báo cáo
-        </a>
-        <a href="<?= getDynamicUrl('/admin/registrations') ?>" class="btn btn-primary btn-sm">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Đăng ký mới
-        </a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-outline btn-sm">📊 Báo cáo</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-primary btn-sm">➕ Đăng ký mới</a>
     </div>
 </div>
 
@@ -77,7 +70,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
         </div>
         <div style="margin-top:4px">
             <div class="progress" style="width:100%">
-                <div class="progress-bar" style="width:<?= $occupancyPct ?>%;background:linear-gradient(90deg,#3b82f6,#60a5fa)"></div>
+                <div class="progress-bar" style="width:<?= $occupancyPct ?>%;background:#3b82f6"></div>
             </div>
             <div style="font-size:11px;color:var(--txt-muted);margin-top:4px"><?= $occupancyPct ?>% lấp đầy</div>
         </div>
@@ -137,10 +130,9 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
             <div class="stat-label">Đơn chờ duyệt</div>
         </div>
         <?php if (($stats['pending_registrations'] ?? 0) > 0): ?>
-            <a href="<?= getDynamicUrl('/admin/registrations?status=pending') ?>"
-               style="font-size:11px;color:#ec4899;font-weight:600;text-decoration:none;margin-top:4px;display:inline-flex;align-items:center;gap:4px">
-                Xem ngay
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?status=pending"
+               style="font-size:11px;color:#ec4899;font-weight:600;text-decoration:underline;margin-top:4px">
+                Xem ngay →
             </a>
         <?php endif; ?>
     </div>
@@ -155,10 +147,9 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
             <div class="stat-label">Vi phạm chưa xử lý</div>
         </div>
         <?php if (($stats['open_violations'] ?? 0) > 0): ?>
-            <a href="<?= getDynamicUrl('/admin/violations?status=open') ?>"
-               style="font-size:11px;color:#ef4444;font-weight:600;text-decoration:none;margin-top:4px;display:inline-flex;align-items:center;gap:4px">
-                Xem ngay
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?status=open"
+               style="font-size:11px;color:#ef4444;font-weight:600;text-decoration:underline;margin-top:4px">
+                Xem ngay →
             </a>
         <?php endif; ?>
     </div>
@@ -167,11 +158,10 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 
 <!-- ── Occupancy Summary Bar ────────────────────────────────── -->
 <div class="card mb-24">
-    <div class="card-body" style="padding:18px 20px">
+    <div class="card-body" style="padding:16px 20px">
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
-            <div style="font-size:13px;font-weight:700;color:var(--txt-secondary);min-width:140px;display:flex;align-items:center;gap:6px">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                Tỷ lệ lấp đầy tổng thể
+            <div style="font-size:13px;font-weight:600;color:var(--txt-secondary);min-width:140px">
+                📊 Tỷ lệ lấp đầy tổng thể
             </div>
             <div style="flex:1;min-width:200px">
                 <div class="progress">
@@ -179,7 +169,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                          style="width:<?= $occupancyPct ?>%"></div>
                 </div>
             </div>
-            <div style="font-size:20px;font-weight:800;color:var(--txt-primary);min-width:55px;text-align:right">
+            <div style="font-size:18px;font-weight:800;color:var(--txt-primary);min-width:55px;text-align:right">
                 <?= $occupancyPct ?>%
             </div>
             <div style="font-size:12px;color:var(--txt-muted)">
@@ -199,7 +189,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                 <div class="card-title">📋 Đơn đăng ký gần đây</div>
                 <div class="card-subtitle">5 đơn mới nhất trong hệ thống</div>
             </div>
-            <a href="<?= getDynamicUrl('/admin/registrations') ?>" class="btn btn-ghost btn-sm">Xem tất cả →</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-ghost btn-sm">Xem tất cả →</a>
         </div>
 
         <?php if (!empty($recent_registrations)): ?>
@@ -267,7 +257,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 
         <?php if (!empty($recent_registrations) && ($stats['pending_registrations'] ?? 0) > 0): ?>
             <div class="card-footer" style="text-align:center">
-                <a href="<?= getDynamicUrl('/admin/registrations?status=pending') ?>"
+                <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?status=pending"
                    class="btn btn-outline btn-sm">
                     ⏳ Xem <?= $stats['pending_registrations'] ?> đơn chờ duyệt
                 </a>
@@ -282,7 +272,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                 <div class="card-title">⚠️ Vi phạm gần đây</div>
                 <div class="card-subtitle">Các trường hợp vi phạm mới nhất</div>
             </div>
-            <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-ghost btn-sm">Xem tất cả →</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="btn btn-ghost btn-sm">Xem tất cả →</a>
         </div>
 
         <?php if (!empty($recent_violations)): ?>
@@ -339,7 +329,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 
         <?php if (!empty($recent_violations) && ($stats['open_violations'] ?? 0) > 0): ?>
             <div class="card-footer" style="text-align:center">
-                <a href="<?= getDynamicUrl('/admin/violations?status=open') ?>"
+                <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?status=open"
                    class="btn btn-danger btn-sm">
                     ⚠️ Xử lý <?= $stats['open_violations'] ?> vi phạm
                 </a>
@@ -356,14 +346,37 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
     </div>
     <div class="card-body">
         <div style="display:flex;flex-wrap:wrap;gap:10px">
-            <a href="<?= getDynamicUrl('/admin/rooms') ?>" class="btn btn-outline">🚪 Quản lý phòng</a>
-            <a href="<?= getDynamicUrl('/admin/students') ?>" class="btn btn-outline">🎓 Quản lý sinh viên</a>
-            <a href="<?= getDynamicUrl('/admin/contracts') ?>" class="btn btn-outline">📄 Hợp đồng</a>
-            <a href="<?= getDynamicUrl('/admin/invoices') ?>" class="btn btn-outline">💰 Hóa đơn</a>
-            <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-outline">⚠️ Vi phạm</a>
-            <a href="<?= getDynamicUrl('/admin/users') ?>" class="btn btn-outline">👤 Tài khoản</a>
-            <a href="<?= getDynamicUrl('/admin/maintenance') ?>" class="btn btn-outline">🔧 Bảo trì</a>
-            <a href="<?= getDynamicUrl('/admin/reports/revenue') ?>" class="btn btn-primary">📊 Báo cáo tổng hợp</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms" class="btn btn-outline">🚪 Quản lý phòng</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-outline">🎓 Quản lý sinh viên</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-outline">📄 Hợp đồng</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-outline">💰 Hóa đơn</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="btn btn-outline">⚠️ Vi phạm</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users" class="btn btn-outline">👤 Tài khoản</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/services" class="btn btn-outline">🔧 Dịch vụ</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-primary">📊 Báo cáo tổng hợp</a>
         </div>
     </div>
 </div>
+
+<script>
+// Animate stat counters on load
+document.addEventListener('DOMContentLoaded', function () {
+    const counters = document.querySelectorAll('.stat-value[data-count]');
+    counters.forEach(function (el) {
+        const target = parseInt(el.getAttribute('data-count'), 10);
+        if (isNaN(target) || target === 0) return;
+        let start = 0;
+        const duration = 900;
+        const step = Math.ceil(target / (duration / 16));
+        const timer = setInterval(function () {
+            start += step;
+            if (start >= target) {
+                el.textContent = target.toLocaleString('vi-VN');
+                clearInterval(timer);
+            } else {
+                el.textContent = start.toLocaleString('vi-VN');
+            }
+        }, 16);
+    });
+});
+</script>

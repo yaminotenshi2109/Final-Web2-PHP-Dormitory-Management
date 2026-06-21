@@ -1,63 +1,117 @@
 <?php
 /**
- * admin/utilities/create.php — Nhập chỉ số điện nước
- * Variables: $title, $rooms[], $_errors, $_old, $_csrfToken
+ * app/views/admin/utilities/create.php
+ * Admin — Ghi chỉ số điện nước mới
+ * Variables: $title, $rooms[], $_csrfToken, $_errors, $_old
  */
+
+$currentMonth = (int)date('m');
+$currentYear  = (int)date('Y');
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">⚡ Nhập chỉ số điện nước</h1><p class="page-subtitle">Ghi nhận chỉ số điện, nước theo phòng</p></div>
-  <a href="<?= getDynamicUrl('/admin/utilities') ?>" class="btn btn-ghost">← Quay lại</a>
+  <div>
+    <h1 class="page-title">⚡ Ghi chỉ số điện nước mới</h1>
+    <p class="page-subtitle">Nhập số công tơ điện nước tiêu thụ của phòng</p>
+  </div>
+  <div class="page-actions">
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="btn btn-ghost btn-sm">← Quay lại danh sách</a>
+  </div>
 </div>
 
-<div class="card" style="max-width:720px">
-  <div class="card-header"><div class="card-title">Chỉ số mới</div></div>
-  <div class="card-body">
-    <form method="POST" action="<?= getDynamicUrl('/admin/utilities') ?>">
+<div class="card" style="max-width: 650px; margin: 0 auto;">
+  <form method="POST" action="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities">
+    <div class="card-body" style="display: flex; flex-direction: column; gap: 16px;">
       <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
 
-      <div class="form-row-3">
+      <div class="form-row">
         <div class="form-group">
-          <label class="form-label" for="room_id">Phòng <span class="req">*</span></label>
-          <select id="room_id" name="room_id" class="form-control" required>
-            <option value="">— Chọn phòng —</option>
-            <?php foreach ($rooms ?? [] as $r): ?>
-              <option value="<?= $r['id'] ?>" <?= ($_old['room_id'] ?? '') == $r['id'] ? 'selected' : '' ?>><?= htmlspecialchars(($r['building_name'] ?? '') . ' — ' . ($r['room_number'] ?? '')) ?></option>
+          <label class="form-label">Chọn phòng <span class="req">*</span></label>
+          <select name="room_id" class="form-control" required>
+            <option value="">-- Chọn phòng --</option>
+            <?php foreach ($rooms as $r): ?>
+              <option value="<?= (int)$r['id'] ?>" <?= (int)($_old['room_id'] ?? 0) === (int)$r['id'] ? 'selected' : '' ?>>Tòa <?= htmlspecialchars($r['building_name']) ?> - Phòng <?= htmlspecialchars($r['room_number']) ?></option>
             <?php endforeach; ?>
           </select>
+          <?php if (!empty($_errors['room_id'])): ?>
+            <div class="form-error"><?= htmlspecialchars($_errors['room_id'][0]) ?></div>
+          <?php endif; ?>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tháng ghi <span class="req">*</span></label>
+          <input type="number" name="month" class="form-control" value="<?= htmlspecialchars($_old['month'] ?? $currentMonth) ?>" min="1" max="12" required>
+          <?php if (!empty($_errors['month'])): ?>
+            <div class="form-error"><?= htmlspecialchars($_errors['month'][0]) ?></div>
+          <?php endif; ?>
         </div>
         <div class="form-group">
-          <label class="form-label" for="month">Tháng <span class="req">*</span></label>
-          <select id="month" name="month" class="form-control" required>
-            <?php for ($m = 1; $m <= 12; $m++): ?><option value="<?= $m ?>" <?= ($_old['month'] ?? date('n')) == $m ? 'selected' : '' ?>>Tháng <?= $m ?></option><?php endfor; ?>
-          </select>
+          <label class="form-label">Năm ghi <span class="req">*</span></label>
+          <input type="number" name="year" class="form-control" value="<?= htmlspecialchars($_old['year'] ?? $currentYear) ?>" min="2020" max="2100" required>
+          <?php if (!empty($_errors['year'])): ?>
+            <div class="form-error"><?= htmlspecialchars($_errors['year'][0]) ?></div>
+          <?php endif; ?>
+        </div>
+      </div>
+
+      <hr style="border:0;border-top:1px solid var(--border);margin:8px 0;">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Chỉ số Điện ĐẦU kỳ <span class="req">*</span></label>
+          <input type="number" name="elec_prev" class="form-control" placeholder="Ví dụ: 120.5" step="0.1" value="<?= htmlspecialchars($_old['elec_prev'] ?? '0.0') ?>" required>
+          <?php if (!empty($_errors['elec_prev'])): ?>
+            <div class="form-error"><?= htmlspecialchars($_errors['elec_prev'][0]) ?></div>
+          <?php endif; ?>
         </div>
         <div class="form-group">
-          <label class="form-label" for="year">Năm <span class="req">*</span></label>
-          <input type="number" id="year" name="year" class="form-control" min="2024" value="<?= htmlspecialchars($_old['year'] ?? date('Y')) ?>" required>
+          <label class="form-label">Chỉ số Điện CUỐI kỳ <span class="req">*</span></label>
+          <input type="number" name="elec_curr" class="form-control" placeholder="Ví dụ: 250.2" step="0.1" value="<?= htmlspecialchars($_old['elec_curr'] ?? '') ?>" required>
+          <?php if (!empty($_errors['elec_curr'])): ?>
+            <div class="form-error"><?= htmlspecialchars($_errors['elec_curr'][0]) ?></div>
+          <?php endif; ?>
         </div>
       </div>
 
-      <div style="padding:16px;background:var(--page-bg);border-radius:var(--radius);margin-bottom:20px">
-        <div style="font-weight:700;font-size:14px;margin-bottom:12px">⚡ Chỉ số điện (kWh)</div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label" for="elec_prev">Chỉ số đầu kỳ</label><input type="number" id="elec_prev" name="elec_prev" class="form-control" step="0.1" value="<?= htmlspecialchars($_old['elec_prev'] ?? '0') ?>" required></div>
-          <div class="form-group"><label class="form-label" for="elec_curr">Chỉ số cuối kỳ</label><input type="number" id="elec_curr" name="elec_curr" class="form-control" step="0.1" value="<?= htmlspecialchars($_old['elec_curr'] ?? '') ?>" required></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Chỉ số Nước ĐẦU kỳ <span class="req">*</span></label>
+          <input type="number" name="water_prev" class="form-control" placeholder="Ví dụ: 15.0" step="0.1" value="<?= htmlspecialchars($_old['water_prev'] ?? '0.0') ?>" required>
+          <?php if (!empty($_errors['water_prev'])): ?>
+            <div class="form-error"><?= htmlspecialchars($_errors['water_prev'][0]) ?></div>
+          <?php endif; ?>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Chỉ số Nước CUỐI kỳ <span class="req">*</span></label>
+          <input type="number" name="water_curr" class="form-control" placeholder="Ví dụ: 30.5" step="0.1" value="<?= htmlspecialchars($_old['water_curr'] ?? '') ?>" required>
+          <?php if (!empty($_errors['water_curr'])): ?>
+            <div class="form-error"><?= htmlspecialchars($_errors['water_curr'][0]) ?></div>
+          <?php endif; ?>
         </div>
       </div>
 
-      <div style="padding:16px;background:var(--page-bg);border-radius:var(--radius);margin-bottom:20px">
-        <div style="font-weight:700;font-size:14px;margin-bottom:12px">💧 Chỉ số nước (m³)</div>
-        <div class="form-row">
-          <div class="form-group"><label class="form-label" for="water_prev">Chỉ số đầu kỳ</label><input type="number" id="water_prev" name="water_prev" class="form-control" step="0.1" value="<?= htmlspecialchars($_old['water_prev'] ?? '0') ?>" required></div>
-          <div class="form-group"><label class="form-label" for="water_curr">Chỉ số cuối kỳ</label><input type="number" id="water_curr" name="water_curr" class="form-control" step="0.1" value="<?= htmlspecialchars($_old['water_curr'] ?? '') ?>" required></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Đơn giá Điện (VND/kWh)</label>
+          <input type="number" name="elec_rate" class="form-control" value="<?= htmlspecialchars($_old['elec_rate'] ?? '3500') ?>" placeholder="3500">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Đơn giá Nước (VND/m³)</label>
+          <input type="number" name="water_rate" class="form-control" value="<?= htmlspecialchars($_old['water_rate'] ?? '15000') ?>" placeholder="15000">
         </div>
       </div>
 
-      <div style="display:flex;gap:10px;justify-content:flex-end;padding-top:20px;border-top:1px solid var(--border)">
-        <a href="<?= getDynamicUrl('/admin/utilities') ?>" class="btn btn-ghost">Hủy</a>
-        <button type="submit" class="btn btn-primary">⚡ Lưu chỉ số</button>
+      <div class="form-group">
+        <label class="form-label">Ghi chú</label>
+        <input type="text" name="notes" class="form-control" placeholder="Nhập ghi chú nếu có..." value="<?= htmlspecialchars($_old['notes'] ?? '') ?>">
       </div>
-    </form>
-  </div>
+
+    </div>
+    <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="btn btn-ghost">Hủy</a>
+      <button type="submit" class="btn btn-primary">➕ Ghi chỉ số</button>
+    </div>
+  </form>
 </div>
