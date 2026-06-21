@@ -2,13 +2,15 @@
 /**
  * app/views/admin/invoices/show.php
  * Chi tiết hóa đơn dành cho Admin
+ *
+ * @var array<string,mixed> $invoice
  */
 ?>
 
 <div class="container-fluid" style="padding: 24px;">
     <div style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center;">
         <div>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-secondary" style="margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px;">
+            <a href="<?= getDynamicUrl('/admin/invoices') ?>" class="btn btn-secondary" style="margin-bottom: 12px; display: inline-flex; align-items: center; gap: 8px;">
                 ⬅️ Quay lại danh sách
             </a>
             <h1 style="margin: 0; font-size: 1.75rem; font-weight: 700; color: #fff;">Chi tiết Hóa đơn #<?= $invoice['id'] ?></h1>
@@ -16,8 +18,8 @@
         </div>
 
         <div style="display: flex; gap: 12px;">
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/api/invoices/<?= $invoice['id'] ?>/pdf" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
-                🖨️ In / Tải PDF
+            <a href="<?= getDynamicUrl('/admin/invoices/' . $invoice['id'] . '/pdf') ?>" target="_blank" rel="noreferrer noopener" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">
+                🖨️ Xem / In PDF
             </a>
             <?php if ($invoice['status'] === 'unpaid' || $invoice['status'] === 'overdue'): ?>
                 <button type="button" class="btn btn-success" onclick="openPaymentModal()" style="display: inline-flex; align-items: center; gap: 8px; font-weight: 600;">

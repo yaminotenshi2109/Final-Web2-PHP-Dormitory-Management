@@ -2,7 +2,9 @@
 /**
  * app/views/student/invoices/show.php
  * Student — Chi tiết hóa đơn
- * Variables: $title, $invoice
+ *
+ * @var string $title
+ * @var array<string,mixed> $invoice
  */
 
 $id = (int)$invoice['id'];
@@ -80,7 +82,7 @@ $statusBadge = match($status) {
   </div>
   
   <div class="card-footer" style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;">
-    <a href="<?= getDynamicUrl('/api/invoices/' . $id . '/pdf') ?>" target="_blank" class="btn btn-outline" style="display:inline-flex;align-items:center;gap:6px;">
+    <a href="<?= getDynamicUrl('/student/invoices/' . $id . '/pdf') ?>" target="_blank" rel="noreferrer noopener" class="btn btn-outline" style="display:inline-flex;align-items:center;gap:6px;">
       📥 Tải hóa đơn (PDF)
     </a>
     <?php if ($status !== 'paid'): ?>

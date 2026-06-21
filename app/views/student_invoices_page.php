@@ -122,7 +122,7 @@
                         </span>
                     </td>
                     <td>
-                        <a href="/student/invoices/<?= $invoice['id'] ?>/pdf" class="btn btn-sm" title="Tải PDF">
+                        <a href="<?= getDynamicUrl('/student/invoices/' . $invoice['id'] . '/pdf') ?>" target="_blank" rel="noreferrer noopener" class="btn btn-sm" title="Mở PDF">
                             <i class="ti ti-file-pdf"></i>
                         </a>
                         <?php if ($status === 'unpaid'): ?>

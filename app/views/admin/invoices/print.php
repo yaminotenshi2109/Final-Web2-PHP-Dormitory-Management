@@ -2,8 +2,11 @@
 /**
  * app/views/admin/invoices/print.php
  * Bản in hóa đơn KTX chuyên nghiệp (A4 layout, high contrast)
+ *
+ * @var array<string,mixed> $invoice
  */
 ?>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>

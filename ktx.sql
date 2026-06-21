@@ -158,6 +158,9 @@ CREATE TABLE `room_registrations` (
   `id`            INT UNSIGNED  NOT NULL AUTO_INCREMENT,
   `student_id`    INT UNSIGNED  NOT NULL,
   `room_id`       INT UNSIGNED  NOT NULL,
+  `preferred_building_id` INT UNSIGNED NULL DEFAULT NULL,
+  `preferred_room_type`   VARCHAR(50) NULL DEFAULT NULL,
+  `assigned_room_id`      INT UNSIGNED NULL DEFAULT NULL,
   `semester`      ENUM('HK1','HK2','HKH') NOT NULL
                   COMMENT 'Học kỳ 1 / Học kỳ 2 / Học kỳ hè',
   `academic_year` SMALLINT      NOT NULL COMMENT 'Năm học (VD: 2025)',
@@ -174,6 +177,8 @@ CREATE TABLE `room_registrations` (
     (`student_id`, `semester`, `academic_year`)
     COMMENT 'Mỗi sinh viên chỉ đăng ký 1 phòng/học kỳ',
   KEY `idx_reg_room`       (`room_id`),
+  KEY `idx_reg_preferred_building` (`preferred_building_id`),
+  KEY `idx_reg_assigned_room` (`assigned_room_id`),
   KEY `idx_reg_status`     (`status`),
   KEY `idx_reg_reviewer`   (`reviewed_by`),
   CONSTRAINT `fk_reg_student`
@@ -182,6 +187,12 @@ CREATE TABLE `room_registrations` (
   CONSTRAINT `fk_reg_room`
     FOREIGN KEY (`room_id`) REFERENCES `rooms`(`id`)
     ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT `fk_reg_pref_building`
+    FOREIGN KEY (`preferred_building_id`) REFERENCES `buildings`(`id`)
+    ON UPDATE CASCADE ON DELETE SET NULL,
+  CONSTRAINT `fk_reg_assigned_room`
+    FOREIGN KEY (`assigned_room_id`) REFERENCES `rooms`(`id`)
+    ON UPDATE CASCADE ON DELETE SET NULL,
   CONSTRAINT `fk_reg_reviewer`
     FOREIGN KEY (`reviewed_by`) REFERENCES `users`(`id`)
     ON UPDATE CASCADE ON DELETE SET NULL
@@ -719,6 +730,11 @@ ALTER TABLE `room_registrations`
 ADD COLUMN `preferred_room_type` VARCHAR(20) NULL DEFAULT NULL
     AFTER `preferred_building_id`;
 
+-- Add assigned_room_id column for assigned room references
+ALTER TABLE `room_registrations`
+ADD COLUMN `assigned_room_id` INT UNSIGNED NULL DEFAULT NULL
+    AFTER `preferred_room_type`;
+
 -- Drop old foreign key if it exists (allowing NULL room_id)
 ALTER TABLE `room_registrations`
 DROP FOREIGN KEY `fk_reg_room`;
@@ -727,6 +743,12 @@ DROP FOREIGN KEY `fk_reg_room`;
 ALTER TABLE `room_registrations`
 ADD CONSTRAINT `fk_reg_preferred_building`
   FOREIGN KEY (`preferred_building_id`) REFERENCES `buildings`(`id`)
+  ON UPDATE CASCADE ON DELETE SET NULL;
+
+-- Add new foreign key for assigned_room_id
+ALTER TABLE `room_registrations`
+ADD CONSTRAINT `fk_reg_assigned_room`
+  FOREIGN KEY (`assigned_room_id`) REFERENCES `rooms`(`id`)
   ON UPDATE CASCADE ON DELETE SET NULL;
 
 -- Optional: Re-add foreign key for room_id with nullable support

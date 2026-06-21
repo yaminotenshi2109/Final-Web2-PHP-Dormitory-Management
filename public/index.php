@@ -13,15 +13,16 @@ declare(strict_types=1);
 
 if (!function_exists('getDynamicUrl')) {
     function getDynamicUrl(string $path): string {
-        $requestUri = $_SERVER['REQUEST_URI'] ?? '';
         $scriptName = $_SERVER['SCRIPT_NAME'] ?? '';
-        $publicBase = rtrim(dirname($scriptName), '/\\');
-        $rootBase   = rtrim(dirname($publicBase), '/\\');
+        $base = rtrim(str_replace('\\', '/', dirname($scriptName)), '/');
 
-        if (str_contains($requestUri, '/public/') || str_ends_with($requestUri, '/public')) {
-            $base = $publicBase;
-        } else {
-            $base = ($rootBase !== '' && $rootBase !== '/' && $rootBase !== '\\') ? $rootBase : '';
+        if ($base === '.' || $base === '\\' || $base === '/') {
+            $base = '';
+        }
+
+        // If the path already includes the base, return it as-is.
+        if ($base !== '' && str_starts_with($path, $base)) {
+            return $path;
         }
 
         return $base . $path;

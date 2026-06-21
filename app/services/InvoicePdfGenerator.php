@@ -24,20 +24,228 @@ if (file_exists(dirname(dirname(__DIR__)) . '/vendor/autoload.php')) {
 
 if (!class_exists('FPDF\FPDF')) {
     class FPDFMock {
-        public function __construct($orientation='P', $unit='mm', $size='A4') {}
-        public function AddPage($orientation='', $size='', $rotation=0) {}
-        public function SetFont($family, $style='', $size=0) {}
-        public function SetTextColor($r, $g=null, $b=null) {}
-        public function SetXY($x, $y) {}
-        public function Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link='') {}
-        public function MultiCell($w, $h, $txt, $border=0, $align='J', $fill=false) {}
-        public function SetDrawColor($r, $g=null, $b=null) {}
-        public function SetLineWidth($width) {}
-        public function Line($x1, $y1, $x2, $y2) {}
-        public function Rect($x, $y, $w, $h, $style='') {}
-        public function SetFillColor($r, $g=null, $b=null) {}
-        public function PageNo() { return 1; }
-        public function Output($dest='', $name='', $utf8=false) {}
+        private array $pages = [];
+        private array $currentPage = [];
+        private string $orientation;
+        private string $unit;
+        private string $size;
+        private float $pageWidth;
+        private float $pageHeight;
+        private array $font = ['family' => 'Helvetica', 'style' => '', 'size' => 11];
+        private array $textColor = [0, 0, 0];
+        private float $x = 10;
+        private float $y = 10;
+        private int $pageNo = 0;
+
+        public function __construct(string $orientation = 'P', string $unit = 'mm', string $size = 'A4')
+        {
+            $this->orientation = $orientation;
+            $this->unit = $unit;
+            $this->size = $size;
+            $this->setPageSize($size);
+            $this->addPage();
+        }
+
+        public function AddPage(string $orientation = '', string $size = '', int $rotation = 0): void
+        {
+            if ($orientation !== '') {
+                $this->orientation = $orientation;
+            }
+            if ($size !== '') {
+                $this->size = $size;
+                $this->setPageSize($size);
+            }
+
+            $this->currentPage = ['lines' => []];
+            $this->pages[] = &$this->currentPage;
+            $this->pageNo = count($this->pages);
+            $this->x = 10;
+            $this->y = 10;
+        }
+
+        public function SetFont(string $family, string $style = '', int $size = 0): void
+        {
+            $normalizedFamily = strtolower($family);
+            if ($normalizedFamily === 'arial') {
+                $family = 'Helvetica';
+            }
+
+            $this->font = [
+                'family' => $family,
+                'style'  => strtoupper($style),
+                'size'   => $size > 0 ? $size : 11,
+            ];
+        }
+
+        public function SetTextColor(int $r, ?int $g = null, ?int $b = null): void
+        {
+            if ($g === null) {
+                $this->textColor = [$r, $r, $r];
+            } else {
+                $this->textColor = [$r, $g, $b];
+            }
+        }
+
+        public function SetXY(float $x, float $y): void
+        {
+            $this->x = $x;
+            $this->y = $y;
+        }
+
+        public function Cell(float $w, float $h = 0, string $txt = '', int $border = 0, int $ln = 0, string $align = '', bool $fill = false, string $link = ''): void
+        {
+            $this->currentPage['lines'][] = [
+                'x'     => $this->x,
+                'y'     => $this->y,
+                'text'  => $this->normalizeText($txt),
+                'font'  => $this->font,
+                'color' => $this->textColor,
+            ];
+
+            if ($ln > 0) {
+                $this->y += $h > 0 ? $h : $this->font['size'] * 0.35;
+                $this->x = 10;
+            } else {
+                $this->x += $w;
+            }
+        }
+
+        public function MultiCell(float $w, float $h, string $txt, int $border = 0, string $align = 'J', bool $fill = false): void
+        {
+            $lines = explode("\n", $txt);
+            foreach ($lines as $line) {
+                $this->currentPage['lines'][] = [
+                    'x'     => $this->x,
+                    'y'     => $this->y,
+                    'text'  => $this->normalizeText($line),
+                    'font'  => $this->font,
+                    'color' => $this->textColor,
+                ];
+                $this->y += $h > 0 ? $h : $this->font['size'] * 0.35;
+            }
+            $this->x = 10;
+        }
+
+        public function SetDrawColor(int $r, ?int $g = null, ?int $b = null): void {}
+        public function SetLineWidth(float $width): void {}
+        public function Line(float $x1, float $y1, float $x2, float $y2): void {}
+        public function Rect(float $x, float $y, float $w, float $h, string $style = ''): void {}
+        public function SetFillColor(int $r, ?int $g = null, ?int $b = null): void {}
+
+        public function PageNo(): int
+        {
+            return $this->pageNo ?: 1;
+        }
+
+        public function GetY(): float
+        {
+            return $this->y;
+        }
+
+        public function GetX(): float
+        {
+            return $this->x;
+        }
+
+        public function Output($dest = '', $name = '', $utf8 = false)
+        {
+            $content = $this->buildPdf();
+            if ($dest === 'F' && $name !== '') {
+                file_put_contents($name, $content);
+            } else {
+                echo $content;
+            }
+        }
+
+        private function setPageSize(string $size): void
+        {
+            if ($size === 'A4') {
+                $this->pageWidth = 210;
+                $this->pageHeight = 297;
+            } else {
+                $this->pageWidth = 210;
+                $this->pageHeight = 297;
+            }
+        }
+
+        private function mmToPt(float $mm): float
+        {
+            return $mm * 2.83464567;
+        }
+
+        private function normalizeText(string $text): string
+        {
+            $ascii = @iconv('UTF-8', 'ASCII//TRANSLIT', $text);
+            return $ascii === false ? $text : $ascii;
+        }
+
+        private function escapePdfString(string $text): string
+        {
+            return str_replace(['\\', '(', ')'], ['\\\\', '\\(', '\\)'], $text);
+        }
+
+        private function getFontTag(array $font): string
+        {
+            $style = strtoupper($font['style'] ?? '');
+            return match ($style) {
+                'B'       => '/F2',
+                'I', 'U'  => '/F3',
+                'BI', 'IB' => '/F4',
+                default   => '/F1',
+            };
+        }
+
+        private function buildPdf(): string
+        {
+            $pageCount = count($this->pages);
+            $objects = [];
+            $objectOffsets = [];
+            $currentOffset = 0;
+
+            $pdf = "%PDF-1.4\n%âãÏÓ\n";
+            $currentOffset += strlen($pdf);
+
+            $objects[] = "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n";
+            $objects[] = "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count {$pageCount} >>\nendobj\n";
+
+            $pageContent = $this->buildPageContent($this->pages[0]);
+            $contentLength = strlen($pageContent);
+
+            $objects[] = "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R >> >> >>\nendobj\n";
+            $objects[] = "4 0 obj\n<< /Length {$contentLength} >>\nstream\n{$pageContent}\nendstream\nendobj\n";
+            $objects[] = "5 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj\n";
+
+            foreach ($objects as $object) {
+                $objectOffsets[] = $currentOffset;
+                $pdf .= $object;
+                $currentOffset += strlen($object);
+            }
+
+            $xrefOffset = $currentOffset;
+            $pdf .= "xref\n0 " . (count($objects) + 1) . "\n";
+            $pdf .= str_pad('0', 10, '0', STR_PAD_LEFT) . " 65535 f \n";
+            foreach ($objectOffsets as $offset) {
+                $pdf .= str_pad((string)$offset, 10, '0', STR_PAD_LEFT) . " 00000 n \n";
+            }
+
+            $pdf .= "trailer\n<< /Size " . (count($objects) + 1) . " /Root 1 0 R >>\nstartxref\n{$xrefOffset}\n%%EOF";
+            return $pdf;
+        }
+
+        private function buildPageContent(array $page): string
+        {
+            $content = "BT\n";
+            foreach ($page['lines'] as $line) {
+                $x = $this->mmToPt($line['x']);
+                $y = 842 - $this->mmToPt($line['y']);
+                $escaped = $this->escapePdfString($line['text']);
+                $color = array_map(fn($value) => sprintf('%.3f', min(max($value / 255, 0), 1)), $line['color']);
+                $fontTag = $this->getFontTag($line['font']);
+                $content .= sprintf("%s %.1f Tf\n%s %s %s rg\n1 0 0 1 %.3f %.3f Tm\n(%s) Tj\n", $fontTag, $line['font']['size'], $color[0], $color[1], $color[2], $x, $y, $escaped);
+            }
+            $content .= "ET";
+            return $content;
+        }
     }
     class_alias('FPDFMock', 'FPDF\FPDF');
 }
@@ -92,7 +300,7 @@ class InvoicePdfGenerator
 
             // Create PDF
             $this->pdf->AddPage();
-            $this->pdf->SetFont('Arial', '', 11);
+            $this->pdf->SetFont('Helvetica', '', 11);
 
             // Build layout
             $this->drawHeader($invoice);
@@ -126,7 +334,7 @@ class InvoicePdfGenerator
         $y = $this->margin;
 
         // Title
-        $this->pdf->SetFont('Arial', 'B', 20);
+        $this->pdf->SetFont('Helvetica', 'B', 20);
         $this->pdf->SetTextColor(...self::COLOR_PRIMARY);
         $this->pdf->SetXY($this->margin, $y);
         $this->pdf->Cell(0, 10, 'KTX MANAGEMENT', 0, 1, 'C');
@@ -149,7 +357,7 @@ class InvoicePdfGenerator
         $y += 5;
 
         // Invoice title
-        $this->pdf->SetFont('Arial', 'B', 14);
+        $this->pdf->SetFont('Helvetica', 'B', 14);
         $this->pdf->SetTextColor(...self::COLOR_TEXT);
         $this->pdf->SetXY($this->margin, $y);
         $this->pdf->Cell(0, 8, 'HÓA ĐƠN TIỀN PHÒNG KTX', 0, 1, 'L');
@@ -311,31 +519,34 @@ class InvoicePdfGenerator
         }
 
         // Other fees
-        if ($invoice['other_fees'] > 0) {
+        $otherFee = isset($invoice['other_fee']) ? (float)$invoice['other_fee'] : 0.0;
+        if ($otherFee > 0) {
             $this->pdf->SetXY($this->margin, $y);
             $this->pdf->Cell(100, 5, 'Phí khác', 1, 0, 'L');
             $this->pdf->Cell(40, 5, '', 1, 0, 'C');
-            $this->pdf->Cell(30, 5, $this->formatCurrency($invoice['other_fees']), 1, 1, 'R');
+            $this->pdf->Cell(30, 5, $this->formatCurrency($otherFee), 1, 1, 'R');
             $y += 6;
         }
 
         // Discount
-        if ($invoice['discount'] > 0) {
+        $discount = isset($invoice['discount']) ? (float)$invoice['discount'] : 0.0;
+        if ($discount > 0) {
             $this->pdf->SetXY($this->margin, $y);
             $this->pdf->Cell(100, 5, 'Giảm giá', 1, 0, 'L');
             $this->pdf->Cell(40, 5, '', 1, 0, 'C');
             $this->pdf->SetTextColor(59, 109, 17); // Green
-            $this->pdf->Cell(30, 5, '-' . $this->formatCurrency($invoice['discount']), 1, 1, 'R');
+            $this->pdf->Cell(30, 5, '-' . $this->formatCurrency($discount), 1, 1, 'R');
             $y += 6;
         }
 
         // Late fee
-        if ($invoice['late_fee'] > 0) {
+        $lateFee = isset($invoice['late_fee']) ? (float)$invoice['late_fee'] : 0.0;
+        if ($lateFee > 0) {
             $this->pdf->SetXY($this->margin, $y);
             $this->pdf->SetTextColor(163, 45, 45); // Red
             $this->pdf->Cell(100, 5, 'Phí trễ hạn', 1, 0, 'L');
             $this->pdf->Cell(40, 5, '', 1, 0, 'C');
-            $this->pdf->Cell(30, 5, '+' . $this->formatCurrency($invoice['late_fee']), 1, 1, 'R');
+            $this->pdf->Cell(30, 5, '+' . $this->formatCurrency($lateFee), 1, 1, 'R');
             $y += 6;
         }
 
@@ -407,7 +618,7 @@ class InvoicePdfGenerator
         // Footer
         $y = $this->pageHeight - 8;
         $this->pdf->SetXY($this->margin, $y);
-        $this->pdf->SetFont('Arial', '', 8);
+        $this->pdf->SetFont('Helvetica', '', 8);
         $this->pdf->SetTextColor(150, 150, 150);
         $this->pdf->Cell(0, 5, 
             'KTX Management System | Trang ' . $this->pdf->PageNo() . ' | ' . date('d/m/Y H:i'),
@@ -429,8 +640,8 @@ class InvoicePdfGenerator
         return $this->db->selectOne(
             "SELECT i.*, s.full_name, s.student_code, r.room_number, b.name as building_name
              FROM invoices i
-             JOIN students s ON s.id = i.student_id
              JOIN contracts c ON c.id = i.contract_id
+             JOIN students s ON s.id = c.student_id
              JOIN rooms r ON r.id = c.room_id
              JOIN buildings b ON b.id = r.building_id
              WHERE i.id = ?",
@@ -441,8 +652,8 @@ class InvoicePdfGenerator
     /**
      * Format currency to Vietnamese format
      */
-    private function formatCurrency(float $amount): string
+    private function formatCurrency(float|int|string $amount): string
     {
-        return number_format($amount, 0, ',', '.') . ' VND';
+        return number_format((float)$amount, 0, ',', '.') . ' VND';
     }
 }

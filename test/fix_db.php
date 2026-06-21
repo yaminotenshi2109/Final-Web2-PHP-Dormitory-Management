@@ -17,7 +17,11 @@ try {
     $columns = $db->select("SHOW COLUMNS FROM room_registrations");
     $columnNames = array_column($columns, 'Field');
 
-    if (!in_array('preferred_building_id', $columnNames, true)) {
+    $hasPreferredBuilding = in_array('preferred_building_id', $columnNames, true);
+    $hasPreferredRoomType = in_array('preferred_room_type', $columnNames, true);
+    $hasAssignedRoom    = in_array('assigned_room_id', $columnNames, true);
+
+    if (!$hasPreferredBuilding || !$hasPreferredRoomType) {
         echo "Modifying room_registrations table...\n";
         
         // Remove foreign key fk_reg_room to modify room_id safely
@@ -36,6 +40,14 @@ try {
         ");
         
         echo "✅ Table room_registrations altered successfully!\n";
+    } elseif (!$hasAssignedRoom) {
+        echo "Adding assigned_room_id column to room_registrations...\n";
+        $db->query("
+            ALTER TABLE room_registrations
+            ADD COLUMN assigned_room_id INT UNSIGNED NULL DEFAULT NULL AFTER preferred_room_type,
+            ADD CONSTRAINT fk_reg_assigned_room FOREIGN KEY (assigned_room_id) REFERENCES rooms(id) ON UPDATE CASCADE ON DELETE SET NULL
+        ");
+        echo "✅ assigned_room_id added successfully!\n";
     } else {
         echo "⚡ Table room_registrations already altered.\n";
     }

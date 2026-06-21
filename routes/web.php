@@ -65,6 +65,7 @@ $router->group('/student', function (Router $r) {
     $r->get('/invoices',       'InvoiceController@myInvoices')->name('invoice.my');
     $r->get('/invoices/:id',   'InvoiceController@show')->name('invoice.show')
         ->where('id', '\d+');
+    $r->get('/invoices/:id/pdf','InvoiceController@getPdf')->where('id', '\d+');
 
     // Yêu cầu bảo trì
     $r->get('/maintenance',         'MaintenanceController@myRequests')->name('maintenance.my');
@@ -179,6 +180,7 @@ $router->group('/api', function (Router $r) {
     // Invoices
     $r->get('/invoices',           'InvoiceApiController@index');
     $r->get('/invoices/:id',       'InvoiceApiController@show')->where('id', '\d+');
+    $r->get('/invoices/:id/pdf',   'InvoiceApiController@getPdf')->where('id', '\d+');
     $r->post('/invoices/generate', 'InvoiceApiController@generate');
     $r->post('/invoices/:id/pay',  'InvoiceApiController@pay')->where('id', '\d+');
 

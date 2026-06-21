@@ -250,31 +250,34 @@ class BillingController extends BaseController
             $this->abort(403, 'Không có quyền');
         }
 
-        // If FPDF autoload is not available, render a beautiful printable HTML invoice instead of crashing!
-        if (!file_exists(BASE_PATH . '/vendor/autoload.php')) {
-            $this->view('admin/invoices/print', [
-                'title'   => 'In hóa đơn #' . $id,
-                'invoice' => $invoice,
-            ], false); // Không dùng main layout, dùng layout in riêng biệt
-            return;
-        }
-
         // Generate PDF using temp directory (cross-platform safe: sys_get_temp_dir())
         $tempDir = sys_get_temp_dir();
         $tempFile = $tempDir . DIRECTORY_SEPARATOR . 'invoice_' . $id . '_' . time() . '.pdf';
 
-        if ($this->pdfGenerator->generate($id, $tempFile)) {
-            // Send file
+        if ($this->pdfGenerator->generate($id, $tempFile) && file_exists($tempFile) && filesize($tempFile) > 0) {
+            // Remove any previously buffered output and headers
+            while (ob_get_level() > 0) {
+                ob_end_clean();
+            }
+            header_remove();
+
+            // Send file for inline display in browser
             header('Content-Type: application/pdf');
-            header('Content-Disposition: attachment; filename="invoice_' . $id . '.pdf"');
+            header('Content-Disposition: inline; filename="invoice_' . $id . '.pdf"');
+            header('Content-Transfer-Encoding: binary');
+            header('Accept-Ranges: bytes');
+            header('Cache-Control: public, must-revalidate');
+            header('Pragma: public');
             header('Content-Length: ' . filesize($tempFile));
 
             readfile($tempFile);
+            flush();
 
             // Clean up
             unlink($tempFile);
             exit;
         } else {
+            error_log('Invoice PDF download generation failed for invoice #' . $id . '.');
             $this->abort(500, 'Lỗi tạo PDF');
         }
     }
