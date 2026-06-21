@@ -189,7 +189,7 @@
     <footer class="bg-light border-top mt-4 py-3">
         <div class="container-fluid text-center">
             <p class="text-muted mb-0">
-                &copy; 2026 KTX Management System | 
+                &copy; <?= date('Y') ?> KTX Management System | 
                 <a href="#" class="text-decoration-none">Privacy</a> |
                 <a href="#" class="text-decoration-none">Terms</a>
             </p>

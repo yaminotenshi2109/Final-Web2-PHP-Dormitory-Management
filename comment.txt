@@ -1,6 +1,0 @@
-  <?php if ($this->auth() && $this->auth('role') === 'admin'): ?>
-
-  EOF
-cat /mnt/user-data/outputs/Validator.php | head -100
-echo ""
-echo "✅ Validator.php created (600+ lines)"

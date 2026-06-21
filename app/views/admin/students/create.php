@@ -3,6 +3,10 @@
  * admin/students/create.php — Thêm sinh viên
  * Variables: $title, $_errors, $_old, $_csrfToken
  */
+
+$_errors = $_errors ?? [];
+$_old    = $_old    ?? [];
+$_csrfToken = $_csrfToken ?? '';
 ?>
 
 <div class="page-header">

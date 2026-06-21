@@ -48,6 +48,7 @@
     </div>
 </div>
 
+<?php $currentYear = (int)date('Y'); ?>
 <!-- Filter & Export -->
 <div class="card" style="margin-bottom: 1.5rem;">
     <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
@@ -60,8 +61,8 @@
             </select>
             <select style="padding: 0.5rem 0.75rem; border: 0.5px solid var(--color-border); border-radius: 4px;" id="yearFilter" onchange="filterInvoices()">
                 <option value="">Tất cả năm</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
+                <option value="<?= $currentYear ?>"><?= $currentYear ?></option>
+                <option value="<?= $currentYear - 1 ?>"><?= $currentYear - 1 ?></option>
             </select>
         </div>
         <button class="btn btn-sm" onclick="exportInvoices()">

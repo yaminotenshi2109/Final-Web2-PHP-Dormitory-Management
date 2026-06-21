@@ -652,7 +652,7 @@ class RegistrationController extends BaseController
     {
         $month = (int)date('m');
 
-        // VN academic year: 9/2024 - 5/2025
+        // VN academic year: 9/YYYY - 5/YYYY+1
         // Semester 1: 9-12, Semester 2: 1-5
         if ($month >= 9) {
             $year = (int)date('Y');

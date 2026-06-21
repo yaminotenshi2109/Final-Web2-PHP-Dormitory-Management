@@ -325,7 +325,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                         <div class="form-group">
                             <label class="form-label">Mã sinh viên</label>
                             <input type="text" name="student_code" class="form-control"
-                                   placeholder="2023XXXXX">
+                                   placeholder="SV<?= date('Y') ?>XXXXX">
                         </div>
                     </div>
                     <div class="form-row">
@@ -428,7 +428,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                     <div class="form-group">
                         <label class="form-label">Mã sinh viên</label>
                         <input type="text" name="student_code" id="edit_student_code"
-                               class="form-control" placeholder="2023XXXXX">
+                               class="form-control" placeholder="SV<?= date('Y') ?>XXXXX">
                     </div>
                 </div>
                 <div class="form-row">

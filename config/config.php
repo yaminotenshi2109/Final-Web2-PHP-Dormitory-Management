@@ -30,4 +30,16 @@ define('DEFAULT_WATER_RATE', 15000.00);  // VND / m³
 define('AC_FEE_MONTHLY',     100000.00); // VND / tháng nếu phòng có AC
 
 // ── Timezone ─────────────────────────────────────────────────
-date_default_timezone_set('Asia/Ho_Chi_Minh');
+$timezone = getenv('APP_TIMEZONE') ?: 'Asia/Ho_Chi_Minh';
+$tz = new DateTimeZone($timezone);
+define('APP_TIMEZONE', $tz->getName());
+
+// Use PHP timezone for all date() and DateTime operations
+date_default_timezone_set(APP_TIMEZONE);
+
+// MySQL session timezone must match PHP timezone
+$offsetSeconds = $tz->getOffset(new DateTimeImmutable('now', $tz));
+$offsetHours = abs((int)floor($offsetSeconds / 3600));
+$offsetMinutes = abs((int)(($offsetSeconds % 3600) / 60));
+$offsetSign = $offsetSeconds < 0 ? '-' : '+';
+define('DB_TIMEZONE', sprintf('%s%02d:%02d', $offsetSign, $offsetHours, $offsetMinutes));
