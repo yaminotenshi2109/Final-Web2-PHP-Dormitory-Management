@@ -176,6 +176,15 @@ $router->group('/api', function (Router $r) {
     $r->get('/students/:id',       'StudentApiController@show')->where('id', '\d+');
     $r->put('/students/:id',       'StudentApiController@update')->where('id', '\d+');
 
+    // Users
+    $r->post('/users',                         'UserController@store');
+    $r->get('/users/export',                   'UserController@export');
+    $r->post('/users/bulk-status',             'UserController@bulkUpdateStatus');
+    $r->post('/users/:id/reset-password',      'UserController@resetPassword')->where('id', '\d+');
+    $r->get('/users/:id',                      'UserController@apiShow')->where('id', '\d+');
+    $r->put('/users/:id',                      'UserController@update')->where('id', '\d+');
+    $r->delete('/users/:id',                   'UserController@destroy')->where('id', '\d+');
+
     // Invoices
     $r->get('/invoices',           'InvoiceApiController@index');
     $r->get('/invoices/:id',       'InvoiceApiController@show')->where('id', '\d+');

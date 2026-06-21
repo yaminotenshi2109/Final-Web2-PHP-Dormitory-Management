@@ -2,6 +2,11 @@
 /**
  * admin/users/create.php — Tạo tài khoản
  * Variables: $title, $_errors, $_old, $_csrfToken
+ *
+ * @var string $title
+ * @var array<string,string> $_errors
+ * @var array<string,mixed> $_old
+ * @var string $_csrfToken
  */
 ?>
 
@@ -31,6 +36,19 @@
       <div class="form-group">
         <label class="form-label" for="password">Mật khẩu <span class="req">*</span></label>
         <input type="password" id="password" name="password" class="form-control" minlength="8" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password_confirm">Xác nhận mật khẩu <span class="req">*</span></label>
+        <input type="password" id="password_confirm" name="password_confirm" class="form-control" minlength="8" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="status">Trạng thái <span class="req">*</span></label>
+        <select id="status" name="status" class="form-control" required>
+          <option value="active" <?= ($_old['status'] ?? '') === 'active' ? 'selected' : '' ?>>✅ Hoạt động</option>
+          <option value="inactive" <?= ($_old['status'] ?? '') === 'inactive' ? 'selected' : '' ?>>🔴 Vô hiệu hóa</option>
+        </select>
       </div>
 
       <div class="form-group">

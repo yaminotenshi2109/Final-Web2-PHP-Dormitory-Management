@@ -80,7 +80,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
         </select>
 
         <?php if ($currentQ || $currentRole || $currentStatus): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+            <a href="<?= getDynamicUrl('/admin/users') ?>" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
         <?php endif; ?>
 
         <span style="margin-left:auto;font-size:12px;color:var(--txt-muted)">
@@ -183,7 +183,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                                 <div class="empty-msg">
                                     <?php if ($currentQ || $currentRole || $currentStatus): ?>
                                         Không có kết quả phù hợp với bộ lọc hiện tại.
-                                        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users">Xóa bộ lọc</a>
+                                        <a href="<?= getDynamicUrl('/admin/users') ?>">Xóa bộ lọc</a>
                                     <?php else: ?>
                                         Chưa có tài khoản nào trong hệ thống.
                                     <?php endif; ?>
@@ -330,9 +330,25 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Số điện thoại</label>
-                            <input type="text" name="phone" class="form-control"
-                                   placeholder="0123 456 789">
+                            <label class="form-label">Ngày sinh</label>
+                            <input type="date" name="dob" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Khoa</label>
+                            <select name="faculty" class="form-control">
+                                <option value="">-- Chọn --</option>
+                                <option value="CNTT">CNTT</option>
+                                <option value="KT">Kinh tế</option>
+                                <option value="XH">Xã hội học</option>
+                                <option value="SP">Sư phạm</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Số thẻ/căn cước</label>
+                            <input type="text" name="id_card" class="form-control"
+                                   placeholder="123456789">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Giới tính</label>
@@ -403,10 +419,49 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">Họ và tên</label>
-                    <input type="text" name="full_name" id="edit_full_name"
-                           class="form-control" placeholder="Nguyễn Văn A">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Họ và tên</label>
+                        <input type="text" name="full_name" id="edit_full_name"
+                               class="form-control" placeholder="Nguyễn Văn A">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mã sinh viên</label>
+                        <input type="text" name="student_code" id="edit_student_code"
+                               class="form-control" placeholder="2023XXXXX">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Ngày sinh</label>
+                        <input type="date" name="dob" id="edit_dob" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Khoa</label>
+                        <select name="faculty" id="edit_faculty" class="form-control">
+                            <option value="">-- Chọn --</option>
+                            <option value="CNTT">CNTT</option>
+                            <option value="KT">Kinh tế</option>
+                            <option value="XH">Xã hội học</option>
+                            <option value="SP">Sư phạm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Số thẻ/căn cước</label>
+                        <input type="text" name="id_card" id="edit_id_card"
+                               class="form-control" placeholder="123456789">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Giới tính</label>
+                        <select name="gender" id="edit_gender" class="form-control">
+                            <option value="">-- Chọn --</option>
+                            <option value="male">Nam</option>
+                            <option value="female">Nữ</option>
+                            <option value="other">Khác</option>
+                        </select>
+                    </div>
                 </div>
 
             </div><!-- /.modal-body -->
@@ -509,6 +564,8 @@ function toggleStudentFields(prefix) {
     if (container) container.style.display = role === 'student' ? 'block' : 'none';
 }
 
+const apiUsersBaseUrl = '<?= getDynamicUrl('/api/users') ?>';
+
 /* ── Add user ───────────────────────────────────────────────── */
 function submitAddUser(e) {
     e.preventDefault();
@@ -524,7 +581,7 @@ function submitAddUser(e) {
     btn.disabled = true;
     btn.innerHTML = '<span class="loading"></span> Đang tạo...';
 
-    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users', {
+    fetch(apiUsersBaseUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': data.get('_csrf_token') },
         body: JSON.stringify(Object.fromEntries(data))
@@ -555,17 +612,22 @@ function submitAddUser(e) {
 
 /* ── Open edit modal ────────────────────────────────────────── */
 function openEditUserModal(id) {
-    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users/' + id)
+    fetch(apiUsersBaseUrl + '/' + id)
     .then(r => r.json())
     .then(json => {
         if (!json.success) { showKtxToast('error', 'Không tải được thông tin người dùng.'); return; }
         const u = json.data;
-        document.getElementById('edit_user_id').value   = u.id;
-        document.getElementById('edit_username').value  = u.username;
-        document.getElementById('edit_email').value     = u.email;
-        document.getElementById('edit_role').value      = u.role;
-        document.getElementById('edit_status').value    = u.status;
-        document.getElementById('edit_full_name').value = u.full_name || '';
+        document.getElementById('edit_user_id').value      = u.id;
+        document.getElementById('edit_username').value     = u.username;
+        document.getElementById('edit_email').value        = u.email;
+        document.getElementById('edit_role').value         = u.role;
+        document.getElementById('edit_status').value       = u.status;
+        document.getElementById('edit_full_name').value    = u.full_name || '';
+        document.getElementById('edit_student_code').value = u.student_code || '';
+        document.getElementById('edit_dob').value          = u.dob || '';
+        document.getElementById('edit_faculty').value      = u.faculty || '';
+        document.getElementById('edit_id_card').value      = u.id_card || '';
+        document.getElementById('edit_gender').value       = u.gender || '';
         openModal('modalEditUser');
     })
     .catch(() => showKtxToast('error', 'Lỗi kết nối.'));
@@ -582,7 +644,7 @@ function submitEditUser(e) {
         el.textContent = ''; el.classList.add('d-none');
     });
 
-    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users/' + userId, {
+    fetch(apiUsersBaseUrl + '/' + userId, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': data.get('_csrf_token') },
         body: JSON.stringify(Object.fromEntries(data))
@@ -611,7 +673,15 @@ function submitEditUser(e) {
 function deleteUser(id, username) {
     if (!confirm('Bạn có chắc muốn xóa tài khoản "' + username + '"?\nHành động này không thể hoàn tác!')) return;
 
-    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users/' + id, { method: 'DELETE' })
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
+    fetch(apiUsersBaseUrl + '/' + id, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': csrfToken,
+        }
+    })
     .then(r => r.json())
     .then(json => {
         if (json.success) {
@@ -639,7 +709,7 @@ function submitResetPassword(e) {
     const data   = new FormData(form);
     const userId = data.get('user_id');
 
-    fetch('/Final-Web2-PHP-Dormitory-Management/public/api/users/' + userId + '/reset-password', {
+    fetch(apiUsersBaseUrl + '/' + userId + '/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': data.get('_csrf_token') },
         body: JSON.stringify(Object.fromEntries(data))

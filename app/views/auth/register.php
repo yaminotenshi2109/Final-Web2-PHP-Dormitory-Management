@@ -34,7 +34,7 @@
     <p class="auth-subtitle">Điền thông tin để bắt đầu sử dụng hệ thống</p>
 
     <!-- Register Form -->
-    <form method="POST" action="<?= getDynamicUrl('/auth/register') ?>" novalidate onsubmit="document.getElementById('password_confirm_confirm').value = document.getElementById('password_confirm').value">
+    <form method="POST" action="<?= getDynamicUrl('/auth/register') ?>" novalidate>
         <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
 
         <!-- Username -->
@@ -110,7 +110,6 @@
                     class="form-control<?= !empty($_errors['password_confirm']) ? ' is-invalid' : '' ?>"
                     placeholder="Nhập lại mật khẩu"
                     autocomplete="new-password"
-                    oninput="document.getElementById('password_confirm_confirm').value = this.value"
                 >
                 <button type="button" class="password-toggle" title="Hiện/ẩn mật khẩu">👁️</button>
             </div>
@@ -118,9 +117,6 @@
                 <span class="form-error">⚠️ <?= htmlspecialchars($_errors['password_confirm']) ?></span>
             <?php endif; ?>
         </div>
-
-        <!-- Hidden input for passing confirmed rule on password_confirm in backend validator -->
-        <input type="hidden" id="password_confirm_confirm" name="password_confirm_confirm">
 
         <!-- General error -->
         <?php if (!empty($_errors['general'])): ?>

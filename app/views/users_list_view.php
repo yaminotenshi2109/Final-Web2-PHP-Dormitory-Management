@@ -5,7 +5,20 @@
  *  Danh sách người dùng với AJAX CRUD
  *  Hỗ trợ: tạo, sửa, xóa, cập nhật trạng thái, xuất Excel
  * ─────────────────────────────────────────────────────────────
+ *
+ * @var array<int,array<string,mixed>> $users
+ * @var array<string,mixed> $pagination
+ * @var string $csrfToken
  */
+
+$users = $users ?? [];
+$pagination = $pagination ?? [
+    'total' => 0,
+    'per_page' => 15,
+    'current_page' => 1,
+    'last_page' => 1,
+];
+$csrfToken = $csrfToken ?? '';
 ?>
 
 <div class="page-header">

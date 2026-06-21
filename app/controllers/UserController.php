@@ -71,7 +71,7 @@ class UserController extends BaseController
         // Phân trang
         $result = $this->db->paginate(
             "SELECT u.*, 
-                    COALESCE(s.full_name, '-') AS student_name,
+                    COALESCE(s.full_name, '') AS full_name,
                     COALESCE(s.student_code, '-') AS student_code
              FROM users u
              LEFT JOIN students s ON s.user_id = u.id
@@ -201,8 +201,16 @@ class UserController extends BaseController
         $id   = (int)$params['id'];
         $user = $this->db->selectOne(
             "SELECT u.*, 
-                    COALESCE(s.full_name, '') AS student_name,
-                    COALESCE(s.student_code, '') AS student_code
+                    COALESCE(s.full_name, '') AS full_name,
+                    COALESCE(s.student_code, '') AS student_code,
+                    COALESCE(s.gender, '') AS gender,
+                    COALESCE(s.dob, '') AS dob,
+                    COALESCE(s.faculty, '') AS faculty,
+                    COALESCE(s.program, '') AS program,
+                    COALESCE(s.priority_level, '') AS priority_level,
+                    COALESCE(s.phone, '') AS phone,
+                    COALESCE(s.hometown, '') AS hometown,
+                    COALESCE(s.id_card, '') AS id_card
              FROM users u
              LEFT JOIN students s ON s.user_id = u.id
              WHERE u.id = ?",
@@ -296,7 +304,9 @@ class UserController extends BaseController
 
         // ─── Create ────────────────────────────────────────────
         try {
-            $this->db->transaction(function (Database $db) use ($userData, $studentData) {
+            $createdUserId = 0;
+
+            $this->db->transaction(function (Database $db) use ($userData, $studentData, &$createdUserId) {
                 // 1. Hash password và tạo user
                 $userData['password_hash'] = password_hash(
                     $userData['password'],
@@ -305,24 +315,27 @@ class UserController extends BaseController
                 );
                 unset($userData['password'], $userData['password_confirm']);
 
-                $userId = $db->insert('users', $userData);
+                $createdUserId = $db->insert('users', $userData);
 
                 // 2. Tạo hồ sơ sinh viên (nếu role = student)
                 if ($userData['role'] === 'student' && !empty($studentData)) {
-                    $studentData['user_id'] = $userId;
+                    $studentData['user_id'] = $createdUserId;
                     $db->insert('students', $studentData);
                 }
 
                 // 3. Gửi thông báo
                 $db->insert('notifications', [
-                    'user_id' => $userId,
+                    'user_id' => $createdUserId,
                     'title'   => 'Tài khoản được tạo',
                     'message' => 'Tài khoản của bạn đã được tạo thành công. Vui lòng đăng nhập.',
                     'type'    => 'system',
                 ]);
             });
 
-            $user = $this->userModel->find($this->db->lastInsertId());
+            $user = $this->userModel->find($createdUserId);
+            if (!$user) {
+                throw new \RuntimeException('Không tìm thấy tài khoản vừa tạo.');
+            }
 
             $this->jsonOk(
                 $user,
@@ -360,8 +373,9 @@ class UserController extends BaseController
             'password', // optional
         ]);
 
+        $requestedRole = $userData['role'] ?? $user['role'];
         $studentData = null;
-        if ($user['role'] === 'student') {
+        if ($requestedRole === 'student') {
             $studentData = $this->only([
                 'student_code',
                 'full_name',
@@ -411,6 +425,8 @@ class UserController extends BaseController
                         PASSWORD_BCRYPT,
                         ['cost' => 12]
                     );
+                    unset($userData['password']);
+                } else {
                     unset($userData['password']);
                 }
 

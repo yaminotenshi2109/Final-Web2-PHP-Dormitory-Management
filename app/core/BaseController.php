@@ -32,8 +32,11 @@ abstract class BaseController
     // ── Default layout (false = không dùng layout) ────────────
     protected string|false $layout = 'main';
 
-    // ── DB shortcut ───────────────────────────────────────────
+    // ── DB shortcut (single shared connection) ───────────────
     protected Database $db;
+
+    // ── Cache parsed JSON request body so repeated request() calls work
+    private ?array $jsonBody = null;
 
     public function __construct()
     {
@@ -312,13 +315,18 @@ abstract class BaseController
 
     private function parseJsonBody(): ?array
     {
+        if ($this->jsonBody !== null) {
+            return $this->jsonBody;
+        }
+
         $ct = $_SERVER['CONTENT_TYPE'] ?? '';
         if (!str_contains($ct, 'application/json')) {
-            return null;
+            return $this->jsonBody = null;
         }
+
         $body = file_get_contents('php://input');
         $data = json_decode($body, true);
-        return is_array($data) ? $data : null;
+        return $this->jsonBody = is_array($data) ? $data : null;
     }
 
     private function sanitize(mixed $value): mixed
@@ -448,13 +456,21 @@ abstract class BaseController
     private function vUnique(string $field, mixed $v, string $arg): ?string
     {
         if ($v === null || $v === '') return null;
-        [$table, $column, $excludeId] = array_pad(explode(',', $arg), 3, null);
+
+        $parts = explode(',', $arg);
+        $table = $parts[0] ?? '';
+        $column = $parts[1] ?? $field;
+        $excludeValue = $parts[2] ?? null;
+        $excludeColumn = $parts[3] ?? 'id';
+
         $where  = "{$column} = ?";
         $params = [$v];
-        if ($excludeId) {
-            $where   .= ' AND id != ?';
-            $params[] = (int)$excludeId;
+
+        if ($excludeValue !== null && $excludeValue !== '') {
+            $where   .= " AND {$excludeColumn} != ?";
+            $params[] = (int)$excludeValue;
         }
+
         return $this->db->exists($table, $where, $params)
             ? "Giá trị này đã tồn tại trong hệ thống." : null;
     }

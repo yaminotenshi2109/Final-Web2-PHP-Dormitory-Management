@@ -2,6 +2,12 @@
 /**
  * admin/users/edit.php — Sửa tài khoản
  * Variables: $title, $user, $_errors, $_old, $_csrfToken
+ *
+ * @var string $title
+ * @var array<string,mixed> $user
+ * @var array<string,string> $_errors
+ * @var array<string,mixed> $_old
+ * @var string $_csrfToken
  */
 $u = $user ?? [];
 ?>

@@ -387,19 +387,19 @@ class AuthController extends BaseController
     {
         $this->verifyCsrf();
 
-        $data = $this->only(['username', 'email', 'password', 'password_confirm']);
+        $data = $this->only([
+            'username',
+            'email',
+            'password',
+            'password_confirm',
+        ]);
 
         $errors = $this->validate($data, [
             'username'         => 'required|min:3|max:50|unique:users,username',
             'email'            => 'required|email|unique:users,email',
-            'password'         => 'required|min:8',
-            'password_confirm' => 'required|confirmed',
+            'password'         => 'required|min:8|confirmed',
+            'password_confirm' => 'required',
         ]);
-
-        // Fix: truyền đúng tham số cho confirmed
-        if (($data['password'] ?? '') !== ($data['password_confirm'] ?? '')) {
-            $errors['password_confirm'][] = 'Xác nhận mật khẩu không khớp.';
-        }
 
         if (!empty($errors)) {
             $this->withOldInput(['username' => $data['username'], 'email' => $data['email']]);
@@ -408,15 +408,51 @@ class AuthController extends BaseController
 
         try {
             $hash   = password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]);
-            $userId = $this->db->insert('users', [
-                'username'      => $data['username'],
-                'email'         => $data['email'],
-                'password_hash' => $hash,
-                'role'          => 'student',
+            $userId = $this->db->transaction(function ($db) use ($data, $hash) {
+                $userId = $db->insert('users', [
+                    'username'      => $data['username'],
+                    'email'         => $data['email'],
+                    'password_hash' => $hash,
+                    'role'          => 'student',
+                ]);
+
+                $studentCode = 'SV' . date('Y') . str_pad((string)$userId, 4, '0', STR_PAD_LEFT);
+                $idCard      = 'CCCD' . str_pad((string)$userId, 8, '0', STR_PAD_LEFT);
+
+                $db->insert('students', [
+                    'user_id'      => $userId,
+                    'student_code' => $studentCode,
+                    'full_name'    => $data['username'],
+                    'gender'       => 'male',
+                    'dob'          => '2000-01-01',
+                    'faculty'      => '',
+                    'program'      => 'Đại trà',
+                    'priority_level' => 0,
+                    'phone'        => '',
+                    'hometown'     => '',
+                    'id_card'      => $idCard,
+                ]);
+
+                $db->insert('notifications', [
+                    'user_id' => $userId,
+                    'title'   => 'Tài khoản được tạo',
+                    'message' => 'Chúc mừng! Tài khoản đã được tạo. Vui lòng hoàn thành hồ sơ cá nhân.',
+                    'type'    => 'system',
+                ]);
+
+                return $userId;
+            });
+
+            $this->loginUser([
+                'id'       => $userId,
+                'username' => $data['username'],
+                'email'    => $data['email'],
+                'role'     => 'student',
+                'status'   => 'active',
             ]);
 
-            $this->flash('success', 'Đăng ký thành công! Vui lòng đăng nhập.');
-            $this->redirect('/auth/login');
+            $this->flash('success', 'Đăng ký thành công! Vui lòng cập nhật hồ sơ cá nhân.');
+            $this->redirect('/student/profile');
 
         } catch (\Throwable $e) {
             $this->flash('error', 'Đã xảy ra lỗi. Vui lòng thử lại.');
