@@ -81,7 +81,10 @@ class Database
             PDO::ATTR_PERSISTENT         => false,
 
             // Timeout kết nối 5 giây
-            PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
+            PDO::MYSQL_ATTR_INIT_COMMAND => sprintf(
+                "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci; SET time_zone = '%s'",
+                DB_TIMEZONE
+            ),
         ];
 
         try {

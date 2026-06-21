@@ -114,7 +114,7 @@
                                 </td>
                                 <td>
                                     <?php
-                                    $dt = $v['created_at'] ?? '';
+                                    $dt = $v['recorded_at'] ?? '';
                                     echo $dt ? htmlspecialchars(date('d/m/Y', strtotime($dt))) : '—';
                                     ?>
                                 </td>

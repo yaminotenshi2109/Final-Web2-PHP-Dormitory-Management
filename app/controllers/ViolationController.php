@@ -83,7 +83,7 @@ class ViolationController extends BaseController
         // Filters
         $status = $this->request('status', '');
         $severity = $this->request('severity', '');
-        $search = $this->request('q', '');
+        $search = $this->request('search', '');
 
         $where = '1';
         $args = [];
@@ -107,13 +107,13 @@ class ViolationController extends BaseController
 
         $result = $this->db->paginate(
             "SELECT v.*, s.full_name, s.student_code, u.username,
-                    c.id AS contract_id
+                    c.id AS active_contract_id
              FROM violation_records v
              JOIN students s ON s.id = v.student_id
              JOIN users u ON u.id = s.user_id
              LEFT JOIN contracts c ON c.student_id = s.id AND c.status = 'active'
              WHERE {$where}
-             ORDER BY v.created_at DESC",
+             ORDER BY v.recorded_at DESC",
             $args,
             $page,
             $perPage
@@ -177,6 +177,65 @@ class ViolationController extends BaseController
             'contract'    => $contract,
             'types'       => self::VIOLATION_TYPES,
         ]);
+    }
+
+    /**
+     * POST /admin/violations/:id/dismiss
+     * Hủy vi phạm từ giao diện admin
+     */
+    public function dismiss(array $params = []): void
+    {
+        $this->requireAdmin();
+        $this->verifyCsrf();
+
+        $id = (int)($params['id'] ?? 0);
+        $violation = $this->db->selectOne(
+            "SELECT v.*, s.user_id FROM violation_records v
+             JOIN students s ON s.id = v.student_id
+             WHERE v.id = ?",
+            [$id]
+        );
+
+        if (!$violation) {
+            $this->abort(404, 'Vi phạm không tồn tại');
+        }
+
+        if (($violation['status'] ?? '') === 'dismissed') {
+            $this->flash('warning', 'Vi phạm đã được hủy bỏ trước đó');
+            $this->redirect('/admin/violations');
+        }
+
+        try {
+            $this->db->transaction(function (Database $db) use ($id, $violation) {
+                $db->update(
+                    'violation_records',
+                    [
+                        'status'       => 'dismissed',
+                        'dismissed_at' => date('Y-m-d H:i:s'),
+                        'dismissed_by' => $this->auth('id'),
+                    ],
+                    'id = ?',
+                    [$id]
+                );
+
+                if (!empty($violation['user_id'])) {
+                    $db->insert('notifications', [
+                        'user_id' => $violation['user_id'],
+                        'title'   => 'Vi phạm của bạn đã được hủy',
+                        'message' => 'Admin đã hủy vi phạm của bạn. Vui lòng kiểm tra lại thông tin và tiếp tục chấp hành nội quy.',
+                        'type'    => 'violation',
+                    ]);
+                }
+            });
+
+            $this->violationService->evaluateStudentStatus((int)$violation['student_id']);
+            $this->flash('success', 'Vi phạm đã được hủy thành công');
+            $this->redirect('/admin/violations');
+        } catch (\Throwable $e) {
+            error_log('[ViolationController::dismiss] ' . $e->getMessage());
+            $this->flash('error', 'Lỗi khi hủy vi phạm. Vui lòng thử lại.');
+            $this->back();
+        }
     }
 
     /**
@@ -805,7 +864,7 @@ class ViolationController extends BaseController
             "SELECT v.*, s.full_name, s.student_code
              FROM violation_records v
              JOIN students s ON s.id = v.student_id
-             ORDER BY v.created_at DESC"
+             ORDER BY v.recorded_at DESC"
         );
 
         if ($format === 'csv') {
