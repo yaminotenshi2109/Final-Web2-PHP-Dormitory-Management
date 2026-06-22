@@ -96,9 +96,14 @@
 function deleteBuilding(id, name) {
     if (!confirm('Bạn có chắc chắn muốn xóa tòa nhà "' + name + '"?\nHành động này không thể hoàn tác!')) return;
     
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content || '';
+
     fetch('/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/' + id, {
         method: 'DELETE',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-Token': csrfToken
+        }
     })
     .then(r => r.json())
     .then(json => {
