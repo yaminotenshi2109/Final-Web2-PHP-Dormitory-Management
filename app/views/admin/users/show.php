@@ -4,17 +4,17 @@
  * Variables: $title, $user, $_csrfToken
  */
 $u = $user ?? [];
-$roleMap = ['admin'=>['badge-purple','👑 Admin'],'student'=>['badge-info','🎓 Sinh viên']];
-$statusMap = ['active'=>['badge-success','✅ Hoạt động'],'inactive'=>['badge-neutral','⚪ Ngừng'],'banned'=>['badge-danger','🚫 Cấm']];
+$roleMap = ['admin'=>['badge-purple',' Admin'],'student'=>['badge-info',' Sinh viên']];
+$statusMap = ['active'=>['badge-success',' Hoạt động'],'inactive'=>['badge-neutral',' Ngừng'],'banned'=>['badge-danger',' Cấm']];
 $role = $u['role'] ?? 'student'; [$rClass, $rLabel] = $roleMap[$role] ?? ['badge-neutral', $role];
 $st = $u['status'] ?? 'active'; [$sClass, $sLabel] = $statusMap[$st] ?? ['badge-neutral', $st];
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">👤 <?= htmlspecialchars($u['username'] ?? '') ?></h1><p class="page-subtitle">Chi tiết tài khoản</p></div>
+  <div><h1 class="page-title"> <?= htmlspecialchars($u['username'] ?? '') ?></h1><p class="page-subtitle">Chi tiết tài khoản</p></div>
   <div class="page-actions">
     <a href="<?= getDynamicUrl('/admin/users') ?>" class="btn btn-ghost">← Quay lại</a>
-    <a href="<?= getDynamicUrl('/admin/users/' . ($u['id'] ?? '') . '/edit') ?>" class="btn btn-outline">✏️ Sửa</a>
+    <a href="<?= getDynamicUrl('/admin/users/' . ($u['id'] ?? '') . '/edit') ?>" class="btn btn-outline"> Sửa</a>
   </div>
 </div>
 

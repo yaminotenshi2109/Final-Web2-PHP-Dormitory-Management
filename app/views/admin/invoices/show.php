@@ -10,7 +10,7 @@
     <div class="page-header invoice-page-header">
         <div>
             <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-secondary invoice-back-btn">
-                ⬅️ Quay lại danh sách
+                ⬅ Quay lại danh sách
             </a>
             <h1 class="page-title">Chi tiết hóa đơn #<?= htmlspecialchars($invoice['id']) ?></h1>
             <p class="page-subtitle">Kỳ thanh toán: Tháng <?= $invoice['month'] ?>/<?= $invoice['year'] ?></p>
@@ -18,11 +18,11 @@
 
         <div class="page-header-actions">
             <a href="/Final-Web2-PHP-Dormitory-Management/public/api/invoices/<?= $invoice['id'] ?>/pdf" target="_blank" class="btn btn-primary">
-                🖨️ In / Tải PDF
+                 In / Tải PDF
             </a>
             <?php if ($invoice['status'] === 'unpaid' || $invoice['status'] === 'overdue'): ?>
                 <button type="button" class="btn btn-success" onclick="openPaymentModal()">
-                    💰 Xác nhận thanh toán
+                     Xác nhận thanh toán
                 </button>
             <?php endif; ?>
         </div>
@@ -85,7 +85,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <strong>🏢 Tiền thuê phòng</strong>
+                                    <strong> Tiền thuê phòng</strong>
                                     <span>Giá thuê phòng cơ bản hàng tháng</span>
                                 </td>
                                 <td style="text-align:right">
@@ -94,7 +94,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <strong>⚡ Tiền điện sinh hoạt</strong>
+                                    <strong> Tiền điện sinh hoạt</strong>
                                     <span>Dựa trên chỉ số tiêu thụ của phòng</span>
                                 </td>
                                 <td style="text-align:right">
@@ -103,7 +103,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <strong>💧 Tiền nước sạch</strong>
+                                    <strong> Tiền nước sạch</strong>
                                     <span>Dựa trên khối lượng nước tiêu thụ</span>
                                 </td>
                                 <td style="text-align:right">
@@ -113,7 +113,7 @@
                             <?php if ((float)$invoice['ac_fee'] > 0): ?>
                             <tr>
                                 <td>
-                                    <strong>❄️ Phụ phí điều hòa</strong>
+                                    <strong> Phụ phí điều hòa</strong>
                                     <span>Phí dịch vụ phòng điều hòa</span>
                                 </td>
                                 <td style="text-align:right">
@@ -124,7 +124,7 @@
                             <?php if ((float)$invoice['other_fee'] > 0): ?>
                             <tr>
                                 <td>
-                                    <strong>⚙️ Chi phí dịch vụ khác</strong>
+                                    <strong> Chi phí dịch vụ khác</strong>
                                     <span>Phí vệ sinh, mạng internet hoặc phụ thu</span>
                                 </td>
                                 <td style="text-align:right">
@@ -155,7 +155,7 @@
                 <div class="card-body payment-state">
                     <?php if ($invoice['status'] === 'paid'): ?>
                         <div class="payment-status-card payment-status-paid">
-                            <span class="payment-status-icon">✅</span>
+                            <span class="payment-status-icon"></span>
                             <div>
                                 <h4>Đã thanh toán</h4>
                                 <p>Hóa đơn đã được thanh toán đầy đủ.</p>
@@ -170,9 +170,9 @@
                                 <span>Phương thức</span>
                                 <strong>
                                     <?= match($invoice['payment_method']) {
-                                        'cash' => '💵 Tiền mặt',
-                                        'transfer' => '🏦 Chuyển khoản ngân hàng',
-                                        'momo' => '📱 Ví Momo',
+                                        'cash' => ' Tiền mặt',
+                                        'transfer' => ' Chuyển khoản ngân hàng',
+                                        'momo' => ' Ví Momo',
                                         default => 'Điện tử VNPAY',
                                     } ?>
                                 </strong>
@@ -192,7 +192,7 @@
 
             <section class="card invoice-section invoice-note-card">
                 <div class="card-header">
-                    <h4 class="card-title">💡 Hướng dẫn</h4>
+                    <h4 class="card-title"> Hướng dẫn</h4>
                 </div>
                 <div class="card-body">
                     <p>• Nút <strong>In / Tải PDF</strong> sẽ tải xuống file PDF chuyên nghiệp để lưu trữ hoặc in ấn.</p>
@@ -211,8 +211,8 @@
 <div class="modal-overlay" id="paymentModalBackdrop" style="display: none;">
     <div class="modal">
         <div class="modal-header">
-            <h3 class="modal-title">💰 Xác nhận Thanh toán Hóa đơn</h3>
-            <button type="button" class="modal-close" aria-label="Close" onclick="closePaymentModal()">✕</button>
+            <h3 class="modal-title"> Xác nhận Thanh toán Hóa đơn</h3>
+            <button type="button" class="modal-close" aria-label="Close" onclick="closePaymentModal()"></button>
         </div>
         <div class="modal-body">
             <p style="margin:0 0 18px;color:var(--txt-muted);font-size:.95rem;line-height:1.7;">
@@ -222,9 +222,9 @@
                 <div class="form-group">
                     <label class="form-label" for="payment_method">Phương thức thanh toán</label>
                     <select id="payment_method" class="form-control">
-                        <option value="cash">💵 Tiền mặt (Trực tiếp)</option>
-                        <option value="transfer">🏦 Chuyển khoản ngân hàng</option>
-                        <option value="momo">📱 Ví điện tử Momo</option>
+                        <option value="cash"> Tiền mặt (Trực tiếp)</option>
+                        <option value="transfer"> Chuyển khoản ngân hàng</option>
+                        <option value="momo"> Ví điện tử Momo</option>
                     </select>
                 </div>
 
@@ -235,7 +235,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closePaymentModal()">Hủy bỏ</button>
-                    <button type="submit" class="btn btn-success">✅ Xác nhận nộp</button>
+                    <button type="submit" class="btn btn-success"> Xác nhận nộp</button>
                 </div>
             </form>
         </div>

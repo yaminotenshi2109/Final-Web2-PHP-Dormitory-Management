@@ -37,7 +37,7 @@ $statusLabel = match($status) {
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">📋 Chi tiết đơn đăng ký</h1>
+    <h1 class="page-title"> Chi tiết đơn đăng ký</h1>
     <p class="page-subtitle">Duyệt và xếp phòng cho sinh viên <?= $studentName ?></p>
   </div>
   <div class="page-actions">
@@ -72,7 +72,7 @@ $statusLabel = match($status) {
     <!-- Allocation Panel (Only if pending) -->
     <?php if ($status === 'pending'): ?>
       <div class="card" style="padding:24px;">
-        <h3 style="font-size:15px;font-weight:800;color:var(--txt-primary);margin-bottom:16px;">🏢 Phân phối xếp phòng ở</h3>
+        <h3 style="font-size:15px;font-weight:800;color:var(--txt-primary);margin-bottom:16px;"> Phân phối xếp phòng ở</h3>
         
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
           <!-- Option A: Auto-Allocate -->
@@ -81,7 +81,7 @@ $statusLabel = match($status) {
               <h4 style="font-weight:700;font-size:13.5px;margin-bottom:6px;">Tự động xếp phòng</h4>
               <p style="color:var(--txt-muted);font-size:12px;margin-bottom:12px;">Hệ thống sẽ tự động gán sinh viên vào phòng trống tối ưu thuộc tòa nhà ưa thích.</p>
             </div>
-            <button class="btn btn-primary btn-sm" style="width:100%;" onclick="autoAllocate()">🚀 Tự động xếp phòng</button>
+            <button class="btn btn-primary btn-sm" style="width:100%;" onclick="autoAllocate()"> Tự động xếp phòng</button>
           </div>
 
           <!-- Option B: Manual Allocate -->
@@ -96,19 +96,19 @@ $statusLabel = match($status) {
                 <?php endforeach; ?>
               </select>
             </div>
-            <button class="btn btn-outline btn-sm" style="width:100%;" onclick="manualAllocate()">💾 Gán phòng chọn</button>
+            <button class="btn btn-outline btn-sm" style="width:100%;" onclick="manualAllocate()"> Gán phòng chọn</button>
           </div>
         </div>
       </div>
     <?php else: ?>
       <?php if ($status === 'approved' && !empty($registration['assigned_room_id'])): ?>
         <div class="card" style="padding:24px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2);">
-          <h3 style="font-size:14px;font-weight:800;color:var(--success);margin-bottom:8px;">✅ Đã gán phòng thành công</h3>
+          <h3 style="font-size:14px;font-weight:800;color:var(--success);margin-bottom:8px;"> Đã gán phòng thành công</h3>
           <p style="font-size:13.5px;margin:0;">Sinh viên đã được gán vào <strong>Phòng <?= htmlspecialchars($registration['room_number']) ?> (Tầng <?= htmlspecialchars($registration['floor']) ?>)</strong> thuộc <strong>Tòa <?= htmlspecialchars($registration['building_name']) ?></strong>.</p>
         </div>
       <?php elseif ($status === 'rejected'): ?>
         <div class="card" style="padding:24px;background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.2);">
-          <h3 style="font-size:14px;font-weight:800;color:var(--danger);margin-bottom:8px;">❌ Đơn đăng ký bị từ chối</h3>
+          <h3 style="font-size:14px;font-weight:800;color:var(--danger);margin-bottom:8px;"> Đơn đăng ký bị từ chối</h3>
           <p style="font-size:13.5px;margin:0;">Lý do từ chối: <strong><?= htmlspecialchars($registration['reject_reason'] ?? 'Không có lý do chi tiết.') ?></strong></p>
         </div>
       <?php endif; ?>
@@ -118,7 +118,7 @@ $statusLabel = match($status) {
   <!-- Right Column: Quick Reject (Only if pending) -->
   <?php if ($status === 'pending'): ?>
     <div class="card" style="padding:20px;height:fit-content;">
-      <h3 style="font-size:14px;font-weight:800;color:var(--txt-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:10px;">❌ Từ chối đơn đăng ký</h3>
+      <h3 style="font-size:14px;font-weight:800;color:var(--txt-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:10px;"> Từ chối đơn đăng ký</h3>
       <div class="form-group" style="margin-bottom:12px;">
         <label class="form-label">Lý do từ chối <span class="req">*</span></label>
         <textarea id="rejectReasonInput" class="form-control" rows="3" placeholder="Nhập lý do chi tiết..." required></textarea>
@@ -145,11 +145,11 @@ function autoAllocate() {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('🚀 Tự động xếp phòng thành công! Phòng ' + json.data.room_number + ' (' + json.data.building_name + ')');
+            alert(' Tự động xếp phòng thành công! Phòng ' + json.data.room_number + ' (' + json.data.building_name + ')');
             // Redirect to admin dashboard
             window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/dashboard';
         } else {
-            alert('❌ Lỗi: ' + json.message);
+            alert(' Lỗi: ' + json.message);
         }
     })
     .catch(err => alert('Lỗi kết nối: ' + err.message));
@@ -174,11 +174,11 @@ function manualAllocate() {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('✅ Gán phòng thủ công thành công!');
+            alert(' Gán phòng thủ công thành công!');
             // Redirect to admin dashboard
             window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/dashboard';
         } else {
-            alert('❌ Lỗi: ' + json.message);
+            alert(' Lỗi: ' + json.message);
         }
     })
     .catch(err => alert('Lỗi kết nối: ' + err.message));
@@ -203,11 +203,11 @@ function rejectRegistration() {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('❌ Đã từ chối đơn đăng ký thành công!');
+            alert(' Đã từ chối đơn đăng ký thành công!');
             // Redirect to admin registrations list
             window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/registrations';
         } else {
-            alert('❌ Lỗi: ' + json.message);
+            alert(' Lỗi: ' + json.message);
         }
     })
     .catch(err => alert('Lỗi kết nối: ' + err.message));

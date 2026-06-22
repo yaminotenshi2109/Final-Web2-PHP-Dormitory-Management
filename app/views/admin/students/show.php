@@ -25,7 +25,7 @@ $priorities = [
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🎓 Chi tiết sinh viên</h1>
+    <h1 class="page-title"> Chi tiết sinh viên</h1>
     <p class="page-subtitle">Hồ sơ cá nhân và lịch sử hoạt động của <?= $name ?></p>
   </div>
   <div class="page-actions">
@@ -86,7 +86,7 @@ $priorities = [
     <!-- Lịch sử hợp đồng -->
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">📄 Lịch sử hợp đồng thuê phòng</h3>
+        <h3 class="card-title"> Lịch sử hợp đồng thuê phòng</h3>
       </div>
       <div class="table-wrapper">
         <table>
@@ -123,7 +123,7 @@ $priorities = [
               <tr>
                 <td colspan="4">
                   <div class="empty-state" style="padding: 24px;">
-                    <div class="empty-icon">📄</div>
+                    <div class="empty-icon" aria-hidden="true"></div>
                     <div class="empty-title" style="font-size:13.5px;">Chưa có lịch sử hợp đồng</div>
                   </div>
                 </td>
@@ -137,7 +137,7 @@ $priorities = [
     <!-- Lịch sử vi phạm -->
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">⚠️ Lịch sử vi phạm</h3>
+        <h3 class="card-title"> Lịch sử vi phạm</h3>
       </div>
       <div class="table-wrapper">
         <table>
@@ -167,7 +167,7 @@ $priorities = [
                   <td style="font-size:12.5px;color:var(--txt-secondary);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="<?= htmlspecialchars($v['description']) ?>">
                     <?= htmlspecialchars($v['description']) ?>
                   </td>
-                  <td style="font-weight:700;color:var(--danger);">⚠️ -<?= (int)$v['penalty_points'] ?>đ</td>
+                  <td style="font-weight:700;color:var(--danger);"> -<?= (int)$v['penalty_points'] ?>đ</td>
                   <td style="font-size:12px;color:var(--txt-muted);"><?= date('d/m/Y', strtotime($v['recorded_at'])) ?></td>
                   <td><span class="badge <?= $badge[0] ?>"><?= $badge[1] ?></span></td>
                 </tr>
@@ -176,7 +176,7 @@ $priorities = [
               <tr>
                 <td colspan="5">
                   <div class="empty-state" style="padding: 24px;">
-                    <div class="empty-icon">🎉</div>
+                    <div class="empty-icon" aria-hidden="true"></div>
                     <div class="empty-title" style="font-size:13.5px;">Tuyệt vời! Không có lịch sử vi phạm nào</div>
                   </div>
                 </td>

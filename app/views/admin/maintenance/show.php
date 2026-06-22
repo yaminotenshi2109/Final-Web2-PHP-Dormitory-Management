@@ -27,7 +27,7 @@ $priorityLabel = match($priority) {
     'low'    => 'Thấp',
     'medium' => 'Trung bình',
     'high'   => 'Cao',
-    'urgent' => 'Khẩn cấp 🚨',
+    'urgent' => 'Khẩn cấp ',
     default  => $priority
 };
 
@@ -49,7 +49,7 @@ $statusLabel = match($status) {
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🔧 Chi tiết sự cố bảo trì</h1>
+    <h1 class="page-title"> Chi tiết sự cố bảo trì</h1>
     <p class="page-subtitle">Sự cố báo cáo tại Phòng <?= $roomNumber ?> (Tòa <?= $building ?>)</p>
   </div>
   <div class="page-actions">
@@ -71,13 +71,13 @@ $statusLabel = match($status) {
       <p style="color:var(--txt-secondary);line-height:1.6;font-size:14px;white-space:pre-wrap;"><?= $desc ?></p>
       
       <div style="font-size:11px;color:var(--txt-muted);margin-top:16px;border-top:1px solid var(--border);padding-top:12px;">
-        🕐 Báo cáo lúc: <?= date('d/m/Y H:i', strtotime($request['reported_at'])) ?>
+         Báo cáo lúc: <?= date('d/m/Y H:i', strtotime($request['reported_at'])) ?>
       </div>
     </div>
 
     <!-- Resolution Card -->
     <div class="card" style="padding:24px;">
-      <h3 style="font-size:15px;font-weight:800;color:var(--txt-primary);margin-bottom:16px;">🛠️ Phương án xử lý sự cố</h3>
+      <h3 style="font-size:15px;font-weight:800;color:var(--txt-primary);margin-bottom:16px;"> Phương án xử lý sự cố</h3>
       
       <?php if ($status === 'open' || $status === 'in_progress'): ?>
         <form id="formResolve" onsubmit="submitResolve(event)">
@@ -87,7 +87,7 @@ $statusLabel = match($status) {
             <textarea name="resolution" class="form-control" rows="4" placeholder="Ví dụ: Đã cử thợ điện đến thay bóng đèn mới..." required><?= $resolution ?></textarea>
           </div>
           <div style="display:flex;justify-content:flex-end;">
-            <button type="submit" class="btn btn-primary">🔧 Xác nhận đã xử lý xong</button>
+            <button type="submit" class="btn btn-primary"> Xác nhận đã xử lý xong</button>
           </div>
         </form>
       <?php else: ?>
@@ -96,14 +96,14 @@ $statusLabel = match($status) {
           <p style="color:var(--txt-secondary);margin:0;"><?= $resolution ?: 'Không có mô tả chi tiết.' ?></p>
           <?php if (!empty($request['resolved_at'])): ?>
             <div style="font-size:11px;color:var(--txt-muted);margin-top:12px;border-top:1px solid var(--border);padding-top:8px;">
-              ✅ Xử lý xong ngày: <?= date('d/m/Y H:i', strtotime($request['resolved_at'])) ?>
+               Xử lý xong ngày: <?= date('d/m/Y H:i', strtotime($request['resolved_at'])) ?>
             </div>
           <?php endif; ?>
         </div>
         
         <?php if ($status === 'resolved'): ?>
           <div style="display:flex;justify-content:flex-end;margin-top:16px;">
-            <button class="btn btn-neutral" onclick="closeRequest(<?= $id ?>)">🔒 Đóng yêu cầu bảo trì</button>
+            <button class="btn btn-neutral" onclick="closeRequest(<?= $id ?>)"> Đóng yêu cầu bảo trì</button>
           </div>
         <?php endif; ?>
       <?php endif; ?>
@@ -112,7 +112,7 @@ $statusLabel = match($status) {
 
   <!-- Right Side: Reporter & Room info -->
   <div class="card" style="padding:20px;height:fit-content;">
-    <h3 style="font-size:14px;font-weight:800;color:var(--txt-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:10px;">📋 Người báo cáo & Địa điểm</h3>
+    <h3 style="font-size:14px;font-weight:800;color:var(--txt-secondary);text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:10px;"> Người báo cáo & Địa điểm</h3>
     
     <div style="display:flex;flex-direction:column;gap:12px;font-size:13.5px;">
       <div>
@@ -155,10 +155,10 @@ function submitResolve(e) {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('✅ Đã cập nhật trạng thái xử lý thành công!');
+            alert(' Đã cập nhật trạng thái xử lý thành công!');
             location.reload();
         } else {
-            alert('❌ Lỗi: ' + json.message);
+            alert(' Lỗi: ' + json.message);
         }
     })
     .catch(err => alert('Lỗi kết nối: ' + err.message));
@@ -180,10 +180,10 @@ function closeRequest(id) {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('✅ Đã đóng yêu cầu bảo trì thành công!');
+            alert(' Đã đóng yêu cầu bảo trì thành công!');
             location.reload();
         } else {
-            alert('❌ Lỗi: ' + json.message);
+            alert(' Lỗi: ' + json.message);
         }
     })
     .catch(err => alert('Lỗi kết nối: ' + err.message));

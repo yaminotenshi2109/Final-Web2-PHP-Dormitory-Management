@@ -11,7 +11,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
 <!-- Page Header -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">📋 <?= htmlspecialchars($title ?? 'Quản lý đăng ký ở KTX') ?></h1>
+        <h1 class="page-title"> <?= htmlspecialchars($title ?? 'Quản lý đăng ký ở KTX') ?></h1>
         <p class="page-subtitle">Duyệt và quản lý hồ sơ đăng ký ký túc xá của sinh viên</p>
     </div>
 </div>
@@ -76,8 +76,8 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
                             $st = $statusMap[$reg['status'] ?? ''] ?? ['label' => $reg['status'] ?? '—', 'class' => 'badge-neutral'];
 
                             $genderLabel = match($reg['gender'] ?? '') {
-                                'male'   => '♂ Nam',
-                                'female' => '♀ Nữ',
+                                'male'   => ' Nam',
+                                'female' => ' Nữ',
                                 default  => '—',
                             };
 
@@ -123,7 +123,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
                             <td style="text-align:center">
                                 <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
                                     <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations/<?= (int)$reg['id'] ?>"
-                                       class="btn btn-ghost btn-sm">👁 Xem</a>
+                                       class="btn btn-ghost btn-sm"> Xem</a>
 
                                     <?php if (($reg['status'] ?? '') === 'pending'): ?>
                                         <!-- Approve -->
@@ -132,14 +132,14 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
                                               onsubmit="return confirm('Xác nhận duyệt đăng ký này?')"
                                               style="display:inline">
                                             <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-                                            <button type="submit" class="btn btn-primary btn-sm">✅ Duyệt</button>
+                                            <button type="submit" class="btn btn-primary btn-sm"> Duyệt</button>
                                         </form>
 
                                         <!-- Reject (open modal) -->
                                         <button
                                             class="btn btn-danger btn-sm"
                                             onclick="openRejectModal(<?= (int)$reg['id'] ?>)">
-                                            ❌ Từ chối
+                                             Từ chối
                                         </button>
                                     <?php endif; ?>
                                 </div>
@@ -151,7 +151,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
             </div>
         <?php else: ?>
             <div class="empty-state">
-                <div class="empty-state-icon">📋</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-state-title">Không có đăng ký nào</div>
                 <div class="empty-state-desc">Không tìm thấy hồ sơ đăng ký phù hợp với bộ lọc hiện tại.</div>
             </div>
@@ -188,15 +188,14 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
     <div class="modal" onclick="event.stopPropagation()">
         <div class="card">
             <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
-                <h3 class="card-title">❌ Từ chối đăng ký</h3>
-                <button class="btn btn-ghost btn-sm" onclick="closeRejectModal()">✕</button>
+                <h3 class="card-title"> Từ chối đăng ký</h3>
+                <button class="btn btn-ghost btn-sm" onclick="closeRejectModal()"></button>
             </div>
             <div class="card-body">
                 <form id="form-reject-registration" method="POST" action="">
                     <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
                     <div class="form-group">
-                        <label class="form-label" for="reject-reason">
-                            Lý do từ chối <span style="color:#ef4444">*</span>
+                        <label class="form-label" for="reject-reason">Lý do từ chối <span style="color:#ef4444">*</span>
                         </label>
                         <textarea
                             id="reject-reason"
@@ -214,7 +213,7 @@ $filterSemester = $semester ?? ($_GET['semester']  ?? '');
             </div>
             <div class="card-footer" style="display:flex;justify-content:flex-end;gap:10px">
                 <button class="btn btn-outline" onclick="closeRejectModal()">Hủy</button>
-                <button class="btn btn-danger" onclick="submitReject()">❌ Xác nhận từ chối</button>
+                <button class="btn btn-danger" onclick="submitReject()"> Xác nhận từ chối</button>
             </div>
         </div>
     </div>

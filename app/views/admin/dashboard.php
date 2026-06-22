@@ -13,30 +13,44 @@
  */
 
 // Helpers for occupancy ratio
-$totalRooms    = $stats['total_rooms']    ?? 0;
-$occupiedRooms = $stats['occupied_rooms'] ?? 0;
+$totalRooms    = $stats['total_rooms']            ?? 0;
+$occupiedRooms = $stats['occupied_rooms']         ?? 0;
+$availableRooms = $stats['available_rooms']        ?? 0;
 $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) : 0;
+$pendingRegs   = $stats['pending_registrations']  ?? 0;
+$openViolations = $stats['open_violations']        ?? 0;
+
+$statIcons = [
+    'rooms'     => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5Z"/></svg>',
+    'occupied'  => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 11c1.66 0 3-1.34 3-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3Z"/><path d="M8 11c1.66 0 3-1.34 3-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3Z"/><path d="M8 13c-2.67 0-8 1.34-8 4v2h10"/><path d="M16 13c-.34 0-.67.02-1 .06 2.02.64 3.5 2.02 3.5 3.94V19h6v-2c0-2.66-5.33-4-8-4Z"/></svg>',
+    'available' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11V7a3 3 0 0 1 6 0v4"/><path d="M5 11h14v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-9Z"/></svg>',
+    'students'  => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/><path d="M4 20v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg>',
+    'contracts' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>',
+    'invoices'  => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2h9l5 5v15a1 1 0 0 1-1 1H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/><path d="M14 2v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg>',
+    'pending'   => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><path d="M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2Z"/><path d="M9 14h6"/><path d="M9 18h4"/></svg>',
+    'violations'=> '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>',
+    'notifications' => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>',
+];
 ?>
 
 <!-- ── Page Header ──────────────────────────────────────────── -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">🏠 Dashboard</h1>
+        <h1 class="page-title"> Dashboard</h1>
         <p class="page-subtitle">Tổng quan hệ thống Ký túc xá</p>
     </div>
     <div class="page-actions">
         <span style="font-size:12px;color:var(--txt-muted);background:var(--card-bg);border:1px solid var(--border);padding:6px 12px;border-radius:var(--radius-sm);">
-            📅 <?= date('d/m/Y H:i') ?>
+             <?= date('d/m/Y H:i') ?>
         </span>
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-outline btn-sm">📊 Báo cáo</a>
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-primary btn-sm">➕ Đăng ký mới</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-outline btn-sm"> Báo cáo</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-primary btn-sm"> Đăng ký mới</a>
     </div>
 </div>
 
 <!-- ── Flash messages ───────────────────────────────────────── -->
 <?php if (!empty($_SESSION['flash_success'])): ?>
     <div class="alert alert-success mb-16">
-        <span class="alert-icon">✅</span>
         <div class="alert-content">
             <div class="alert-msg"><?= htmlspecialchars($_SESSION['flash_success']) ?></div>
         </div>
@@ -49,109 +63,121 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 <div class="stat-grid mb-24">
 
     <!-- Tổng số phòng -->
-    <div class="stat-card" style="--stat-color:#6366f1;--stat-icon-bg:#eef2ff">
-        <div class="stat-icon">🚪</div>
-        <div>
-            <div class="stat-value" data-count="<?= $stats['total_rooms'] ?? 0 ?>">
-                <?= number_format($stats['total_rooms'] ?? 0) ?>
+    <div class="stat-card" style="--stat-color:#6366f1">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['rooms'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $totalRooms ?>"><?= number_format($totalRooms) ?></div>
+                <div class="stat-label">Tổng số phòng</div>
             </div>
-            <div class="stat-label">Tổng số phòng</div>
         </div>
     </div>
 
     <!-- Phòng đã có người -->
-    <div class="stat-card" style="--stat-color:#3b82f6;--stat-icon-bg:#eff6ff">
-        <div class="stat-icon">🛏️</div>
-        <div>
-            <div class="stat-value" data-count="<?= $stats['occupied_rooms'] ?? 0 ?>">
-                <?= number_format($stats['occupied_rooms'] ?? 0) ?>
+    <div class="stat-card" style="--stat-color:#3b82f6">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['occupied'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $occupiedRooms ?>"><?= number_format($occupiedRooms) ?></div>
+                <div class="stat-label">Phòng đã có người</div>
             </div>
-            <div class="stat-label">Phòng đã có người</div>
         </div>
-        <div style="margin-top:4px">
-            <div class="progress" style="width:100%">
+        <div class="stat-card__extra">
+            <div class="progress">
                 <div class="progress-bar" style="width:<?= $occupancyPct ?>%;background:#3b82f6"></div>
             </div>
-            <div style="font-size:11px;color:var(--txt-muted);margin-top:4px"><?= $occupancyPct ?>% lấp đầy</div>
+            <div class="stat-card__hint"><?= $occupancyPct ?>% lấp đầy</div>
         </div>
     </div>
 
     <!-- Phòng còn trống -->
-    <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#d1fae5">
-        <div class="stat-icon">✅</div>
-        <div>
-            <div class="stat-value" data-count="<?= $stats['available_rooms'] ?? 0 ?>">
-                <?= number_format($stats['available_rooms'] ?? 0) ?>
+    <div class="stat-card" style="--stat-color:#10b981">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['available'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $availableRooms ?>"><?= number_format($availableRooms) ?></div>
+                <div class="stat-label">Phòng còn trống</div>
             </div>
-            <div class="stat-label">Phòng còn trống</div>
         </div>
     </div>
 
     <!-- Tổng sinh viên -->
-    <div class="stat-card" style="--stat-color:#8b5cf6;--stat-icon-bg:#ede9fe">
-        <div class="stat-icon">🎓</div>
-        <div>
-            <div class="stat-value" data-count="<?= $stats['total_students'] ?? 0 ?>">
-                <?= number_format($stats['total_students'] ?? 0) ?>
+    <div class="stat-card" style="--stat-color:#8b5cf6">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['students'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $stats['total_students'] ?? 0 ?>"><?= number_format($stats['total_students'] ?? 0) ?></div>
+                <div class="stat-label">Sinh viên</div>
             </div>
-            <div class="stat-label">Sinh viên</div>
         </div>
     </div>
 
     <!-- Hợp đồng -->
-    <div class="stat-card" style="--stat-color:#06b6d4;--stat-icon-bg:#cffafe">
-        <div class="stat-icon">📄</div>
-        <div>
-            <div class="stat-value" data-count="<?= $stats['total_contracts'] ?? 0 ?>">
-                <?= number_format($stats['total_contracts'] ?? 0) ?>
+    <div class="stat-card" style="--stat-color:#06b6d4">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['contracts'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $stats['total_contracts'] ?? 0 ?>"><?= number_format($stats['total_contracts'] ?? 0) ?></div>
+                <div class="stat-label">Hợp đồng active</div>
             </div>
-            <div class="stat-label">Hợp đồng active</div>
         </div>
     </div>
 
     <!-- Hóa đơn chưa thanh toán -->
-    <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7">
-        <div class="stat-icon">💰</div>
-        <div>
-            <div class="stat-value" data-count="<?= $stats['unpaid_invoices'] ?? 0 ?>">
-                <?= number_format($stats['unpaid_invoices'] ?? 0) ?>
+    <div class="stat-card" style="--stat-color:#f59e0b">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['invoices'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $stats['unpaid_invoices'] ?? 0 ?>"><?= number_format($stats['unpaid_invoices'] ?? 0) ?></div>
+                <div class="stat-label">Hóa đơn chưa trả</div>
             </div>
-            <div class="stat-label">Hóa đơn chưa trả</div>
         </div>
     </div>
 
     <!-- Đơn đăng ký chờ duyệt -->
-    <div class="stat-card" style="--stat-color:#ec4899;--stat-icon-bg:#fce7f3">
-        <div class="stat-icon">📋</div>
-        <div>
-            <div class="stat-value" data-count="<?= $stats['pending_registrations'] ?? 0 ?>">
-                <?= number_format($stats['pending_registrations'] ?? 0) ?>
+    <div class="stat-card" style="--stat-color:#ec4899">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['pending'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $pendingRegs ?>"><?= number_format($pendingRegs) ?></div>
+                <div class="stat-label">Đơn chờ duyệt</div>
             </div>
-            <div class="stat-label">Đơn chờ duyệt</div>
         </div>
-        <?php if (($stats['pending_registrations'] ?? 0) > 0): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?status=pending"
-               style="font-size:11px;color:#ec4899;font-weight:600;text-decoration:underline;margin-top:4px">
+        <?php if ($pendingRegs > 0): ?>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?status=pending" class="stat-card__link">
                 Xem ngay →
             </a>
         <?php endif; ?>
     </div>
 
     <!-- Vi phạm đang mở -->
-    <div class="stat-card" style="--stat-color:#ef4444;--stat-icon-bg:#fee2e2">
-        <div class="stat-icon">⚠️</div>
-        <div>
-            <div class="stat-value" data-count="<?= $stats['open_violations'] ?? 0 ?>">
-                <?= number_format($stats['open_violations'] ?? 0) ?>
+    <div class="stat-card" style="--stat-color:#ef4444">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['violations'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $openViolations ?>"><?= number_format($openViolations) ?></div>
+                <div class="stat-label">Vi phạm chưa xử lý</div>
             </div>
-            <div class="stat-label">Vi phạm chưa xử lý</div>
         </div>
-        <?php if (($stats['open_violations'] ?? 0) > 0): ?>
-            <a href="<?= getDynamicUrl('/admin/violations?status=active') ?>"
-               style="font-size:11px;color:#ef4444;font-weight:600;text-decoration:underline;margin-top:4px">
+        <?php if ($openViolations > 0): ?>
+            <a href="<?= getDynamicUrl('/admin/violations?status=active') ?>" class="stat-card__link stat-card__link--danger">
                 Xem ngay →
             </a>
         <?php endif; ?>
+    </div>
+
+    <!-- Thông báo -->
+    <div class="stat-card" style="--stat-color:#64748b">
+        <div class="stat-card__top">
+            <div class="stat-icon"><?= $statIcons['notifications'] ?></div>
+            <div>
+                <div class="stat-value" data-count="<?= $stats['total_notifications'] ?? 0 ?>"><?= number_format($stats['total_notifications'] ?? 0) ?></div>
+                <div class="stat-label">Thông báo</div>
+            </div>
+        </div>
+        <a href="<?= getDynamicUrl('/admin/notifications') ?>" class="stat-card__link">
+            Quản lý →
+        </a>
     </div>
 
 </div><!-- /.stat-grid -->
@@ -161,7 +187,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
     <div class="card-body" style="padding:16px 20px">
         <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
             <div style="font-size:13px;font-weight:600;color:var(--txt-secondary);min-width:140px">
-                📊 Tỷ lệ lấp đầy tổng thể
+                 Tỷ lệ lấp đầy tổng thể
             </div>
             <div style="flex:1;min-width:200px">
                 <div class="progress">
@@ -186,7 +212,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
     <div class="card">
         <div class="card-header">
             <div>
-                <div class="card-title">📋 Đơn đăng ký gần đây</div>
+                <div class="card-title"> Đơn đăng ký gần đây</div>
                 <div class="card-subtitle">5 đơn mới nhất trong hệ thống</div>
             </div>
             <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations" class="btn btn-ghost btn-sm">Xem tất cả →</a>
@@ -208,8 +234,8 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                             <?php
                                 $statusMap = [
                                     'pending'  => ['badge-warning', '⏳ Chờ duyệt'],
-                                    'approved' => ['badge-success', '✅ Đã duyệt'],
-                                    'rejected' => ['badge-danger',  '❌ Từ chối'],
+                                    'approved' => ['badge-success', ' Đã duyệt'],
+                                    'rejected' => ['badge-danger',  ' Từ chối'],
                                 ];
                                 $status    = $reg['status'] ?? 'pending';
                                 [$badgeClass, $statusLabel] = $statusMap[$status] ?? ['badge-neutral', $status];
@@ -249,17 +275,17 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
             </div>
         <?php else: ?>
             <div class="empty-state" style="padding:40px 24px">
-                <div class="empty-icon">📋</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-title">Chưa có đơn đăng ký</div>
                 <div class="empty-msg">Các đơn đăng ký mới sẽ hiển thị tại đây.</div>
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($recent_registrations) && ($stats['pending_registrations'] ?? 0) > 0): ?>
+        <?php if (!empty($recent_registrations) && $pendingRegs > 0): ?>
             <div class="card-footer" style="text-align:center">
                 <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/registrations?status=pending"
                    class="btn btn-outline btn-sm">
-                    ⏳ Xem <?= $stats['pending_registrations'] ?> đơn chờ duyệt
+                    ⏳ Xem <?= $pendingRegs ?> đơn chờ duyệt
                 </a>
             </div>
         <?php endif; ?>
@@ -269,7 +295,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
     <div class="card">
         <div class="card-header">
             <div>
-                <div class="card-title">⚠️ Vi phạm gần đây</div>
+                <div class="card-title"> Vi phạm gần đây</div>
                 <div class="card-subtitle">Các trường hợp vi phạm mới nhất</div>
             </div>
             <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-ghost btn-sm">Xem tất cả →</a>
@@ -291,7 +317,7 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                                 <?= htmlspecialchars($v['violation_type'] ?? 'Vi phạm nội quy') ?>
                             </div>
                             <div class="notif-msg">
-                                🚪 Phòng <?= htmlspecialchars($v['room_number'] ?? '—') ?>
+                                 Phòng <?= htmlspecialchars($v['room_number'] ?? '—') ?>
                                 <?php if (!empty($v['description'])): ?>
                                     · <?= htmlspecialchars(mb_strimwidth($v['description'], 0, 60, '...')) ?>
                                 <?php endif; ?>
@@ -299,18 +325,18 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
                             <div style="display:flex;align-items:center;gap:8px;margin-top:5px">
                                 <?php
                                     $vBadge = match($vStatus) {
-                                        'active'    => ['badge-danger',  '🔴 Chưa xử lý'],
-                                        'resolved'  => ['badge-success', '✅ Đã xử lý'],
+                                        'active'    => ['badge-danger',  ' Chưa xử lý'],
+                                        'resolved'  => ['badge-success', ' Đã xử lý'],
                                         'pending'   => ['badge-warning', '⏳ Đang xem xét'],
-                                        'appealed'  => ['badge-warning', '⚠️ Đang khiếu nại'],
-                                        'dismissed' => ['badge-neutral', '✅ Đã hủy'],
+                                        'appealed'  => ['badge-warning', ' Đang khiếu nại'],
+                                        'dismissed' => ['badge-neutral', ' Đã hủy'],
                                         default     => ['badge-neutral', $vStatus],
                                     };
                                 ?>
                                 <span class="badge <?= $vBadge[0] ?>"><?= $vBadge[1] ?></span>
                                 <?php if (!empty($v['fine_amount']) && $v['fine_amount'] > 0): ?>
                                     <span style="font-size:11px;color:var(--danger);font-weight:600">
-                                        💸 <?= number_format($v['fine_amount']) ?>đ
+                                         <?= number_format($v['fine_amount']) ?>đ
                                     </span>
                                 <?php endif; ?>
                             </div>
@@ -323,17 +349,17 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
             </div>
         <?php else: ?>
             <div class="empty-state" style="padding:40px 24px">
-                <div class="empty-icon">🎉</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-title">Không có vi phạm</div>
                 <div class="empty-msg">Tuyệt vời! Hiện không có vi phạm nào cần xử lý.</div>
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($recent_violations) && ($stats['open_violations'] ?? 0) > 0): ?>
+        <?php if (!empty($recent_violations) && $openViolations > 0): ?>
             <div class="card-footer" style="text-align:center">
                 <a href="<?= getDynamicUrl('/admin/violations?status=active') ?>"
                    class="btn btn-danger btn-sm">
-                    ⚠️ Xử lý <?= $stats['open_violations'] ?> vi phạm
+                     Xử lý <?= $openViolations ?> vi phạm
                 </a>
             </div>
         <?php endif; ?>
@@ -344,18 +370,18 @@ $occupancyPct  = $totalRooms > 0 ? round(($occupiedRooms / $totalRooms) * 100) :
 <!-- ── Quick Links ───────────────────────────────────────────── -->
 <div class="card mt-24">
     <div class="card-header">
-        <div class="card-title">⚡ Truy cập nhanh</div>
+        <div class="card-title"> Truy cập nhanh</div>
     </div>
     <div class="card-body">
         <div style="display:flex;flex-wrap:wrap;gap:10px">
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms" class="btn btn-outline">🚪 Quản lý phòng</a>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-outline">🎓 Quản lý sinh viên</a>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-outline">📄 Hợp đồng</a>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-outline">💰 Hóa đơn</a>
-            <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-outline">⚠️ Vi phạm</a>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users" class="btn btn-outline">👤 Tài khoản</a>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/services" class="btn btn-outline">🔧 Dịch vụ</a>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-primary">📊 Báo cáo tổng hợp</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms" class="btn btn-outline"> Quản lý phòng</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-outline"> Quản lý sinh viên</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-outline"> Hợp đồng</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices" class="btn btn-outline"> Hóa đơn</a>
+            <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-outline"> Vi phạm</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/users" class="btn btn-outline"> Tài khoản</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/services" class="btn btn-outline"> Dịch vụ</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/reports" class="btn btn-primary"> Báo cáo tổng hợp</a>
         </div>
     </div>
 </div>

@@ -231,10 +231,10 @@
 
 <div class="no-print-bar no-print">
     <div>
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= $invoice['id'] ?>" class="btn btn-secondary">⬅️ Trở lại chi tiết</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= $invoice['id'] ?>" class="btn btn-secondary">⬅ Trở lại chi tiết</a>
     </div>
     <div style="display: flex; gap: 12px;">
-        <button class="btn btn-primary" onclick="window.print()">🖨️ In ngay (Print)</button>
+        <button class="btn btn-primary" onclick="window.print()"> In ngay (Print)</button>
     </div>
 </div>
 
@@ -242,7 +242,7 @@
     <!-- Header -->
     <div class="header">
         <div class="logo-section">
-            <h2>🏠 KTX MANAGEMENT</h2>
+            <h2> KTX MANAGEMENT</h2>
             <p>Hệ thống Quản lý Ký túc xá Đại học</p>
         </div>
         <div class="title-section">
@@ -283,7 +283,7 @@
         <tbody>
             <tr>
                 <td>
-                    <strong>🏢 Tiền thuê phòng cơ bản</strong>
+                    <strong> Tiền thuê phòng cơ bản</strong>
                     <span class="desc">Phí phòng ở tiêu chuẩn tính theo tháng</span>
                 </td>
                 <td style="text-align: right; font-weight: 600;">
@@ -292,7 +292,7 @@
             </tr>
             <tr>
                 <td>
-                    <strong>⚡ Chỉ số điện sinh hoạt</strong>
+                    <strong> Chỉ số điện sinh hoạt</strong>
                     <span class="desc">Phí sử dụng điện thực tế theo chỉ số công tơ</span>
                 </td>
                 <td style="text-align: right; font-weight: 600;">
@@ -301,7 +301,7 @@
             </tr>
             <tr>
                 <td>
-                    <strong>💧 Chỉ số nước sạch sinh hoạt</strong>
+                    <strong> Chỉ số nước sạch sinh hoạt</strong>
                     <span class="desc">Phí sử dụng nước sạch theo m³ sử dụng thực tế</span>
                 </td>
                 <td style="text-align: right; font-weight: 600;">
@@ -311,7 +311,7 @@
             <?php if ((float)$invoice['ac_fee'] > 0): ?>
             <tr>
                 <td>
-                    <strong>❄️ Phụ phí điều hòa</strong>
+                    <strong> Phụ phí điều hòa</strong>
                     <span class="desc">Dịch vụ bổ sung cho phòng có trang bị máy lạnh</span>
                 </td>
                 <td style="text-align: right; font-weight: 600;">
@@ -322,7 +322,7 @@
             <?php if ((float)$invoice['other_fee'] > 0): ?>
             <tr>
                 <td>
-                    <strong>⚙️ Phí dịch vụ khác</strong>
+                    <strong> Phí dịch vụ khác</strong>
                     <span class="desc">Phụ thu vệ sinh, internet và an ninh</span>
                 </td>
                 <td style="text-align: right; font-weight: 600;">
@@ -341,7 +341,7 @@
 
     <!-- Payment info -->
     <div class="payment-info">
-        <h3>🏦 PHƯƠNG THỨC THANH TOÁN</h3>
+        <h3> PHƯƠNG THỨC THANH TOÁN</h3>
         <p>
             <strong>1. Chuyển khoản ngân hàng:</strong><br>
             • Số tài khoản: <strong>1234567890</strong> (Ngân hàng VietcomBank)<br>

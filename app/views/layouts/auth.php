@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?= htmlspecialchars($title ?? 'Đăng nhập') ?> — KTX System</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236366f1'/><text x='50' y='68' text-anchor='middle' font-size='52' font-family='system-ui' fill='white' font-weight='700'>K</text></svg>">
     <link rel="stylesheet" href="<?= getDynamicUrl('/assets/css/app.css') ?>">
     <style>
         .auth-layout {
@@ -58,11 +58,18 @@
             margin-bottom: 2rem;
         }
         .auth-logo-icon {
-            font-size: 3rem;
-            line-height: 1;
-            margin-bottom: 0.75rem;
-            display: block;
-            filter: drop-shadow(0 4px 12px rgba(99,102,241,0.5));
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 0.75rem;
+            background: #6366f1;
+            border-radius: 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 800;
+            color: #fff;
+            box-shadow: 0 0 0 8px rgba(99,102,241,0.2);
         }
         .auth-logo h1 {
             font-size: 1.6rem;
@@ -205,10 +212,12 @@
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.55);
             cursor: pointer;
             padding: 0;
-            font-size: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
             line-height: 1;
             transition: color 0.2s;
         }
@@ -229,10 +238,10 @@ document.querySelectorAll('.password-toggle').forEach(function(btn) {
         var input = this.closest('.password-wrapper').querySelector('input');
         if (input.type === 'password') {
             input.type = 'text';
-            this.textContent = '🙈';
+            this.textContent = 'Ẩn';
         } else {
             input.type = 'password';
-            this.textContent = '👁️';
+            this.textContent = 'Hiện';
         }
     });
 });

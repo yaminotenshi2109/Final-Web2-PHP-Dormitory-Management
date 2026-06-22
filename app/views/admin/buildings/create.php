@@ -8,7 +8,7 @@
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🏢 Thêm tòa nhà mới</h1>
+    <h1 class="page-title"> Thêm tòa nhà mới</h1>
     <p class="page-subtitle">Tạo cơ sở vật chất mới cho hệ thống ký túc xá</p>
   </div>
   <div class="page-actions">
@@ -78,7 +78,7 @@
     </div>
     <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
       <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings" class="btn btn-ghost">Hủy</a>
-      <button type="submit" class="btn btn-primary">➕ Tạo tòa nhà</button>
+      <button type="submit" class="btn btn-primary"> Tạo tòa nhà</button>
     </div>
   </form>
 </div>

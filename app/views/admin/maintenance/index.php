@@ -11,7 +11,7 @@ $filterPriority = $_GET['priority'] ?? '';
 <!-- Page Header -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">🔧 <?= htmlspecialchars($title ?? 'Quản lý bảo trì') ?></h1>
+        <h1 class="page-title"> <?= htmlspecialchars($title ?? 'Quản lý bảo trì') ?></h1>
         <p class="page-subtitle">Xử lý các yêu cầu sửa chữa và bảo trì cơ sở vật chất ký túc xá</p>
     </div>
 </div>
@@ -108,7 +108,7 @@ $filterPriority = $_GET['priority'] ?? '';
                             </td>
                             <td>
                                 <div style="display:flex;align-items:center;gap:6px">
-                                    <span style="font-size:1.1rem">👤</span>
+                                    <span style="font-size:1.1rem"></span>
                                     <?= htmlspecialchars($req['reporter_username'] ?? '—') ?>
                                 </div>
                             </td>
@@ -128,7 +128,7 @@ $filterPriority = $_GET['priority'] ?? '';
                             <td style="text-align:center">
                                 <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
                                     <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/maintenance/<?= (int)$req['id'] ?>"
-                                       class="btn btn-ghost btn-sm">👁 Xem</a>
+                                       class="btn btn-ghost btn-sm"> Xem</a>
 
                                     <?php if ($canResolve): ?>
                                         <form method="POST"
@@ -136,7 +136,7 @@ $filterPriority = $_GET['priority'] ?? '';
                                               onsubmit="return confirm('Đánh dấu yêu cầu #<?= (int)$req['id'] ?> là đã giải quyết?')"
                                               style="display:inline">
                                             <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-                                            <button type="submit" class="btn btn-primary btn-sm">✅ Giải quyết</button>
+                                            <button type="submit" class="btn btn-primary btn-sm"> Giải quyết</button>
                                         </form>
                                     <?php endif; ?>
 
@@ -146,7 +146,7 @@ $filterPriority = $_GET['priority'] ?? '';
                                               onsubmit="return confirm('Đóng yêu cầu bảo trì #<?= (int)$req['id'] ?>?')"
                                               style="display:inline">
                                             <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-                                            <button type="submit" class="btn btn-outline btn-sm">🔒 Đóng</button>
+                                            <button type="submit" class="btn btn-outline btn-sm"> Đóng</button>
                                         </form>
                                     <?php endif; ?>
                                 </div>
@@ -158,7 +158,7 @@ $filterPriority = $_GET['priority'] ?? '';
             </div>
         <?php else: ?>
             <div class="empty-state">
-                <div class="empty-state-icon">🔧</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-state-title">Không có yêu cầu bảo trì nào</div>
                 <div class="empty-state-desc">Hiện tại không có yêu cầu bảo trì phù hợp với bộ lọc hiện tại.</div>
             </div>

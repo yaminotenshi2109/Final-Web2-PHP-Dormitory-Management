@@ -4,16 +4,16 @@
  * Variables: $title, $violation, $_csrfToken
  */
 $v = $violation ?? [];
-$statusMap = ['active'=>['badge-danger','🔴 Chưa xử lý'],'appealed'=>['badge-warning','⚠️ Đang khiếu nại'],'dismissed'=>['badge-neutral','✅ Đã bác bỏ']];
+$statusMap = ['active'=>['badge-danger',' Chưa xử lý'],'appealed'=>['badge-warning',' Đang khiếu nại'],'dismissed'=>['badge-neutral',' Đã bác bỏ']];
 $st = $v['status'] ?? 'active'; [$bClass, $bLabel] = $statusMap[$st] ?? ['badge-neutral', $st];
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">⚠️ Vi phạm #<?= $v['id'] ?? '' ?></h1><p class="page-subtitle"><?= htmlspecialchars($v['violation_type'] ?? '') ?></p></div>
+  <div><h1 class="page-title"> Vi phạm #<?= $v['id'] ?? '' ?></h1><p class="page-subtitle"><?= htmlspecialchars($v['violation_type'] ?? '') ?></p></div>
   <div class="page-actions">
     <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-ghost">← Quay lại</a>
     <?php if ($st === 'active' || $st === 'appealed'): ?>
-      <form method="POST" action="<?= getDynamicUrl('/admin/violations/' . ($v['id'] ?? '') . '/dismiss') ?>" style="display:inline"><input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>"><button type="submit" class="btn btn-outline" onclick="return confirm('Bác bỏ vi phạm?')">✅ Bác bỏ</button></form>
+      <form method="POST" action="<?= getDynamicUrl('/admin/violations/' . ($v['id'] ?? '') . '/dismiss') ?>" style="display:inline"><input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>"><button type="submit" class="btn btn-outline" onclick="return confirm('Bác bỏ vi phạm?')"> Bác bỏ</button></form>
     <?php endif; ?>
   </div>
 </div>

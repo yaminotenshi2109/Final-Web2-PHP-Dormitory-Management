@@ -15,7 +15,7 @@ $searchQ     = htmlspecialchars($search ?? '');
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🎓 Quản lý sinh viên</h1>
+    <h1 class="page-title"> Quản lý sinh viên</h1>
     <p class="page-subtitle">Tổng cộng <?= number_format($total) ?> hồ sơ sinh viên trong hệ thống</p>
   </div>
 </div>
@@ -24,7 +24,7 @@ $searchQ     = htmlspecialchars($search ?? '');
   <!-- Search/Filter bar -->
   <div class="filter-bar">
     <div class="filter-search">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon" aria-hidden="true"></span>
       <input type="text" 
              id="studentSearch" 
              class="form-control" 
@@ -34,7 +34,7 @@ $searchQ     = htmlspecialchars($search ?? '');
     </div>
     <button class="btn btn-primary btn-sm" onclick="doSearch()">Tìm kiếm</button>
     <?php if ($searchQ): ?>
-      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students" class="btn btn-ghost btn-sm"> Xóa bộ lọc</a>
     <?php endif; ?>
     <span style="margin-left:auto;font-size:12px;color:var(--txt-muted);">
       Hiển thị <?= $from ?>–<?= $to ?> / <?= number_format($total) ?>
@@ -79,21 +79,21 @@ $searchQ     = htmlspecialchars($search ?? '');
               <td style="color:var(--txt-secondary);"><?= htmlspecialchars($s['phone']) ?></td>
               <td>
                 <?php if (!empty($s['room_number'])): ?>
-                  <span class="badge badge-info">🚪 <?= htmlspecialchars($s['building_name']) ?> - <?= htmlspecialchars($s['room_number']) ?></span>
+                  <span class="badge badge-info"> <?= htmlspecialchars($s['building_name']) ?> - <?= htmlspecialchars($s['room_number']) ?></span>
                 <?php else: ?>
                   <span class="badge badge-neutral">Chưa xếp phòng</span>
                 <?php endif; ?>
               </td>
               <td>
                 <?php if ($s['user_status'] === 'active'): ?>
-                  <span class="badge badge-success">✅ Hoạt động</span>
+                  <span class="badge badge-success"> Hoạt động</span>
                 <?php else: ?>
-                  <span class="badge badge-danger">🔴 Khóa</span>
+                  <span class="badge badge-danger"> Khóa</span>
                 <?php endif; ?>
               </td>
               <td>
                 <div style="display:flex;justify-content:center;">
-                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students/<?= (int)$s['id'] ?>" class="btn btn-ghost btn-sm" title="Chi tiết">👁️ Chi tiết</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/students/<?= (int)$s['id'] ?>" class="btn btn-ghost btn-sm" title="Chi tiết"> Chi tiết</a>
                 </div>
               </td>
             </tr>
@@ -102,7 +102,7 @@ $searchQ     = htmlspecialchars($search ?? '');
           <tr>
             <td colspan="8">
               <div class="empty-state">
-                <div class="empty-icon">🎓</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-title">Không tìm thấy sinh viên</div>
                 <div class="empty-msg">Thử tìm kiếm với từ khóa khác hoặc chưa có sinh viên nào.</div>
               </div>

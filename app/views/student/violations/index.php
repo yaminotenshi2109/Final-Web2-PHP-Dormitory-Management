@@ -22,7 +22,7 @@ function violationStatusBadge(string $status): string {
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">⚠️ Vi phạm của tôi</h1>
+    <h1 class="page-title"> Vi phạm của tôi</h1>
     <p class="page-subtitle">Lịch sử vi phạm và trạng thái điểm</p>
   </div>
 </div>
@@ -59,8 +59,8 @@ function violationStatusBadge(string $status): string {
       </div>
       <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txt-muted);margin-top:4px">
         <span>0</span>
-        <span style="color:var(--warning)">⚠️ Cảnh báo (7)</span>
-        <span style="color:var(--danger)">🔴 Xem xét (10)</span>
+        <span style="color:var(--warning)"> Cảnh báo (7)</span>
+        <span style="color:var(--danger)"> Xem xét (10)</span>
       </div>
     </div>
   </div>
@@ -69,7 +69,6 @@ function violationStatusBadge(string $status): string {
 <!-- Warning banner if exceeded threshold -->
 <?php if ($activePoints >= $threshold): ?>
   <div class="alert alert-error mb-24" style="border-radius:var(--radius)">
-    <span class="alert-icon">🚨</span>
     <div class="alert-content">
       <p class="alert-title">Hợp đồng đang bị xem xét!</p>
       <p class="alert-msg">Điểm vi phạm của bạn đã đạt <strong><?= $activePoints ?> điểm</strong>. Hợp đồng thuê phòng của bạn đang ở trạng thái <strong>"Đang xem xét"</strong>. Vui lòng liên hệ ban quản lý để giải quyết.</p>
@@ -77,7 +76,6 @@ function violationStatusBadge(string $status): string {
   </div>
 <?php elseif ($activePoints >= 7): ?>
   <div class="alert alert-warning mb-24" style="border-radius:var(--radius)">
-    <span class="alert-icon">⚠️</span>
     <div class="alert-content">
       <p class="alert-title">Cảnh báo điểm vi phạm</p>
       <p class="alert-msg">Bạn đã có <strong><?= $activePoints ?>/10 điểm</strong> vi phạm. Hãy tuân thủ nội quy ký túc xá để tránh bị xem xét hợp đồng.</p>
@@ -89,7 +87,7 @@ function violationStatusBadge(string $status): string {
 <?php if (empty($violations)): ?>
   <div class="card">
     <div class="empty-state">
-      <div class="empty-icon">✅</div>
+      <div class="empty-icon" aria-hidden="true"></div>
       <h3 class="empty-title">Không có vi phạm nào</h3>
       <p class="empty-msg">Bạn chưa có vi phạm nội quy nào. Hãy tiếp tục tuân thủ quy định ký túc xá!</p>
     </div>
@@ -129,7 +127,7 @@ function violationStatusBadge(string $status): string {
                   <?= htmlspecialchars($v['description'] ?? '') ?>
                 </div>
                 <?php if (!empty($v['appeal_note'])): ?>
-                  <div class="sub" style="color:var(--info)">💬 Khiếu nại: <?= htmlspecialchars($v['appeal_note']) ?></div>
+                  <div class="sub" style="color:var(--info)"> Khiếu nại: <?= htmlspecialchars($v['appeal_note']) ?></div>
                 <?php endif; ?>
               </td>
               <td>
@@ -143,7 +141,7 @@ function violationStatusBadge(string $status): string {
               <td>
                 <?php if (($v['status'] ?? '') === 'active'): ?>
                   <button class="btn btn-outline btn-sm" onclick="openAppealModal(<?= (int)($v['id'] ?? 0) ?>)">
-                    📝 Khiếu nại
+                     Khiếu nại
                   </button>
                 <?php else: ?>
                   <span style="font-size:12px;color:var(--txt-muted)">—</span>
@@ -161,12 +159,11 @@ function violationStatusBadge(string $status): string {
 <div class="modal-overlay" id="modalAppeal">
   <div class="modal" style="max-width:480px">
     <div class="modal-header">
-      <h3 class="modal-title">📝 Gửi khiếu nại vi phạm</h3>
+      <h3 class="modal-title"> Gửi khiếu nại vi phạm</h3>
       <button class="modal-close" data-modal-close="modalAppeal">×</button>
     </div>
     <div class="modal-body">
       <div class="alert alert-info mb-16">
-        <span class="alert-icon">ℹ️</span>
         <div class="alert-content"><p class="alert-msg">Hãy giải trình rõ ràng lý do khiếu nại. Ban quản lý sẽ xem xét trong vòng 5–7 ngày làm việc.</p></div>
       </div>
       <div class="form-group">
@@ -178,7 +175,7 @@ function violationStatusBadge(string $status): string {
     <div class="modal-footer">
       <button class="btn btn-ghost" data-modal-close="modalAppeal">Hủy</button>
       <button class="btn btn-primary" id="btnSubmitAppeal">
-        📤 Gửi khiếu nại
+         Gửi khiếu nại
       </button>
     </div>
   </div>
@@ -220,7 +217,7 @@ document.getElementById('btnSubmitAppeal')?.addEventListener('click', async () =
     window.ktx.toast(err.message || 'Lỗi khi gửi khiếu nại', 'error');
   } finally {
     btn.disabled = false;
-    btn.innerHTML = '📤 Gửi khiếu nại';
+    btn.innerHTML = ' Gửi khiếu nại';
   }
 });
 </script>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>500 — Lỗi máy chủ | KTX System</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
     <!-- Google Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Final-Web2-PHP-Dormitory-Management/public/assets/css/app.css">
@@ -158,7 +158,7 @@
 <body>
     <div class="error-page">
         <div class="error-content">
-            <span class="error-emoji">💥</span>
+            <span class="error-emoji"></span>
             <h1 class="error-code">500</h1>
             <div class="error-divider"></div>
             <h2 class="error-title">Lỗi máy chủ nội bộ</h2>
@@ -171,10 +171,10 @@
             </p>
             <div class="error-actions">
                 <a href="javascript:location.reload()" class="error-btn error-btn-outline">
-                    🔄 Tải lại trang
+                     Tải lại trang
                 </a>
                 <a href="/Final-Web2-PHP-Dormitory-Management/public/" class="error-btn error-btn-primary">
-                    🏠 Trang chủ
+                     Trang chủ
                 </a>
             </div>
         </div>

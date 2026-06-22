@@ -7,7 +7,7 @@
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🚪 Thêm phòng mới</h1>
+    <h1 class="page-title"> Thêm phòng mới</h1>
     <p class="page-subtitle">Tạo phòng ở mới trong hệ thống</p>
   </div>
   <a href="<?= getDynamicUrl('/admin/rooms') ?>" class="btn btn-ghost">← Quay lại</a>
@@ -28,12 +28,12 @@
               <option value="<?= $bl['id'] ?>" <?= ($_old['building_id'] ?? ($_GET['building_id'] ?? '')) == $bl['id'] ? 'selected' : '' ?>><?= htmlspecialchars($bl['name']) ?></option>
             <?php endforeach; ?>
           </select>
-          <?php if (!empty($_errors['building_id'] ?? '')): ?><div class="form-error">⚠ <?= htmlspecialchars($_errors['building_id']) ?></div><?php endif; ?>
+          <?php if (!empty($_errors['building_id'] ?? '')): ?><div class="form-error"> <?= htmlspecialchars($_errors['building_id']) ?></div><?php endif; ?>
         </div>
         <div class="form-group">
           <label class="form-label" for="room_number">Số phòng <span class="req">*</span></label>
           <input type="text" id="room_number" name="room_number" class="form-control" placeholder="101" value="<?= htmlspecialchars($_old['room_number'] ?? '') ?>" required>
-          <?php if (!empty($_errors['room_number'] ?? '')): ?><div class="form-error">⚠ <?= htmlspecialchars($_errors['room_number']) ?></div><?php endif; ?>
+          <?php if (!empty($_errors['room_number'] ?? '')): ?><div class="form-error"> <?= htmlspecialchars($_errors['room_number']) ?></div><?php endif; ?>
         </div>
       </div>
 
@@ -62,14 +62,13 @@
         <div class="form-group">
           <label class="form-label" for="price_per_month">Giá/tháng (VND) <span class="req">*</span></label>
           <input type="number" id="price_per_month" name="price_per_month" class="form-control" min="0" step="50000" placeholder="600000" value="<?= htmlspecialchars($_old['price_per_month'] ?? '') ?>" required>
-          <?php if (!empty($_errors['price_per_month'] ?? '')): ?><div class="form-error">⚠ <?= htmlspecialchars($_errors['price_per_month']) ?></div><?php endif; ?>
+          <?php if (!empty($_errors['price_per_month'] ?? '')): ?><div class="form-error"> <?= htmlspecialchars($_errors['price_per_month']) ?></div><?php endif; ?>
         </div>
         <div class="form-group">
           <label class="form-label">Tiện nghi</label>
           <div style="padding-top:8px">
-            <label class="form-check">
-              <input type="checkbox" name="has_ac" value="1" <?= ($_old['has_ac'] ?? 0) ? 'checked' : '' ?>>
-              <span style="font-size:14px">❄️ Có điều hòa</span>
+            <label class="form-check"><input type="checkbox" name="has_ac" value="1" <?= ($_old['has_ac'] ?? 0) ? 'checked' : '' ?>>
+              <span style="font-size:14px"> Có điều hòa</span>
             </label>
           </div>
         </div>

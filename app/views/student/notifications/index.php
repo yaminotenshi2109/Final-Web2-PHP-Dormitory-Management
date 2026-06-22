@@ -9,34 +9,39 @@ foreach ($notifications ?? [] as $n) {
     if (!($n['is_read'] ?? false)) $unreadCount++;
 }
 
+$bellIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>';
+
 function notifTypeIcon(string $type): string {
     return match($type) {
-        'registration' => '📋',
-        'contract'     => '📄',
-        'invoice'      => '🧾',
-        'violation'    => '⚠️',
-        'maintenance'  => '🔧',
-        'system'       => '⚙️',
-        default        => '🔔',
+        'registration' => '',
+        'contract'     => '',
+        'invoice'      => '',
+        'violation'    => '',
+        'maintenance'  => '',
+        'system'       => '',
+        default        => '',
     };
 }
 ?>
 
 <div class="page-header">
-  <div>
-    <h1 class="page-title">🔔 Thông báo</h1>
-    <p class="page-subtitle">
+  <div style="display:flex;align-items:center;gap:14px">
+    <div class="stat-icon stat-icon--sm"><?= $bellIcon ?></div>
+    <div>
+      <h1 class="page-title"> Thông báo</h1>
+      <p class="page-subtitle">
       <?php if ($unreadCount > 0): ?>
         Bạn có <strong><?= $unreadCount ?></strong> thông báo chưa đọc
       <?php else: ?>
         Tất cả thông báo đã được đọc
       <?php endif; ?>
     </p>
+    </div>
   </div>
   <?php if ($unreadCount > 0): ?>
     <div class="page-actions">
       <button class="btn btn-outline btn-sm" id="btnMarkAllRead">
-        ✅ Đánh dấu tất cả đã đọc
+         Đánh dấu tất cả đã đọc
       </button>
     </div>
   <?php endif; ?>
@@ -51,7 +56,7 @@ function notifTypeIcon(string $type): string {
 <?php if (empty($notifications)): ?>
   <div class="card">
     <div class="empty-state">
-      <div class="empty-icon">🔔</div>
+      <div class="empty-icon" aria-hidden="true"></div>
       <h3 class="empty-title">Chưa có thông báo nào</h3>
       <p class="empty-msg">Bạn sẽ nhận được thông báo khi có cập nhật về đăng ký phòng, hóa đơn, và các sự kiện khác.</p>
     </div>
@@ -154,7 +159,7 @@ document.getElementById('btnMarkAllRead')?.addEventListener('click', async () =>
   } catch (e) {
     window.ktx.toast('Có lỗi xảy ra', 'error');
     btn.disabled = false;
-    btn.innerHTML = '✅ Đánh dấu tất cả đã đọc';
+    btn.innerHTML = ' Đánh dấu tất cả đã đọc';
   }
 });
 </script>

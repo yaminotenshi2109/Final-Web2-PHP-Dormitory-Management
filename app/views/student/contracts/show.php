@@ -25,7 +25,7 @@ $badge = match($status) {
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">📄 Chi tiết hợp đồng</h1>
+    <h1 class="page-title"> Chi tiết hợp đồng</h1>
     <p class="page-subtitle">Xem thông tin chi tiết hợp đồng thuê phòng số #<?= (int)$contract['id'] ?></p>
   </div>
   <div class="page-actions">
@@ -35,7 +35,7 @@ $badge = match($status) {
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
   <div class="card-header">
-    <h3 class="card-title">📝 Hợp đồng thuê phòng</h3>
+    <h3 class="card-title"> Hợp đồng thuê phòng</h3>
     <span class="badge <?= $badge[0] ?>" style="margin-left:auto;"><?= $badge[1] ?></span>
   </div>
   <div class="card-body" style="display:flex;flex-direction:column;gap:18px;">

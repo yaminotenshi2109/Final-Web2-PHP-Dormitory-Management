@@ -24,7 +24,7 @@ $statusBadge = match($status) {
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🧾 Chi tiết hóa đơn</h1>
+    <h1 class="page-title"> Chi tiết hóa đơn</h1>
     <p class="page-subtitle">Hóa đơn tháng <?= $month ?>/<?= $year ?> cho Phòng <?= htmlspecialchars($invoice['room_number']) ?></p>
   </div>
   <div class="page-actions">
@@ -34,7 +34,7 @@ $statusBadge = match($status) {
 
 <div class="card" style="max-width: 600px; margin: 0 auto;">
   <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
-    <h3 class="card-title">🧾 Hóa đơn số #<?= $id ?></h3>
+    <h3 class="card-title"> Hóa đơn số #<?= $id ?></h3>
     <?= $statusBadge ?>
   </div>
   
@@ -48,7 +48,7 @@ $statusBadge = match($status) {
 
     <!-- Breakdown details -->
     <div>
-      <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;">📊 Chi tiết các khoản phí</h4>
+      <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;"> Chi tiết các khoản phí</h4>
       <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
         <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);">
           <span style="color:var(--txt-muted);">1. Tiền phòng cơ bản:</span>
@@ -81,10 +81,10 @@ $statusBadge = match($status) {
   
   <div class="card-footer" style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;">
     <a href="<?= getDynamicUrl('/api/invoices/' . $id . '/pdf') ?>" target="_blank" class="btn btn-outline" style="display:inline-flex;align-items:center;gap:6px;">
-      📥 Tải hóa đơn (PDF)
+       Tải hóa đơn (PDF)
     </a>
     <?php if ($status !== 'paid'): ?>
-      <button class="btn btn-primary" onclick="alert('Vui lòng liên hệ Văn phòng ban quản lý KTX để nộp tiền hoặc chuyển khoản theo cú pháp:\n[Dong tien KTX Phong <?= htmlspecialchars($invoice['room_number']) ?> Month <?= $month ?>]')">💳 Thanh toán trực tuyến</button>
+      <button class="btn btn-primary" onclick="alert('Vui lòng liên hệ Văn phòng ban quản lý KTX để nộp tiền hoặc chuyển khoản theo cú pháp:\n[Dong tien KTX Phong <?= htmlspecialchars($invoice['room_number']) ?> Month <?= $month ?>]')"> Thanh toán trực tuyến</button>
     <?php endif; ?>
   </div>
 </div>

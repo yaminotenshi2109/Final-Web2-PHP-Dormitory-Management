@@ -20,7 +20,7 @@ $notes     = htmlspecialchars($reading['notes'] ?? '');
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">⚡ Chỉnh sửa chỉ số điện nước</h1>
+    <h1 class="page-title"> Chỉnh sửa chỉ số điện nước</h1>
     <p class="page-subtitle">Sửa chỉ số tiêu thụ Phòng <?= $room ?> (Tháng <?= $month ?>/<?= $year ?>)</p>
   </div>
   <div class="page-actions">
@@ -100,7 +100,7 @@ $notes     = htmlspecialchars($reading['notes'] ?? '');
     </div>
     <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
       <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="btn btn-ghost">Hủy</a>
-      <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
+      <button type="submit" class="btn btn-primary"> Lưu thay đổi</button>
     </div>
   </form>
 </div>

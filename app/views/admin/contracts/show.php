@@ -29,7 +29,7 @@ $badge = match($status) {
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">📄 Chi tiết hợp đồng</h1>
+    <h1 class="page-title"> Chi tiết hợp đồng</h1>
     <p class="page-subtitle">Xem chi tiết hợp đồng thuê phòng của sinh viên <?= $studentName ?></p>
   </div>
   <div class="page-actions">
@@ -39,7 +39,7 @@ $badge = match($status) {
 
 <div class="card" style="max-width: 700px; margin: 0 auto;">
   <div class="card-header">
-    <h3 class="card-title">📝 Thông tin hợp đồng số #<?= (int)$contract['id'] ?></h3>
+    <h3 class="card-title"> Thông tin hợp đồng số #<?= (int)$contract['id'] ?></h3>
     <span class="badge <?= $badge[0] ?>" style="margin-left:auto;"><?= $badge[1] ?></span>
   </div>
   
@@ -48,7 +48,7 @@ $badge = match($status) {
     <div class="grid-2" style="gap:24px;">
       <!-- Column 1: Student info -->
       <div>
-        <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;">🎓 Bên thuê (Sinh viên)</h4>
+        <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;"> Bên thuê (Sinh viên)</h4>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
           <div>Họ và tên: <strong><?= $studentName ?></strong></div>
           <div>Mã số sinh viên: <strong><?= $studentCode ?></strong></div>
@@ -58,7 +58,7 @@ $badge = match($status) {
       
       <!-- Column 2: Room info -->
       <div>
-        <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;">🏠 Đối tượng thuê (Phòng ở)</h4>
+        <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;"> Đối tượng thuê (Phòng ở)</h4>
         <div style="display:flex;flex-direction:column;gap:10px;font-size:14px;">
           <div>Tòa nhà: <strong>Tòa <?= $building ?></strong></div>
           <div>Số phòng: <strong>Phòng <?= $roomNumber ?></strong></div>
@@ -71,7 +71,7 @@ $badge = match($status) {
     
     <!-- Terms & Pricing -->
     <div>
-      <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;">💸 Điều khoản & Đơn giá</h4>
+      <h4 style="font-weight:700;color:var(--txt-secondary);margin-bottom:12px;text-transform:uppercase;font-size:12px;letter-spacing:.5px;"> Điều khoản & Đơn giá</h4>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:14px;">
         <div style="background:var(--bg-neutral);padding:14px;border-radius:var(--radius-sm);">
           <div style="font-size:11px;color:var(--txt-muted);font-weight:600;margin-bottom:4px;text-transform:uppercase;">Giá thuê hàng tháng</div>
@@ -87,7 +87,7 @@ $badge = match($status) {
   
   <?php if ($status === 'active'): ?>
     <div class="card-footer" style="display:flex;justify-content:flex-end;gap:10px;">
-      <button class="btn btn-danger" onclick="terminateContract(<?= (int)$contract['id'] ?>, '<?= $studentName ?>')">🛑 Chấm dứt hợp đồng</button>
+      <button class="btn btn-danger" onclick="terminateContract(<?= (int)$contract['id'] ?>, '<?= $studentName ?>')"> Chấm dứt hợp đồng</button>
     </div>
   <?php endif; ?>
 </div>
@@ -109,10 +109,10 @@ function terminateContract(id, name) {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('✅ Đã chấm dứt hợp đồng thành công!');
+            alert(' Đã chấm dứt hợp đồng thành công!');
             window.location.href = '/Final-Web2-PHP-Dormitory-Management/public/admin/contracts';
         } else {
-            alert('❌ Lỗi: ' + json.message);
+            alert(' Lỗi: ' + json.message);
         }
     })
     .catch(err => alert('Lỗi kết nối: ' + err.message));

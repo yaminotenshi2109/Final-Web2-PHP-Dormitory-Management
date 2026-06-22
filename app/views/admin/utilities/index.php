@@ -14,11 +14,11 @@ $to          = (int)($pagination['to']           ?? 0);
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">⚡ Quản lý điện nước</h1>
+    <h1 class="page-title"> Quản lý điện nước</h1>
     <p class="page-subtitle">Quản lý và ghi chỉ số tiêu thụ điện nước của từng phòng theo tháng</p>
   </div>
   <div class="page-actions">
-    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/create" class="btn btn-primary">➕ Ghi chỉ số mới</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/create" class="btn btn-primary"> Ghi chỉ số mới</a>
   </div>
 </div>
 
@@ -45,19 +45,19 @@ $to          = (int)($pagination['to']           ?? 0);
               $waterUsed = (float)$u['water_curr'] - (float)$u['water_prev'];
             ?>
             <tr>
-              <td><strong>🚪 Tòa <?= htmlspecialchars($u['building_name']) ?> - Phòng <?= htmlspecialchars($u['room_number']) ?></strong></td>
+              <td><strong> Tòa <?= htmlspecialchars($u['building_name']) ?> - Phòng <?= htmlspecialchars($u['room_number']) ?></strong></td>
               <td><strong>Tháng <?= (int)$u['month'] ?>/<?= (int)$u['year'] ?></strong></td>
               <td style="color:var(--txt-secondary);">
                 <?= number_format((float)$u['elec_prev'], 1) ?> – <strong><?= number_format((float)$u['elec_curr'], 1) ?></strong>
               </td>
               <td>
-                <span class="badge badge-info">⚡ <?= number_format($elecUsed, 1) ?> kWh</span>
+                <span class="badge badge-info"> <?= number_format($elecUsed, 1) ?> kWh</span>
               </td>
               <td style="color:var(--txt-secondary);">
                 <?= number_format((float)$u['water_prev'], 1) ?> – <strong><?= number_format((float)$u['water_curr'], 1) ?></strong>
               </td>
               <td>
-                <span class="badge badge-purple">💧 <?= number_format($waterUsed, 1) ?> m³</span>
+                <span class="badge badge-purple"> <?= number_format($waterUsed, 1) ?> m³</span>
               </td>
               <td>
                 <div style="font-size:12.5px;"><?= htmlspecialchars($u['recorder_username']) ?></div>
@@ -65,7 +65,7 @@ $to          = (int)($pagination['to']           ?? 0);
               </td>
               <td>
                 <div style="display:flex;gap:6px;justify-content:center;">
-                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/<?= (int)$u['id'] ?>/edit" class="btn btn-ghost btn-sm">✏️ Sửa</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities/<?= (int)$u['id'] ?>/edit" class="btn btn-ghost btn-sm"> Sửa</a>
                 </div>
               </td>
             </tr>
@@ -74,7 +74,7 @@ $to          = (int)($pagination['to']           ?? 0);
           <tr>
             <td colspan="8">
               <div class="empty-state">
-                <div class="empty-icon">⚡</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-title">Chưa có chỉ số điện nước nào</div>
                 <div class="empty-msg">Bấm nút "Ghi chỉ số mới" để bắt đầu nhập chỉ số tiêu thụ cho các phòng.</div>
               </div>

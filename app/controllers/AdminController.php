@@ -27,7 +27,8 @@ class AdminController extends BaseController
             'total_contracts'       => (int)$this->db->selectValue("SELECT COUNT(*) FROM contracts WHERE status = 'active'"),
             'unpaid_invoices'       => (int)$this->db->selectValue("SELECT COUNT(*) FROM invoices WHERE status = 'unpaid'"),
             'pending_registrations' => (int)$this->db->selectValue("SELECT COUNT(*) FROM room_registrations WHERE status = 'pending'"),
-            'open_violations'       => (int)$this->db->selectValue("SELECT COUNT(*) FROM violation_records WHERE status = 'active'")
+            'open_violations'       => (int)$this->db->selectValue("SELECT COUNT(*) FROM violation_records WHERE status = 'active'"),
+            'total_notifications'   => (int)$this->db->selectValue("SELECT COUNT(*) FROM notifications")
         ];
 
         // 2. Đơn đăng ký gần đây

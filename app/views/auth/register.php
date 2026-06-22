@@ -8,7 +8,7 @@
 <div class="auth-card">
     <!-- Logo -->
     <div class="auth-logo">
-        <span class="auth-logo-icon">🏠</span>
+        <span class="auth-logo-icon">K</span>
         <h1>KTX System</h1>
         <p>Hệ thống quản lý ký túc xá</p>
     </div>
@@ -17,20 +17,19 @@
     <?php foreach ($_flash ?? [] as $f): ?>
         <?php
           $type = match($f['type'] ?? 'info') {
-            'success' => ['alert-success', '✅'],
-            'error', 'danger' => ['alert-danger', '❌'],
-            'warning' => ['alert-warning', '⚠️'],
-            default   => ['alert-info',    'ℹ️'],
+            'success' => 'alert-success',
+            'error', 'danger' => 'alert-danger',
+            'warning' => 'alert-warning',
+            default   => 'alert-info',
           };
         ?>
-        <div class="alert <?= $type[0] ?>">
-          <span><?= $type[1] ?></span>
+        <div class="alert <?= $type ?>">
           <span><?= htmlspecialchars($f['message']) ?></span>
         </div>
     <?php endforeach; ?>
 
     <!-- Title -->
-    <h2 class="auth-title">Tạo tài khoản mới ✨</h2>
+    <h2 class="auth-title">Tạo tài khoản mới</h2>
     <p class="auth-subtitle">Điền thông tin để bắt đầu sử dụng hệ thống</p>
 
     <!-- Register Form -->
@@ -39,7 +38,7 @@
 
         <!-- Username -->
         <div class="form-group">
-            <label class="form-label" for="username">👤 Tên đăng nhập</label>
+            <label class="form-label" for="username">Tên đăng nhập</label>
             <input
                 type="text"
                 id="username"
@@ -51,7 +50,7 @@
                 autofocus
             >
             <?php if (!empty($_errors['username'])): ?>
-                <span class="form-error">⚠️ <?= htmlspecialchars($_errors['username']) ?></span>
+                <span class="form-error"> <?= htmlspecialchars($_errors['username']) ?></span>
             <?php else: ?>
                 <span class="form-hint" style="color:rgba(255,255,255,0.35);font-size:0.78rem;margin-top:0.25rem;display:block;">
                     Chỉ chứa chữ cái, số và dấu gạch dưới
@@ -61,7 +60,7 @@
 
         <!-- Email -->
         <div class="form-group">
-            <label class="form-label" for="email">📧 Email</label>
+            <label class="form-label" for="email">Email</label>
             <input
                 type="email"
                 id="email"
@@ -72,13 +71,13 @@
                 autocomplete="email"
             >
             <?php if (!empty($_errors['email'])): ?>
-                <span class="form-error">⚠️ <?= htmlspecialchars($_errors['email']) ?></span>
+                <span class="form-error"> <?= htmlspecialchars($_errors['email']) ?></span>
             <?php endif; ?>
         </div>
 
         <!-- Password -->
         <div class="form-group">
-            <label class="form-label" for="password">🔒 Mật khẩu</label>
+            <label class="form-label" for="password">Mật khẩu</label>
             <div class="password-wrapper">
                 <input
                     type="password"
@@ -88,10 +87,10 @@
                     placeholder="Tối thiểu 8 ký tự"
                     autocomplete="new-password"
                 >
-                <button type="button" class="password-toggle" title="Hiện/ẩn mật khẩu">👁️</button>
+                <button type="button" class="password-toggle" title="Hiện/ẩn mật khẩu">Hiện</button>
             </div>
             <?php if (!empty($_errors['password'])): ?>
-                <span class="form-error">⚠️ <?= htmlspecialchars($_errors['password']) ?></span>
+                <span class="form-error"> <?= htmlspecialchars($_errors['password']) ?></span>
             <?php else: ?>
                 <span class="form-hint" style="color:rgba(255,255,255,0.35);font-size:0.78rem;margin-top:0.25rem;display:block;">
                     Ít nhất 8 ký tự, bao gồm chữ và số
@@ -101,7 +100,7 @@
 
         <!-- Password Confirm -->
         <div class="form-group">
-            <label class="form-label" for="password_confirm">🔐 Xác nhận mật khẩu</label>
+            <label class="form-label" for="password_confirm">Xác nhận mật khẩu</label>
             <div class="password-wrapper">
                 <input
                     type="password"
@@ -111,24 +110,23 @@
                     placeholder="Nhập lại mật khẩu"
                     autocomplete="new-password"
                 >
-                <button type="button" class="password-toggle" title="Hiện/ẩn mật khẩu">👁️</button>
+                <button type="button" class="password-toggle" title="Hiện/ẩn mật khẩu">Hiện</button>
             </div>
             <?php if (!empty($_errors['password_confirm'])): ?>
-                <span class="form-error">⚠️ <?= htmlspecialchars($_errors['password_confirm']) ?></span>
+                <span class="form-error"> <?= htmlspecialchars($_errors['password_confirm']) ?></span>
             <?php endif; ?>
         </div>
 
         <!-- General error -->
         <?php if (!empty($_errors['general'])): ?>
             <div class="alert alert-danger">
-                <span>❌</span>
                 <span><?= htmlspecialchars($_errors['general']) ?></span>
             </div>
         <?php endif; ?>
 
         <!-- Submit -->
         <button type="submit" class="btn btn-primary">
-            ✨ Tạo tài khoản
+             Tạo tài khoản
         </button>
     </form>
 

@@ -7,7 +7,7 @@ $s = $student ?? [];
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">✏️ Sửa sinh viên: <?= htmlspecialchars($s['full_name'] ?? '') ?></h1><p class="page-subtitle">Cập nhật thông tin sinh viên</p></div>
+  <div><h1 class="page-title"> Sửa sinh viên: <?= htmlspecialchars($s['full_name'] ?? '') ?></h1><p class="page-subtitle">Cập nhật thông tin sinh viên</p></div>
   <a href="<?= getDynamicUrl('/admin/students') ?>" class="btn btn-ghost">← Quay lại</a>
 </div>
 
@@ -22,7 +22,7 @@ $s = $student ?? [];
         <div class="form-group">
           <label class="form-label" for="full_name">Họ và tên <span class="req">*</span></label>
           <input type="text" id="full_name" name="full_name" class="form-control" value="<?= htmlspecialchars($_old['full_name'] ?? $s['full_name'] ?? '') ?>" required>
-          <?php if (!empty($_errors['full_name'] ?? '')): ?><div class="form-error">⚠ <?= htmlspecialchars($_errors['full_name']) ?></div><?php endif; ?>
+          <?php if (!empty($_errors['full_name'] ?? '')): ?><div class="form-error"> <?= htmlspecialchars($_errors['full_name']) ?></div><?php endif; ?>
         </div>
         <div class="form-group">
           <label class="form-label" for="student_code">Mã sinh viên <span class="req">*</span></label>
@@ -89,7 +89,7 @@ $s = $student ?? [];
 
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
         <a href="<?= getDynamicUrl('/admin/students') ?>" class="btn btn-ghost">Hủy</a>
-        <button type="submit" class="btn btn-primary">✅ Cập nhật</button>
+        <button type="submit" class="btn btn-primary"> Cập nhật</button>
       </div>
     </form>
   </div>

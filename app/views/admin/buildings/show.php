@@ -15,7 +15,7 @@ $address = htmlspecialchars($building['address']);
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🏢 Chi tiết tòa nhà <?= $name ?></h1>
+    <h1 class="page-title"> Chi tiết tòa nhà <?= $name ?></h1>
     <p class="page-subtitle">Xem chi tiết cơ cấu và danh sách phòng</p>
   </div>
   <div class="page-actions">
@@ -27,7 +27,7 @@ $address = htmlspecialchars($building['address']);
   <!-- Left Column: Building Details Card -->
   <div class="card" style="padding: 20px;">
     <div style="text-align: center; margin-bottom: 20px;">
-      <div style="font-size: 48px; margin-bottom: 10px;">🏢</div>
+      <div style="font-size: 48px; margin-bottom: 10px;"></div>
       <h3 style="font-size: 18px; font-weight: 800; color: var(--txt-primary); margin: 0;">Tòa <?= $name ?></h3>
     </div>
     
@@ -58,7 +58,7 @@ $address = htmlspecialchars($building['address']);
   <!-- Right Column: Rooms List Table -->
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">🚪 Danh sách phòng thuộc Tòa <?= $name ?></h3>
+      <h3 class="card-title"> Danh sách phòng thuộc Tòa <?= $name ?></h3>
     </div>
     <div class="table-wrapper">
       <table>
@@ -104,7 +104,7 @@ $address = htmlspecialchars($building['address']);
             <tr>
               <td colspan="7">
                 <div class="empty-state" style="padding: 30px;">
-                  <div class="empty-icon">🚪</div>
+                  <div class="empty-icon" aria-hidden="true"></div>
                   <div class="empty-title">Chưa có phòng nào thuộc tòa nhà này</div>
                 </div>
               </td>

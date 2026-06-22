@@ -30,7 +30,7 @@ $hasContract = !empty($contract);
         </div>
         <div style="flex:1;min-width:200px;">
             <h2 style="font-size:22px;font-weight:800;margin:0 0 6px 0;line-height:1.2;">
-                Xin chào, <?= htmlspecialchars($studentName) ?>! 👋
+                Xin chào, <?= htmlspecialchars($studentName) ?>! 
             </h2>
             <p style="opacity:.8;margin:0;font-size:14px;">
                 Mã SV: <strong><?= htmlspecialchars($studentCode) ?></strong>
@@ -40,7 +40,7 @@ $hasContract = !empty($contract);
         </div>
         <div style="text-align:right;flex-shrink:0;">
             <a href="<?= getDynamicUrl('/student/profile') ?>" class="btn" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);font-size:13px;">
-                👤 Hồ sơ của tôi
+                 Hồ sơ của tôi
             </a>
         </div>
     </div>
@@ -50,7 +50,7 @@ $hasContract = !empty($contract);
 <div class="stat-grid mb-24">
     <!-- Hoá đơn chưa thanh toán -->
     <div class="stat-card" style="--stat-color:<?= $unpaidInvoices > 0 ? '#ef4444' : '#22c55e' ?>;--stat-icon-bg:<?= $unpaidInvoices > 0 ? '#fef2f2' : '#f0fdf4' ?>;">
-        <div class="stat-icon"><?= $unpaidInvoices > 0 ? '💳' : '✅' ?></div>
+        <div class="stat-icon"><?= $unpaidInvoices > 0 ? '' : '' ?></div>
         <div class="stat-body">
             <div class="stat-value"><?= $unpaidInvoices ?></div>
             <div class="stat-label">Hóa đơn chưa thanh toán</div>
@@ -62,7 +62,7 @@ $hasContract = !empty($contract);
 
     <!-- Vi phạm đang hiệu lực -->
     <div class="stat-card" style="--stat-color:<?= $activeViolations > 0 ? '#f59e0b' : '#22c55e' ?>;--stat-icon-bg:<?= $activeViolations > 0 ? '#fffbeb' : '#f0fdf4' ?>;">
-        <div class="stat-icon"><?= $activeViolations > 0 ? '⚠️' : '🛡️' ?></div>
+        <div class="stat-icon"><?= $activeViolations > 0 ? '' : '' ?></div>
         <div class="stat-body">
             <div class="stat-value"><?= $activeViolations ?></div>
             <div class="stat-label">Vi phạm đang hiệu lực</div>
@@ -74,7 +74,7 @@ $hasContract = !empty($contract);
 
     <!-- Trạng thái phòng -->
     <div class="stat-card" style="--stat-color:<?= $hasContract ? '#4f46e5' : '#6b7280' ?>;--stat-icon-bg:<?= $hasContract ? '#eef2ff' : '#f9fafb' ?>;">
-        <div class="stat-icon"><?= $hasContract ? '🏠' : '🔍' ?></div>
+        <div class="stat-icon"><?= $hasContract ? '' : '' ?></div>
         <div class="stat-body">
             <div class="stat-value" style="font-size:18px;">
                 <?= $hasContract ? htmlspecialchars($contract['room_number'] ?? '--') : 'Chưa có' ?>
@@ -92,9 +92,9 @@ $hasContract = !empty($contract);
                 <?php
                 $cStatus = $contract['status'] ?? '';
                 $statusLabel = match($cStatus) {
-                    'active'    => '🟢 Đang ở',
-                    'expired'   => '🔴 Đã hết hạn',
-                    'cancelled' => '⚫ Đã huỷ',
+                    'active'    => ' Đang ở',
+                    'expired'   => ' Đã hết hạn',
+                    'cancelled' => ' Đã huỷ',
                     default     => $cStatus
                 };
                 echo htmlspecialchars($statusLabel);
@@ -114,7 +114,7 @@ $hasContract = !empty($contract);
     <!-- Left: Room / Contract Info -->
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">🏠 Thông tin phòng ở</h3>
+            <h3 class="card-title"> Thông tin phòng ở</h3>
         </div>
         <div class="card-body">
             <?php if ($hasContract): ?>
@@ -162,22 +162,22 @@ $hasContract = !empty($contract);
 
                     <div style="border-top:1px solid #e5e7eb;padding-top:14px;display:flex;gap:10px;flex-wrap:wrap;">
                         <a href="<?= getDynamicUrl('/student/invoices') ?>" class="btn btn-primary btn-sm">
-                            💳 Xem hóa đơn
+                             Xem hóa đơn
                         </a>
                         <a href="<?= getDynamicUrl('/student/registrations') ?>" class="btn btn-outline btn-sm">
-                            📋 Đăng ký của tôi
+                             Đăng ký của tôi
                         </a>
                     </div>
                 </div>
             <?php else: ?>
                 <div class="empty-state" style="padding:40px 20px;">
-                    <div style="font-size:52px;margin-bottom:12px;">🏠</div>
+                    <div style="font-size:52px;margin-bottom:12px;"></div>
                     <h4 style="font-weight:700;color:#374151;margin-bottom:8px;">Chưa có phòng ở</h4>
                     <p style="color:#6b7280;font-size:14px;margin-bottom:20px;max-width:260px;margin-left:auto;margin-right:auto;">
                         Bạn chưa đăng ký phòng ký túc xá hoặc đơn chưa được phê duyệt.
                     </p>
                     <a href="<?= getDynamicUrl('/student/registrations/create') ?>" class="btn btn-primary">
-                        ➕ Đăng ký phòng ngay
+                         Đăng ký phòng ngay
                     </a>
                 </div>
             <?php endif; ?>
@@ -187,13 +187,13 @@ $hasContract = !empty($contract);
     <!-- Right: Recent Notifications -->
     <div class="card">
         <div class="card-header" style="display:flex;align-items:center;justify-content:space-between;">
-            <h3 class="card-title">🔔 Thông báo gần đây</h3>
+            <h3 class="card-title"> Thông báo gần đây</h3>
             <a href="<?= getDynamicUrl('/student/notifications') ?>" class="btn btn-ghost btn-sm">Xem tất cả</a>
         </div>
         <div class="card-body" style="padding:0;">
             <?php if (empty($recentNotifs)): ?>
                 <div class="empty-state" style="padding:40px 20px;">
-                    <div style="font-size:40px;margin-bottom:10px;">📭</div>
+                    <div style="font-size:40px;margin-bottom:10px;"></div>
                     <p style="color:#6b7280;font-size:14px;margin:0;">Chưa có thông báo nào.</p>
                 </div>
             <?php else: ?>
@@ -203,11 +203,11 @@ $hasContract = !empty($contract);
                         $isRead  = !empty($notif['is_read']);
                         $nType   = $notif['type'] ?? 'general';
                         $typeIcon = match($nType) {
-                            'invoice'   => '💳',
-                            'violation' => '⚠️',
-                            'contract'  => '📄',
-                            'system'    => '⚙️',
-                            default     => '🔔',
+                            'invoice'   => '',
+                            'violation' => '',
+                            'contract'  => '',
+                            'system'    => '',
+                            default     => '',
                         };
                         ?>
                         <div class="notif-item <?= $isRead ? '' : 'notif-unread' ?>"
@@ -225,7 +225,7 @@ $hasContract = !empty($contract);
                                     <?= htmlspecialchars(mb_strimwidth($notif['message'] ?? '', 0, 80, '...')) ?>
                                 </div>
                                 <div style="color:#94a3b8;font-size:11px;margin-top:4px;">
-                                    🕐 <?= htmlspecialchars($notif['sent_at'] ?? '') ?>
+                                     <?= htmlspecialchars($notif['sent_at'] ?? '') ?>
                                 </div>
                             </div>
                         </div>
@@ -246,28 +246,28 @@ $hasContract = !empty($contract);
 <!-- Quick Actions (full-width bottom) -->
 <div class="card mt-24">
     <div class="card-header">
-        <h3 class="card-title">⚡ Thao tác nhanh</h3>
+        <h3 class="card-title"> Thao tác nhanh</h3>
     </div>
     <div class="card-body">
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;">
             <a href="<?= getDynamicUrl('/student/invoices') ?>" class="btn btn-outline" style="flex-direction:column;gap:6px;padding:18px 12px;height:auto;text-align:center;">
-                <span style="font-size:26px;">💳</span>
+                <span style="font-size:26px;"></span>
                 <span style="font-size:13px;">Hóa đơn</span>
             </a>
             <a href="<?= getDynamicUrl('/student/registrations') ?>" class="btn btn-outline" style="flex-direction:column;gap:6px;padding:18px 12px;height:auto;text-align:center;">
-                <span style="font-size:26px;">📋</span>
+                <span style="font-size:26px;"></span>
                 <span style="font-size:13px;">Đăng ký phòng</span>
             </a>
             <a href="<?= getDynamicUrl('/student/violations') ?>" class="btn btn-outline" style="flex-direction:column;gap:6px;padding:18px 12px;height:auto;text-align:center;">
-                <span style="font-size:26px;">📝</span>
+                <span style="font-size:26px;"></span>
                 <span style="font-size:13px;">Vi phạm</span>
             </a>
             <a href="<?= getDynamicUrl('/student/notifications') ?>" class="btn btn-outline" style="flex-direction:column;gap:6px;padding:18px 12px;height:auto;text-align:center;">
-                <span style="font-size:26px;">🔔</span>
+                <span style="font-size:26px;"></span>
                 <span style="font-size:13px;">Thông báo</span>
             </a>
             <a href="<?= getDynamicUrl('/student/profile') ?>" class="btn btn-outline" style="flex-direction:column;gap:6px;padding:18px 12px;height:auto;text-align:center;">
-                <span style="font-size:26px;">👤</span>
+                <span style="font-size:26px;"></span>
                 <span style="font-size:13px;">Hồ sơ</span>
             </a>
         </div>

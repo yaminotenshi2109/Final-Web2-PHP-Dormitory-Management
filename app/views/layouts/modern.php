@@ -41,7 +41,7 @@
                     <?php if ($this->auth()): ?>
                         <li class="nav-item">
                             <span class="navbar-text text-white me-3">
-                                👤 <?= htmlspecialchars($this->auth('username') ?? 'User') ?>
+                                 <?= htmlspecialchars($this->auth('username') ?? 'User') ?>
                             </span>
                         </li>
                         <li class="nav-item">

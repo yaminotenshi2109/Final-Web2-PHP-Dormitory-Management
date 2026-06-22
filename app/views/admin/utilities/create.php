@@ -11,7 +11,7 @@ $currentYear  = (int)date('Y');
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">⚡ Ghi chỉ số điện nước mới</h1>
+    <h1 class="page-title"> Ghi chỉ số điện nước mới</h1>
     <p class="page-subtitle">Nhập số công tơ điện nước tiêu thụ của phòng</p>
   </div>
   <div class="page-actions">
@@ -111,7 +111,7 @@ $currentYear  = (int)date('Y');
     </div>
     <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
       <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/utilities" class="btn btn-ghost">Hủy</a>
-      <button type="submit" class="btn btn-primary">➕ Ghi chỉ số</button>
+      <button type="submit" class="btn btn-primary"> Ghi chỉ số</button>
     </div>
   </form>
 </div>

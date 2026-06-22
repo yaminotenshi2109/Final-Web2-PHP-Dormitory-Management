@@ -9,23 +9,23 @@ if (!empty($monthlyData)) { foreach ($monthlyData as $md) { $maxVio = max($maxVi
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">⚠️ Báo cáo Vi phạm</h1><p class="page-subtitle">Thống kê vi phạm nội quy KTX</p></div>
+  <div><h1 class="page-title"> Báo cáo Vi phạm</h1><p class="page-subtitle">Thống kê vi phạm nội quy KTX</p></div>
   <div class="page-actions">
-    <a href="<?= getDynamicUrl('/admin/reports/revenue') ?>" class="btn btn-ghost">💰 Doanh thu</a>
-    <a href="<?= getDynamicUrl('/admin/reports/occupancy') ?>" class="btn btn-ghost">📊 Lấp đầy</a>
+    <a href="<?= getDynamicUrl('/admin/reports/revenue') ?>" class="btn btn-ghost"> Doanh thu</a>
+    <a href="<?= getDynamicUrl('/admin/reports/occupancy') ?>" class="btn btn-ghost"> Lấp đầy</a>
   </div>
 </div>
 
 <div class="stat-grid mb-24">
-  <div class="stat-card" style="--stat-color:#ef4444;--stat-icon-bg:#fee2e2"><div class="stat-icon">⚠️</div><div><div class="stat-value"><?= number_format($report['total'] ?? 0) ?></div><div class="stat-label">Tổng vi phạm</div></div></div>
-  <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7"><div class="stat-icon">📊</div><div><div class="stat-value"><?= number_format($report['total_points'] ?? 0) ?></div><div class="stat-label">Tổng điểm phạt</div></div></div>
-  <div class="stat-card" style="--stat-color:#8b5cf6;--stat-icon-bg:#ede9fe"><div class="stat-icon">👤</div><div><div class="stat-value"><?= number_format($report['students_involved'] ?? 0) ?></div><div class="stat-label">SV vi phạm</div></div></div>
+  <div class="stat-card" style="--stat-color:#ef4444;--stat-icon-bg:#fee2e2"><div class="stat-icon"></div><div><div class="stat-value"><?= number_format($report['total'] ?? 0) ?></div><div class="stat-label">Tổng vi phạm</div></div></div>
+  <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7"><div class="stat-icon"></div><div><div class="stat-value"><?= number_format($report['total_points'] ?? 0) ?></div><div class="stat-label">Tổng điểm phạt</div></div></div>
+  <div class="stat-card" style="--stat-color:#8b5cf6;--stat-icon-bg:#ede9fe"><div class="stat-icon"></div><div><div class="stat-value"><?= number_format($report['students_involved'] ?? 0) ?></div><div class="stat-label">SV vi phạm</div></div></div>
 </div>
 
 <div class="grid-2 mb-24">
   <!-- Monthly trend -->
   <div class="card">
-    <div class="card-header"><div class="card-title">📈 Theo tháng</div></div>
+    <div class="card-header"><div class="card-title"> Theo tháng</div></div>
     <div class="card-body">
       <div class="bar-chart">
         <?php foreach ($monthlyData ?? [] as $i => $md): ?>
@@ -42,7 +42,7 @@ if (!empty($monthlyData)) { foreach ($monthlyData as $md) { $maxVio = max($maxVi
 
   <!-- By type -->
   <div class="card">
-    <div class="card-header"><div class="card-title">📋 Theo loại vi phạm</div></div>
+    <div class="card-header"><div class="card-title"> Theo loại vi phạm</div></div>
     <div class="card-body">
       <?php if (!empty($typeData)): ?>
         <div style="display:flex;flex-direction:column;gap:12px">

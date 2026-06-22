@@ -305,7 +305,7 @@ $csrfToken = $csrfToken ?? '';
                 <input type="hidden" name="_csrf_token" value="<?= $csrfToken ?? '' ?>">
 
                 <div style="margin-bottom: 1rem; padding: 1rem; background: #FAEEDA; border-radius: 4px; font-size: 13px; color: #412402;">
-                    <strong>⚠️ Lưu ý:</strong> Mật khẩu tạm thời sẽ được gửi cho sinh viên qua email.
+                    <strong> Lưu ý:</strong> Mật khẩu tạm thời sẽ được gửi cho sinh viên qua email.
                 </div>
 
                 <div style="margin-bottom: 1rem;">
@@ -314,8 +314,7 @@ $csrfToken = $csrfToken ?? '';
                     <small style="color: var(--color-text-muted); font-size: 12px;">Tối thiểu 8 ký tự</small>
                 </div>
 
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                    <input type="checkbox" name="send_email" checked>
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" name="send_email" checked>
                     <span>Gửi thông báo qua email</span>
                 </label>
             </div>

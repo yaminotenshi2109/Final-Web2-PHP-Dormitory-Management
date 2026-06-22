@@ -4,7 +4,7 @@
  * Variables: $title, $room, $amenities[], $students[]
  */
 $r = $room ?? [];
-$statusMap = ['available'=>['badge-success','✅ Trống'],'full'=>['badge-danger','🔴 Đầy'],'maintenance'=>['badge-warning','🔧 Bảo trì'],'inactive'=>['badge-neutral','Không dùng']];
+$statusMap = ['available'=>['badge-success',' Trống'],'full'=>['badge-danger',' Đầy'],'maintenance'=>['badge-warning',' Bảo trì'],'inactive'=>['badge-neutral','Không dùng']];
 $typeMap = ['standard'=>'Tiêu chuẩn','deluxe'=>'Cao cấp','ac_standard'=>'Tiêu chuẩn (ML)','ac_deluxe'=>'Cao cấp (ML)'];
 $conditionMap = ['new'=>'badge-info','good'=>'badge-success','fair'=>'badge-warning','damaged'=>'badge-danger','broken'=>'badge-danger'];
 $rs = $r['status'] ?? 'available';
@@ -14,12 +14,12 @@ $occupancy = ($r['capacity'] ?? 1) > 0 ? round(($r['current_occupants'] ?? 0) / 
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🚪 Phòng <?= htmlspecialchars($r['room_number'] ?? '') ?></h1>
+    <h1 class="page-title"> Phòng <?= htmlspecialchars($r['room_number'] ?? '') ?></h1>
     <p class="page-subtitle"><?= htmlspecialchars($r['building_name'] ?? '') ?> — Tầng <?= $r['floor'] ?? 0 ?></p>
   </div>
   <div class="page-actions">
     <a href="<?= getDynamicUrl('/admin/rooms') ?>" class="btn btn-ghost">← Quay lại</a>
-    <a href="<?= getDynamicUrl('/admin/rooms/' . ($r['id'] ?? '') . '/edit') ?>" class="btn btn-outline">✏️ Sửa</a>
+    <a href="<?= getDynamicUrl('/admin/rooms/' . ($r['id'] ?? '') . '/edit') ?>" class="btn btn-outline"> Sửa</a>
   </div>
 </div>
 
@@ -33,7 +33,7 @@ $occupancy = ($r['capacity'] ?? 1) > 0 ? round(($r['current_occupants'] ?? 0) / 
         <tr><td style="padding:10px 0;color:var(--txt-muted)">Tòa nhà</td><td style="font-weight:600"><?= htmlspecialchars($r['building_name'] ?? '—') ?></td></tr>
         <tr><td style="padding:10px 0;color:var(--txt-muted)">Tầng</td><td>Tầng <?= $r['floor'] ?? 0 ?></td></tr>
         <tr><td style="padding:10px 0;color:var(--txt-muted)">Loại phòng</td><td><?= $typeMap[$r['room_type'] ?? ''] ?? 'Standard' ?></td></tr>
-        <tr><td style="padding:10px 0;color:var(--txt-muted)">Điều hòa</td><td><?= ($r['has_ac'] ?? 0) ? '❄️ Có' : '— Không' ?></td></tr>
+        <tr><td style="padding:10px 0;color:var(--txt-muted)">Điều hòa</td><td><?= ($r['has_ac'] ?? 0) ? ' Có' : '— Không' ?></td></tr>
         <tr><td style="padding:10px 0;color:var(--txt-muted)">Giá/tháng</td><td style="font-weight:700;font-size:16px;color:var(--brand)"><?= number_format($r['price_per_month'] ?? 0, 0, ',', '.') ?> VND</td></tr>
         <tr><td style="padding:10px 0;color:var(--txt-muted)">Trạng thái</td><td><span class="badge <?= $rClass ?>"><?= $rLabel ?></span></td></tr>
       </table>
@@ -56,7 +56,7 @@ $occupancy = ($r['capacity'] ?? 1) > 0 ? round(($r['current_occupants'] ?? 0) / 
 <!-- Amenities -->
 <div class="card mb-24">
   <div class="card-header">
-    <div class="card-title">🪑 Trang thiết bị</div>
+    <div class="card-title"> Trang thiết bị</div>
   </div>
   <?php if (!empty($amenities)): ?>
     <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
@@ -77,13 +77,13 @@ $occupancy = ($r['capacity'] ?? 1) > 0 ? round(($r['current_occupants'] ?? 0) / 
       </table>
     </div>
   <?php else: ?>
-    <div class="empty-state" style="padding:40px"><div class="empty-icon">🪑</div><div class="empty-title">Chưa có thiết bị</div></div>
+    <div class="empty-state" style="padding:40px"><div class="empty-icon" aria-hidden="true"></div><div class="empty-title">Chưa có thiết bị</div></div>
   <?php endif; ?>
 </div>
 
 <!-- Students in room -->
 <div class="card">
-  <div class="card-header"><div class="card-title">🎓 Sinh viên đang ở</div></div>
+  <div class="card-header"><div class="card-title"> Sinh viên đang ở</div></div>
   <?php if (!empty($students)): ?>
     <div class="table-wrapper" style="border:none;border-radius:0;box-shadow:none">
       <table>
@@ -106,6 +106,6 @@ $occupancy = ($r['capacity'] ?? 1) > 0 ? round(($r['current_occupants'] ?? 0) / 
       </table>
     </div>
   <?php else: ?>
-    <div class="empty-state" style="padding:40px"><div class="empty-icon">🎓</div><div class="empty-title">Chưa có sinh viên</div></div>
+    <div class="empty-state" style="padding:40px"><div class="empty-icon" aria-hidden="true"></div><div class="empty-title">Chưa có sinh viên</div></div>
   <?php endif; ?>
 </div>

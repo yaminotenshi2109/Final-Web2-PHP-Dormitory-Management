@@ -10,7 +10,7 @@ $_csrfToken = $_csrfToken ?? '';
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">🎓 Thêm sinh viên mới</h1><p class="page-subtitle">Tạo hồ sơ sinh viên trong hệ thống</p></div>
+  <div><h1 class="page-title"> Thêm sinh viên mới</h1><p class="page-subtitle">Tạo hồ sơ sinh viên trong hệ thống</p></div>
   <a href="<?= getDynamicUrl('/admin/students') ?>" class="btn btn-ghost">← Quay lại</a>
 </div>
 
@@ -24,12 +24,12 @@ $_csrfToken = $_csrfToken ?? '';
         <div class="form-group">
           <label class="form-label" for="full_name">Họ và tên <span class="req">*</span></label>
           <input type="text" id="full_name" name="full_name" class="form-control <?= !empty($_errors['full_name'] ?? '') ? 'is-invalid' : '' ?>" placeholder="Nguyễn Văn A" value="<?= htmlspecialchars($_old['full_name'] ?? '') ?>" required>
-          <?php if (!empty($_errors['full_name'] ?? '')): ?><div class="form-error">⚠ <?= htmlspecialchars($_errors['full_name']) ?></div><?php endif; ?>
+          <?php if (!empty($_errors['full_name'] ?? '')): ?><div class="form-error"> <?= htmlspecialchars($_errors['full_name']) ?></div><?php endif; ?>
         </div>
         <div class="form-group">
           <label class="form-label" for="student_code">Mã sinh viên <span class="req">*</span></label>
           <input type="text" id="student_code" name="student_code" class="form-control" placeholder="SV20210001" value="<?= htmlspecialchars($_old['student_code'] ?? '') ?>" required>
-          <?php if (!empty($_errors['student_code'] ?? '')): ?><div class="form-error">⚠ <?= htmlspecialchars($_errors['student_code']) ?></div><?php endif; ?>
+          <?php if (!empty($_errors['student_code'] ?? '')): ?><div class="form-error"> <?= htmlspecialchars($_errors['student_code']) ?></div><?php endif; ?>
         </div>
       </div>
 
@@ -90,7 +90,7 @@ $_csrfToken = $_csrfToken ?? '';
 
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
         <a href="<?= getDynamicUrl('/admin/students') ?>" class="btn btn-ghost">Hủy</a>
-        <button type="submit" class="btn btn-primary">✅ Tạo sinh viên</button>
+        <button type="submit" class="btn btn-primary"> Tạo sinh viên</button>
       </div>
     </form>
   </div>

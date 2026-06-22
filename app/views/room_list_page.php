@@ -127,8 +127,7 @@
                     <input type="number" name="price_per_month" min="100000" step="100000" required style="width: 100%; padding: 0.5rem; border: 0.5px solid var(--color-border); border-radius: 4px;">
                 </div>
 
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
-                    <input type="checkbox" name="has_ac">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;"><input type="checkbox" name="has_ac">
                     <span>Có điều hòa</span>
                 </label>
             </div>

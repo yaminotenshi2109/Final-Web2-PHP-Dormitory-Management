@@ -11,7 +11,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Quên mật khẩu — KTX System</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
   <link rel="stylesheet" href="<?= getDynamicUrl('/assets/css/main.css') ?>">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -43,7 +43,6 @@
     <!-- Success message -->
     <?php if (!empty($success ?? '')): ?>
       <div class="alert alert-success" style="margin-bottom:20px">
-        <span class="alert-icon">✅</span>
         <div class="alert-content">
           <p class="alert-msg"><?= htmlspecialchars($success) ?></p>
         </div>
@@ -53,7 +52,6 @@
     <!-- Error -->
     <?php if (!empty($_errors['email'] ?? '')): ?>
       <div class="alert alert-danger" style="margin-bottom:20px">
-        <span class="alert-icon">❌</span>
         <div class="alert-content">
           <p class="alert-msg"><?= htmlspecialchars($_errors['email']) ?></p>
         </div>

@@ -8,10 +8,10 @@ $status = $reg['status'] ?? 'unknown';
 function regStatusBadge(string $status): string {
     return match(strtolower($status)) {
         'pending'   => '<span class="badge badge-warning">⏳ Chờ duyệt</span>',
-        'approved'  => '<span class="badge badge-success">✅ Đã duyệt</span>',
-        'assigned'  => '<span class="badge badge-info">🏠 Đã phân phòng</span>',
-        'rejected'  => '<span class="badge badge-danger">❌ Từ chối</span>',
-        'cancelled' => '<span class="badge badge-neutral">🚫 Đã huỷ</span>',
+        'approved'  => '<span class="badge badge-success"> Đã duyệt</span>',
+        'assigned'  => '<span class="badge badge-info"> Đã phân phòng</span>',
+        'rejected'  => '<span class="badge badge-danger"> Từ chối</span>',
+        'cancelled' => '<span class="badge badge-neutral"> Đã huỷ</span>',
         default     => '<span class="badge badge-neutral">' . htmlspecialchars($status) . '</span>',
     };
 }
@@ -29,7 +29,7 @@ function semesterLabel(string $sem): string {
 
 <div class="page-header">
     <div>
-        <h1 class="page-title">🔎 Chi tiết đơn đăng ký</h1>
+        <h1 class="page-title"> Chi tiết đơn đăng ký</h1>
         <p class="page-subtitle">Xem trạng thái và thông tin đơn đăng ký phòng của bạn</p>
     </div>
     <div class="page-actions">

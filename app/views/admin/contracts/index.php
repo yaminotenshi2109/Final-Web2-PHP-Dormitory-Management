@@ -15,7 +15,7 @@ $searchQ     = htmlspecialchars($search ?? '');
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">📄 Quản lý hợp đồng</h1>
+    <h1 class="page-title"> Quản lý hợp đồng</h1>
     <p class="page-subtitle">Tổng cộng <?= number_format($total) ?> hợp đồng trong hệ thống</p>
   </div>
 </div>
@@ -24,7 +24,7 @@ $searchQ     = htmlspecialchars($search ?? '');
   <!-- Search Filter bar -->
   <div class="filter-bar">
     <div class="filter-search">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon" aria-hidden="true"></span>
       <input type="text" 
              id="contractSearch" 
              class="form-control" 
@@ -34,7 +34,7 @@ $searchQ     = htmlspecialchars($search ?? '');
     </div>
     <button class="btn btn-primary btn-sm" onclick="doSearch()">Tìm kiếm</button>
     <?php if ($searchQ): ?>
-      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+      <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts" class="btn btn-ghost btn-sm"> Xóa bộ lọc</a>
     <?php endif; ?>
     <span style="margin-left:auto;font-size:12px;color:var(--txt-muted);">
       Hiển thị <?= $from ?>–<?= $to ?> / <?= number_format($total) ?>
@@ -78,16 +78,16 @@ $searchQ     = htmlspecialchars($search ?? '');
                   </div>
                 </div>
               </td>
-              <td><strong>🚪 Tòa <?= htmlspecialchars($c['building_name']) ?> - Phòng <?= htmlspecialchars($c['room_number']) ?></strong></td>
+              <td><strong> Tòa <?= htmlspecialchars($c['building_name']) ?> - Phòng <?= htmlspecialchars($c['room_number']) ?></strong></td>
               <td style="color:var(--txt-secondary);"><?= date('d/m/Y', strtotime($c['start_date'])) ?></td>
               <td style="color:var(--txt-secondary);"><?= date('d/m/Y', strtotime($c['end_date'])) ?></td>
               <td style="font-weight:600;color:var(--txt-primary);"><?= number_format((float)$c['monthly_fee']) ?>đ</td>
               <td><span class="badge <?= $badge[0] ?>"><?= $badge[1] ?></span></td>
               <td>
                 <div style="display:flex;gap:6px;justify-content:center;">
-                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts/<?= (int)$c['id'] ?>" class="btn btn-ghost btn-sm">👁️ Chi tiết</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/contracts/<?= (int)$c['id'] ?>" class="btn btn-ghost btn-sm"> Chi tiết</a>
                   <?php if ($status === 'active'): ?>
-                    <button class="btn btn-danger-outline btn-sm" onclick="terminateContract(<?= (int)$c['id'] ?>, '<?= htmlspecialchars(addslashes($c['student_name'])) ?>')">🛑 Chấm dứt</button>
+                    <button class="btn btn-danger-outline btn-sm" onclick="terminateContract(<?= (int)$c['id'] ?>, '<?= htmlspecialchars(addslashes($c['student_name'])) ?>')"> Chấm dứt</button>
                   <?php endif; ?>
                 </div>
               </td>
@@ -97,7 +97,7 @@ $searchQ     = htmlspecialchars($search ?? '');
           <tr>
             <td colspan="7">
               <div class="empty-state">
-                <div class="empty-icon">📄</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-title">Chưa có hợp đồng nào</div>
                 <div class="empty-msg">Các hợp đồng được tạo tự động khi duyệt đơn đăng ký phòng ở.</div>
               </div>
@@ -149,10 +149,10 @@ function terminateContract(id, name) {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('✅ Đã chấm dứt hợp đồng thành công!');
+            alert(' Đã chấm dứt hợp đồng thành công!');
             location.reload();
         } else {
-            alert('❌ Lỗi: ' + json.message);
+            alert(' Lỗi: ' + json.message);
         }
     })
     .catch(err => alert('Lỗi kết nối: ' + err.message));

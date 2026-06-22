@@ -6,18 +6,18 @@
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">📊 Báo cáo Lấp đầy</h1><p class="page-subtitle">Thống kê tỷ lệ sử dụng phòng KTX</p></div>
+  <div><h1 class="page-title"> Báo cáo Lấp đầy</h1><p class="page-subtitle">Thống kê tỷ lệ sử dụng phòng KTX</p></div>
   <div class="page-actions">
-    <a href="<?= getDynamicUrl('/admin/reports/revenue') ?>" class="btn btn-ghost">💰 Doanh thu</a>
-    <a href="<?= getDynamicUrl('/admin/reports/violations') ?>" class="btn btn-ghost">⚠️ Vi phạm</a>
+    <a href="<?= getDynamicUrl('/admin/reports/revenue') ?>" class="btn btn-ghost"> Doanh thu</a>
+    <a href="<?= getDynamicUrl('/admin/reports/violations') ?>" class="btn btn-ghost"> Vi phạm</a>
   </div>
 </div>
 
 <div class="stat-grid mb-24">
-  <div class="stat-card" style="--stat-color:#6366f1;--stat-icon-bg:#eef2ff"><div class="stat-icon">🚪</div><div><div class="stat-value"><?= number_format($report['total_rooms'] ?? 0) ?></div><div class="stat-label">Tổng phòng</div></div></div>
-  <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#d1fae5"><div class="stat-icon">🛏️</div><div><div class="stat-value"><?= number_format($report['total_beds'] ?? 0) ?></div><div class="stat-label">Tổng giường</div></div></div>
-  <div class="stat-card" style="--stat-color:#8b5cf6;--stat-icon-bg:#ede9fe"><div class="stat-icon">🎓</div><div><div class="stat-value"><?= number_format($report['occupied'] ?? 0) ?></div><div class="stat-label">Đang sử dụng</div></div></div>
-  <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7"><div class="stat-icon">📈</div><div><div class="stat-value"><?= number_format($report['occupancy_rate'] ?? 0, 1) ?>%</div><div class="stat-label">Tỷ lệ lấp đầy</div></div></div>
+  <div class="stat-card" style="--stat-color:#6366f1;--stat-icon-bg:#eef2ff"><div class="stat-icon"></div><div><div class="stat-value"><?= number_format($report['total_rooms'] ?? 0) ?></div><div class="stat-label">Tổng phòng</div></div></div>
+  <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#d1fae5"><div class="stat-icon"></div><div><div class="stat-value"><?= number_format($report['total_beds'] ?? 0) ?></div><div class="stat-label">Tổng giường</div></div></div>
+  <div class="stat-card" style="--stat-color:#8b5cf6;--stat-icon-bg:#ede9fe"><div class="stat-icon"></div><div><div class="stat-value"><?= number_format($report['occupied'] ?? 0) ?></div><div class="stat-label">Đang sử dụng</div></div></div>
+  <div class="stat-card" style="--stat-color:#f59e0b;--stat-icon-bg:#fef3c7"><div class="stat-icon"></div><div><div class="stat-value"><?= number_format($report['occupancy_rate'] ?? 0, 1) ?>%</div><div class="stat-label">Tỷ lệ lấp đầy</div></div></div>
 </div>
 
 <!-- Overall donut -->
@@ -76,6 +76,6 @@
       </table>
     </div>
   <?php else: ?>
-    <div class="empty-state" style="padding:40px"><div class="empty-icon">📊</div><div class="empty-title">Chưa có dữ liệu</div></div>
+    <div class="empty-state" style="padding:40px"><div class="empty-icon" aria-hidden="true"></div><div class="empty-title">Chưa có dữ liệu</div></div>
   <?php endif; ?>
 </div>

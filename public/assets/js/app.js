@@ -145,14 +145,12 @@ async function ktxFetch(url, options = {}) {
 
 // ── Toast notification ──────────────────────────────────────
 function toast(message, type = 'success') {
-  const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
   const div = document.createElement('div');
   div.className = `alert alert-${type}`;
   div.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;max-width:360px;box-shadow:var(--shadow-lg)';
   div.innerHTML = `
-    <span class="alert-icon">${icons[type] || '💬'}</span>
     <div class="alert-content"><p class="alert-msg">${message}</p></div>
-    <button class="alert-close" onclick="this.closest('.alert').remove()">×</button>
+    <button class="alert-close" onclick="this.closest('.alert').remove()" aria-label="Đóng">×</button>
   `;
   document.body.appendChild(div);
   setTimeout(() => { div.style.opacity='0'; div.style.transform='translateX(16px)'; setTimeout(() => div.remove(), 300); }, 4000);

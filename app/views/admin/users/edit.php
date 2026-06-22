@@ -13,7 +13,7 @@ $u = $user ?? [];
 ?>
 
 <div class="page-header">
-  <div><h1 class="page-title">✏️ Sửa tài khoản: <?= htmlspecialchars($u['username'] ?? '') ?></h1></div>
+  <div><h1 class="page-title"> Sửa tài khoản: <?= htmlspecialchars($u['username'] ?? '') ?></h1></div>
   <a href="<?= getDynamicUrl('/admin/users') ?>" class="btn btn-ghost">← Quay lại</a>
 </div>
 
@@ -44,8 +44,8 @@ $u = $user ?? [];
           <label class="form-label" for="role">Vai trò</label>
           <?php $role = $_old['role'] ?? $u['role'] ?? 'student'; ?>
           <select id="role" name="role" class="form-control">
-            <option value="student" <?= $role === 'student' ? 'selected' : '' ?>>🎓 Sinh viên</option>
-            <option value="admin" <?= $role === 'admin' ? 'selected' : '' ?>>👑 Admin</option>
+            <option value="student" <?= $role === 'student' ? 'selected' : '' ?>> Sinh viên</option>
+            <option value="admin" <?= $role === 'admin' ? 'selected' : '' ?>> Admin</option>
           </select>
         </div>
         <div class="form-group">
@@ -61,7 +61,7 @@ $u = $user ?? [];
 
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
         <a href="<?= getDynamicUrl('/admin/users') ?>" class="btn btn-ghost">Hủy</a>
-        <button type="submit" class="btn btn-primary">✅ Cập nhật</button>
+        <button type="submit" class="btn btn-primary"> Cập nhật</button>
       </div>
     </form>
   </div>

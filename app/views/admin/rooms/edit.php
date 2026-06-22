@@ -8,7 +8,7 @@ $r = $room ?? [];
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">✏️ Sửa phòng <?= htmlspecialchars($r['room_number'] ?? '') ?></h1>
+    <h1 class="page-title"> Sửa phòng <?= htmlspecialchars($r['room_number'] ?? '') ?></h1>
     <p class="page-subtitle">Cập nhật thông tin phòng</p>
   </div>
   <a href="<?= getDynamicUrl('/admin/rooms') ?>" class="btn btn-ghost">← Quay lại</a>
@@ -75,15 +75,14 @@ $r = $room ?? [];
       </div>
 
       <div class="form-group">
-        <label class="form-check">
-          <input type="checkbox" name="has_ac" value="1" <?= ($_old['has_ac'] ?? $r['has_ac'] ?? 0) ? 'checked' : '' ?>>
-          <span>❄️ Có điều hòa</span>
+        <label class="form-check"><input type="checkbox" name="has_ac" value="1" <?= ($_old['has_ac'] ?? $r['has_ac'] ?? 0) ? 'checked' : '' ?>>
+          <span> Có điều hòa</span>
         </label>
       </div>
 
       <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:24px;padding-top:20px;border-top:1px solid var(--border)">
         <a href="<?= getDynamicUrl('/admin/rooms') ?>" class="btn btn-ghost">Hủy</a>
-        <button type="submit" class="btn btn-primary">✅ Cập nhật</button>
+        <button type="submit" class="btn btn-primary"> Cập nhật</button>
       </div>
     </form>
   </div>

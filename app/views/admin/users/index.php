@@ -23,13 +23,13 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
 <!-- ── Page Header ──────────────────────────────────────────── -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">👤 Quản lý tài khoản</h1>
+        <h1 class="page-title"> Quản lý tài khoản</h1>
         <p class="page-subtitle">Tổng cộng <?= number_format($total) ?> tài khoản trong hệ thống</p>
     </div>
     <div class="page-actions">
 
         <button class="btn btn-primary" data-modal-open="modalAddUser">
-            ➕ Thêm người dùng
+             Thêm người dùng
         </button>
     </div>
 </div>
@@ -37,7 +37,6 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
 <!-- ── Flash messages ───────────────────────────────────────── -->
 <?php if (!empty($_SESSION['flash_success'])): ?>
     <div class="alert alert-success mb-16">
-        <span class="alert-icon">✅</span>
         <div class="alert-content"><div class="alert-msg"><?= htmlspecialchars($_SESSION['flash_success']) ?></div></div>
         <button class="alert-close" onclick="this.closest('.alert').remove()">×</button>
     </div>
@@ -45,7 +44,6 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
 <?php endif; ?>
 <?php if (!empty($_SESSION['flash_error'])): ?>
     <div class="alert alert-error mb-16">
-        <span class="alert-icon">❌</span>
         <div class="alert-content"><div class="alert-msg"><?= htmlspecialchars($_SESSION['flash_error']) ?></div></div>
         <button class="alert-close" onclick="this.closest('.alert').remove()">×</button>
     </div>
@@ -58,7 +56,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
     <!-- Filter Bar -->
     <div class="filter-bar">
         <div class="filter-search">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon" aria-hidden="true"></span>
             <input type="text"
                    id="searchInput"
                    class="form-control"
@@ -69,18 +67,18 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
 
         <select id="roleFilter" class="form-control" style="width:auto" onchange="applyFilters()">
             <option value="">Tất cả vai trò</option>
-            <option value="admin"   <?= $currentRole === 'admin'   ? 'selected' : '' ?>>🛡️ Quản trị viên</option>
-            <option value="student" <?= $currentRole === 'student' ? 'selected' : '' ?>>🎓 Sinh viên</option>
+            <option value="admin"   <?= $currentRole === 'admin'   ? 'selected' : '' ?>> Quản trị viên</option>
+            <option value="student" <?= $currentRole === 'student' ? 'selected' : '' ?>> Sinh viên</option>
         </select>
 
         <select id="statusFilter" class="form-control" style="width:auto" onchange="applyFilters()">
             <option value="">Tất cả trạng thái</option>
-            <option value="active"   <?= $currentStatus === 'active'   ? 'selected' : '' ?>>✅ Hoạt động</option>
-            <option value="inactive" <?= $currentStatus === 'inactive' ? 'selected' : '' ?>>🔴 Không hoạt động</option>
+            <option value="active"   <?= $currentStatus === 'active'   ? 'selected' : '' ?>> Hoạt động</option>
+            <option value="inactive" <?= $currentStatus === 'inactive' ? 'selected' : '' ?>> Không hoạt động</option>
         </select>
 
         <?php if ($currentQ || $currentRole || $currentStatus): ?>
-            <a href="<?= getDynamicUrl('/admin/users') ?>" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+            <a href="<?= getDynamicUrl('/admin/users') ?>" class="btn btn-ghost btn-sm"> Xóa bộ lọc</a>
         <?php endif; ?>
 
         <span style="margin-left:auto;font-size:12px;color:var(--txt-muted)">
@@ -136,16 +134,16 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                             </td>
                             <td>
                                 <?php if ($role === 'admin'): ?>
-                                    <span class="badge badge-purple">🛡️ Quản trị viên</span>
+                                    <span class="badge badge-purple"> Quản trị viên</span>
                                 <?php else: ?>
-                                    <span class="badge badge-info">🎓 Sinh viên</span>
+                                    <span class="badge badge-info"> Sinh viên</span>
                                 <?php endif; ?>
                             </td>
                             <td>
                                 <?php if ($status === 'active'): ?>
-                                    <span class="badge badge-success">✅ Hoạt động</span>
+                                    <span class="badge badge-success"> Hoạt động</span>
                                 <?php else: ?>
-                                    <span class="badge badge-neutral">🔴 Vô hiệu hóa</span>
+                                    <span class="badge badge-neutral"> Vô hiệu hóa</span>
                                 <?php endif; ?>
                             </td>
                             <td>
@@ -158,17 +156,17 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                                     <button class="btn btn-ghost btn-sm"
                                             title="Sửa"
                                             onclick="openEditUserModal(<?= $uid ?>)">
-                                        ✏️
+                                        
                                     </button>
                                     <button class="btn btn-ghost btn-sm"
                                             title="Đặt lại mật khẩu"
                                             onclick="openResetPasswordModal(<?= $uid ?>, '<?= htmlspecialchars(addslashes($user['username'] ?? '')) ?>')">
-                                        🔑
+                                        
                                     </button>
                                     <button class="btn btn-danger-outline btn-sm"
                                             title="Xóa"
                                             onclick="deleteUser(<?= $uid ?>, '<?= htmlspecialchars(addslashes($user['username'] ?? '')) ?>')">
-                                        🗑️
+                                        
                                     </button>
                                 </div>
                             </td>
@@ -178,7 +176,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                     <tr>
                         <td colspan="8">
                             <div class="empty-state">
-                                <div class="empty-icon">👤</div>
+                                <div class="empty-icon" aria-hidden="true"></div>
                                 <div class="empty-title">Không tìm thấy tài khoản</div>
                                 <div class="empty-msg">
                                     <?php if ($currentQ || $currentRole || $currentStatus): ?>
@@ -254,7 +252,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
 <div class="modal-overlay" id="modalAddUser">
     <div class="modal">
         <div class="modal-header">
-            <div class="modal-title">➕ Thêm người dùng mới</div>
+            <div class="modal-title"> Thêm người dùng mới</div>
             <button class="modal-close" data-modal-close="modalAddUser">×</button>
         </div>
         <form id="formAddUser" onsubmit="submitAddUser(event)">
@@ -296,15 +294,15 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                         <label class="form-label">Vai trò <span class="req">*</span></label>
                         <select name="role" id="add_role" class="form-control"
                                 required onchange="toggleStudentFields('add')">
-                            <option value="student">🎓 Sinh viên</option>
-                            <option value="admin">🛡️ Quản trị viên</option>
+                            <option value="student"> Sinh viên</option>
+                            <option value="admin"> Quản trị viên</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Trạng thái</label>
                         <select name="status" class="form-control">
-                            <option value="active">✅ Hoạt động</option>
-                            <option value="inactive">🔴 Vô hiệu hóa</option>
+                            <option value="active"> Hoạt động</option>
+                            <option value="inactive"> Vô hiệu hóa</option>
                         </select>
                     </div>
                 </div>
@@ -313,7 +311,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                 <div id="add_student_fields">
                     <div style="margin:4px 0 16px;border-top:1px solid var(--border);padding-top:16px">
                         <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--txt-muted);margin-bottom:14px">
-                            📋 Thông tin sinh viên
+                             Thông tin sinh viên
                         </div>
                     </div>
                     <div class="form-row">
@@ -366,7 +364,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" data-modal-close="modalAddUser">Hủy</button>
                 <button type="submit" class="btn btn-primary" id="btnAddUser">
-                    <span>➕ Tạo tài khoản</span>
+                    <span> Tạo tài khoản</span>
                 </button>
             </div>
         </form>
@@ -379,7 +377,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
 <div class="modal-overlay" id="modalEditUser">
     <div class="modal">
         <div class="modal-header">
-            <div class="modal-title">✏️ Sửa tài khoản</div>
+            <div class="modal-title"> Sửa tài khoản</div>
             <button class="modal-close" data-modal-close="modalEditUser">×</button>
         </div>
         <form id="formEditUser" onsubmit="submitEditUser(event)">
@@ -406,15 +404,15 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                     <div class="form-group">
                         <label class="form-label">Vai trò</label>
                         <select name="role" id="edit_role" class="form-control">
-                            <option value="student">🎓 Sinh viên</option>
-                            <option value="admin">🛡️ Quản trị viên</option>
+                            <option value="student"> Sinh viên</option>
+                            <option value="admin"> Quản trị viên</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Trạng thái</label>
                         <select name="status" id="edit_status" class="form-control">
-                            <option value="active">✅ Hoạt động</option>
-                            <option value="inactive">🔴 Vô hiệu hóa</option>
+                            <option value="active"> Hoạt động</option>
+                            <option value="inactive"> Vô hiệu hóa</option>
                         </select>
                     </div>
                 </div>
@@ -467,7 +465,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
             </div><!-- /.modal-body -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" data-modal-close="modalEditUser">Hủy</button>
-                <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
+                <button type="submit" class="btn btn-primary"> Lưu thay đổi</button>
             </div>
         </form>
     </div>
@@ -479,7 +477,7 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
 <div class="modal-overlay" id="modalResetPassword">
     <div class="modal" style="max-width:400px">
         <div class="modal-header">
-            <div class="modal-title">🔑 Đặt lại mật khẩu</div>
+            <div class="modal-title"> Đặt lại mật khẩu</div>
             <button class="modal-close" data-modal-close="modalResetPassword">×</button>
         </div>
         <form id="formResetPassword" onsubmit="submitResetPassword(event)">
@@ -488,7 +486,6 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                 <input type="hidden" name="user_id" id="reset_user_id">
 
                 <div class="alert alert-warning" style="margin-bottom:16px">
-                    <span class="alert-icon">⚠️</span>
                     <div class="alert-content">
                         <div class="alert-msg">
                             Mật khẩu của <strong id="reset_username_label"></strong> sẽ được thay đổi.
@@ -504,15 +501,14 @@ $currentStatus = htmlspecialchars($_GET['status'] ?? '');
                 </div>
 
                 <div class="form-group mb-0">
-                    <label class="form-check">
-                        <input type="checkbox" name="notify_email" checked>
+                    <label class="form-check"><input type="checkbox" name="notify_email" checked>
                         <span style="font-size:13px">Gửi thông báo qua email</span>
                     </label>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" data-modal-close="modalResetPassword">Hủy</button>
-                <button type="submit" class="btn btn-primary">🔑 Đặt lại</button>
+                <button type="submit" class="btn btn-primary"> Đặt lại</button>
             </div>
         </form>
     </div>
@@ -590,7 +586,7 @@ function submitAddUser(e) {
     .then(json => {
         if (json.success) {
             closeModal('modalAddUser');
-            showKtxToast('success', '✅ Tạo tài khoản thành công!');
+            showKtxToast('success', ' Tạo tài khoản thành công!');
             setTimeout(() => location.reload(), 1200);
         } else {
             if (json.errors) {
@@ -606,7 +602,7 @@ function submitAddUser(e) {
     .catch(err => showKtxToast('error', 'Lỗi kết nối: ' + err.message))
     .finally(() => {
         btn.disabled = false;
-        btn.innerHTML = '<span>➕ Tạo tài khoản</span>';
+        btn.innerHTML = '<span> Tạo tài khoản</span>';
     });
 }
 
@@ -653,7 +649,7 @@ function submitEditUser(e) {
     .then(json => {
         if (json.success) {
             closeModal('modalEditUser');
-            showKtxToast('success', '✅ Cập nhật tài khoản thành công!');
+            showKtxToast('success', ' Cập nhật tài khoản thành công!');
             setTimeout(() => location.reload(), 1200);
         } else {
             if (json.errors) {
@@ -685,7 +681,7 @@ function deleteUser(id, username) {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            showKtxToast('success', '🗑️ Đã xóa tài khoản ' + username);
+            showKtxToast('success', ' Đã xóa tài khoản ' + username);
             setTimeout(() => location.reload(), 1200);
         } else {
             showKtxToast('error', json.message || 'Xóa thất bại.');
@@ -718,7 +714,7 @@ function submitResetPassword(e) {
     .then(json => {
         if (json.success) {
             closeModal('modalResetPassword');
-            showKtxToast('success', '🔑 Đặt lại mật khẩu thành công!');
+            showKtxToast('success', ' Đặt lại mật khẩu thành công!');
         } else {
             showKtxToast('error', json.message || 'Đặt lại mật khẩu thất bại.');
         }

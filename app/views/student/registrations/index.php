@@ -17,10 +17,10 @@ foreach ($registrations as $reg) {
 function regStatusBadge(string $status): string {
     return match(strtolower($status)) {
         'pending'  => '<span class="badge badge-warning">⏳ Chờ duyệt</span>',
-        'approved' => '<span class="badge badge-success">✅ Đã duyệt</span>',
-        'rejected' => '<span class="badge badge-danger">❌ Từ chối</span>',
-        'cancelled' => '<span class="badge badge-neutral">🚫 Đã huỷ</span>',
-        'assigned' => '<span class="badge badge-info">🏠 Đã phân phòng</span>',
+        'approved' => '<span class="badge badge-success"> Đã duyệt</span>',
+        'rejected' => '<span class="badge badge-danger"> Từ chối</span>',
+        'cancelled' => '<span class="badge badge-neutral"> Đã huỷ</span>',
+        'assigned' => '<span class="badge badge-info"> Đã phân phòng</span>',
         default    => '<span class="badge badge-neutral">' . htmlspecialchars($status) . '</span>',
     };
 }
@@ -38,17 +38,17 @@ function semesterLabel(string $sem): string {
 <!-- Page Header -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">📋 Đăng ký phòng của tôi</h1>
+        <h1 class="page-title"> Đăng ký phòng của tôi</h1>
         <p class="page-subtitle">Quản lý các đơn đăng ký ký túc xá của bạn</p>
     </div>
     <div class="page-actions">
         <?php if (!$hasActiveReg): ?>
             <a href="<?= getDynamicUrl('/student/registrations/create') ?>" class="btn btn-primary">
-                ➕ Đăng ký mới
+                 Đăng ký mới
             </a>
         <?php else: ?>
             <button class="btn btn-outline" disabled title="Bạn đã có đơn đang chờ xử lý" style="cursor:not-allowed;opacity:.6;">
-                ➕ Đăng ký mới
+                 Đăng ký mới
             </button>
         <?php endif; ?>
         <a href="<?= getDynamicUrl('/student/dashboard') ?>" class="btn btn-ghost">← Về trang chủ</a>
@@ -56,8 +56,7 @@ function semesterLabel(string $sem): string {
 </div>
 
 <?php if ($hasActiveReg): ?>
-    <div class="alert alert-info mb-20" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px 18px;display:flex;gap:12px;align-items:flex-start;">
-        <span style="font-size:18px;">ℹ️</span>
+    <div class="alert alert-info mb-20" style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px 18px;">
         <div style="font-size:14px;color:#1e40af;">
             Bạn đang có đơn đăng ký đang chờ xử lý hoặc đã được duyệt. Vui lòng chờ kết quả trước khi tạo đơn mới.
         </div>
@@ -69,13 +68,13 @@ function semesterLabel(string $sem): string {
     <div class="card">
         <div class="card-body">
             <div class="empty-state" style="padding:60px 20px;text-align:center;">
-                <div style="font-size:64px;margin-bottom:16px;">📭</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <h3 style="font-weight:700;color:#374151;font-size:18px;margin-bottom:8px;">Chưa có đơn đăng ký nào</h3>
                 <p style="color:#6b7280;font-size:14px;margin-bottom:24px;max-width:320px;margin-left:auto;margin-right:auto;">
                     Bạn chưa có đơn đăng ký phòng ký túc xá nào. Hãy tạo đơn đăng ký để được sắp xếp phòng ở.
                 </p>
                 <a href="<?= getDynamicUrl('/student/registrations/create') ?>" class="btn btn-primary">
-                    ➕ Tạo đơn đăng ký ngay
+                     Tạo đơn đăng ký ngay
                 </a>
             </div>
         </div>
@@ -109,7 +108,7 @@ function semesterLabel(string $sem): string {
                         <!-- Left info -->
                         <div style="flex:1;min-width:220px;">
                             <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;">
-                                <span style="font-size:20px;">🗓️</span>
+                                <span style="font-size:20px;"></span>
                                 <h3 style="font-weight:700;font-size:16px;color:#1e293b;margin:0;">
                                     <?= semesterLabel((string)$semester) ?> — <?= htmlspecialchars($year) ?>
                                 </h3>
@@ -128,7 +127,7 @@ function semesterLabel(string $sem): string {
                                     <div style="font-size:11px;color:#94a3b8;font-weight:600;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;">Phòng được phân</div>
                                     <div style="font-weight:600;color:#374151;font-size:13.5px;">
                                         <?php if ($roomNum): ?>
-                                            🏠 Phòng <?= htmlspecialchars($roomNum) ?>
+                                             Phòng <?= htmlspecialchars($roomNum) ?>
                                             <?php if ($floor): ?>(Tầng <?= htmlspecialchars($floor) ?>)<?php endif; ?>
                                         <?php else: ?>
                                             <span style="color:#94a3b8;">Chưa phân phòng</span>
@@ -154,13 +153,13 @@ function semesterLabel(string $sem): string {
                         <!-- Right actions -->
                         <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-end;flex-shrink:0;">
                             <a href="<?= getDynamicUrl('/student/registrations/' . $regId) ?>" class="btn btn-outline btn-sm">
-                                👁️ Chi tiết
+                                 Chi tiết
                             </a>
                             <?php if ($isPending): ?>
                                 <button class="btn btn-danger btn-sm"
                                         onclick="confirmCancel(<?= $regId ?>)"
                                         data-reg-id="<?= $regId ?>">
-                                    🚫 Huỷ đơn
+                                     Huỷ đơn
                                 </button>
                             <?php endif; ?>
                         </div>
@@ -175,7 +174,6 @@ function semesterLabel(string $sem): string {
 <div class="modal-overlay" id="cancelModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;align-items:center;justify-content:center;">
     <div class="modal" style="background:#fff;border-radius:16px;padding:28px;max-width:420px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
         <div style="text-align:center;margin-bottom:20px;">
-            <div style="font-size:48px;margin-bottom:12px;">🚫</div>
             <h3 style="font-weight:700;font-size:18px;color:#1e293b;margin-bottom:8px;">Xác nhận huỷ đơn</h3>
             <p style="color:#6b7280;font-size:14px;">Bạn có chắc chắn muốn huỷ đơn đăng ký này không? Hành động này không thể hoàn tác.</p>
         </div>

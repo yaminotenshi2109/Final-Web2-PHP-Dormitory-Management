@@ -8,7 +8,7 @@
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">📄 Hợp đồng của tôi</h1>
+    <h1 class="page-title"> Hợp đồng của tôi</h1>
     <p class="page-subtitle">Xem lịch sử và trạng thái các hợp đồng thuê phòng</p>
   </div>
 </div>
@@ -41,14 +41,14 @@
             ?>
             <tr>
               <td><strong>#<?= (int)$c['id'] ?></strong></td>
-              <td><strong>🚪 Tòa <?= htmlspecialchars($c['building_name']) ?> - Phòng <?= htmlspecialchars($c['room_number']) ?></strong></td>
+              <td><strong> Tòa <?= htmlspecialchars($c['building_name']) ?> - Phòng <?= htmlspecialchars($c['room_number']) ?></strong></td>
               <td style="color:var(--txt-secondary);"><?= date('d/m/Y', strtotime($c['start_date'])) ?></td>
               <td style="color:var(--txt-secondary);"><?= date('d/m/Y', strtotime($c['end_date'])) ?></td>
               <td style="font-weight:600;color:var(--txt-primary);"><?= number_format((float)$c['monthly_fee']) ?> ₫</td>
               <td><span class="badge <?= $badge[0] ?>"><?= $badge[1] ?></span></td>
               <td>
                 <div style="display:flex;justify-content:center;">
-                  <a href="<?= getDynamicUrl('/student/contracts/' . $c['id']) ?>" class="btn btn-ghost btn-sm">👁️ Chi tiết</a>
+                  <a href="<?= getDynamicUrl('/student/contracts/' . $c['id']) ?>" class="btn btn-ghost btn-sm"> Chi tiết</a>
                 </div>
               </td>
             </tr>
@@ -57,7 +57,7 @@
           <tr>
             <td colspan="7">
               <div class="empty-state">
-                <div class="empty-icon">📄</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-title">Chưa có hợp đồng nào</div>
                 <div class="empty-msg">Hợp đồng sẽ được tạo khi đăng ký phòng của bạn được duyệt.</div>
               </div>

@@ -25,39 +25,38 @@ $currentStatus  = htmlspecialchars($_GET['status']   ?? '');
 
 // Status config
 $statusConfig = [
-    'available'   => ['badge-success', '✅ Còn trống'],
-    'full'        => ['badge-danger',  '🔴 Đầy'],
-    'maintenance' => ['badge-warning', '🔧 Bảo trì'],
-    'inactive'    => ['badge-neutral', '⛔ Không hoạt động'],
+    'available'   => ['badge-success', ' Còn trống'],
+    'full'        => ['badge-danger',  ' Đầy'],
+    'maintenance' => ['badge-warning', ' Bảo trì'],
+    'inactive'    => ['badge-neutral', ' Không hoạt động'],
 ];
 
 // Room type labels
 $typeLabels = [
-    'single'  => '👤 Đơn',
-    'double'  => '👥 Đôi',
-    'triple'  => '👥 Ba người',
-    'quad'    => '👥 Bốn người',
-    'dormitory'=> '🏠 Tập thể',
+    'single'  => ' Đơn',
+    'double'  => ' Đôi',
+    'triple'  => ' Ba người',
+    'quad'    => ' Bốn người',
+    'dormitory'=> ' Tập thể',
 ];
 ?>
 
 <!-- ── Page Header ──────────────────────────────────────────── -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">🚪 Quản lý phòng</h1>
+        <h1 class="page-title"> Quản lý phòng</h1>
         <p class="page-subtitle">Tổng cộng <?= number_format($total) ?> phòng trong hệ thống</p>
     </div>
     <div class="page-actions">
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms/map" class="btn btn-outline btn-sm">🗺️ Sơ đồ phòng</a>
+        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms/map" class="btn btn-outline btn-sm"> Sơ đồ phòng</a>
 
-        <button class="btn btn-primary" data-modal-open="modalAddRoom">➕ Thêm phòng</button>
+        <button class="btn btn-primary" data-modal-open="modalAddRoom"> Thêm phòng</button>
     </div>
 </div>
 
 <!-- ── Flash messages ───────────────────────────────────────── -->
 <?php if (!empty($_SESSION['flash_success'])): ?>
     <div class="alert alert-success mb-16">
-        <span class="alert-icon">✅</span>
         <div class="alert-content"><div class="alert-msg"><?= htmlspecialchars($_SESSION['flash_success']) ?></div></div>
         <button class="alert-close" onclick="this.closest('.alert').remove()">×</button>
     </div>
@@ -65,7 +64,6 @@ $typeLabels = [
 <?php endif; ?>
 <?php if (!empty($_SESSION['flash_error'])): ?>
     <div class="alert alert-error mb-16">
-        <span class="alert-icon">❌</span>
         <div class="alert-content"><div class="alert-msg"><?= htmlspecialchars($_SESSION['flash_error']) ?></div></div>
         <button class="alert-close" onclick="this.closest('.alert').remove()">×</button>
     </div>
@@ -84,19 +82,19 @@ $typeLabels = [
 ?>
 <div style="display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap">
     <div style="flex:1;min-width:140px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;display:flex;align-items:center;gap:10px;border-left:3px solid #10b981">
-        <span style="font-size:22px">✅</span>
+        <span style="font-size:22px"></span>
         <div><div style="font-size:20px;font-weight:800;color:#10b981"><?= number_format($availableCount) ?></div><div style="font-size:11px;color:var(--txt-muted);text-transform:uppercase">Còn trống</div></div>
     </div>
     <div style="flex:1;min-width:140px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;display:flex;align-items:center;gap:10px;border-left:3px solid #ef4444">
-        <span style="font-size:22px">🔴</span>
+        <span style="font-size:22px"></span>
         <div><div style="font-size:20px;font-weight:800;color:#ef4444"><?= number_format($fullCount) ?></div><div style="font-size:11px;color:var(--txt-muted);text-transform:uppercase">Đầy</div></div>
     </div>
     <div style="flex:1;min-width:140px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;display:flex;align-items:center;gap:10px;border-left:3px solid #f59e0b">
-        <span style="font-size:22px">🔧</span>
+        <span style="font-size:22px"></span>
         <div><div style="font-size:20px;font-weight:800;color:#f59e0b"><?= number_format($maintenanceCount) ?></div><div style="font-size:11px;color:var(--txt-muted);text-transform:uppercase">Bảo trì</div></div>
     </div>
     <div style="flex:1;min-width:140px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;display:flex;align-items:center;gap:10px;border-left:3px solid #6366f1">
-        <span style="font-size:22px">🚪</span>
+        <span style="font-size:22px"></span>
         <div><div style="font-size:20px;font-weight:800;color:#6366f1"><?= number_format($total) ?></div><div style="font-size:11px;color:var(--txt-muted);text-transform:uppercase">Tổng phòng</div></div>
     </div>
 </div>
@@ -107,7 +105,7 @@ $typeLabels = [
     <!-- Filter Bar -->
     <div class="filter-bar">
         <div class="filter-search">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon" aria-hidden="true"></span>
             <input type="text"
                    id="searchInput"
                    class="form-control"
@@ -121,21 +119,21 @@ $typeLabels = [
             <?php foreach (($buildings ?? []) as $b): ?>
                 <option value="<?= (int)$b['id'] ?>"
                         <?= (string)($b['id'] ?? '') === $currentBuilding ? 'selected' : '' ?>>
-                    🏢 <?= htmlspecialchars($b['name'] ?? '') ?>
+                     <?= htmlspecialchars($b['name'] ?? '') ?>
                 </option>
             <?php endforeach; ?>
         </select>
 
         <select id="statusFilter" class="form-control" style="width:auto" onchange="applyFilters()">
             <option value="">Tất cả trạng thái</option>
-            <option value="available"   <?= $currentStatus === 'available'   ? 'selected' : '' ?>>✅ Còn trống</option>
-            <option value="full"        <?= $currentStatus === 'full'        ? 'selected' : '' ?>>🔴 Đầy</option>
-            <option value="maintenance" <?= $currentStatus === 'maintenance' ? 'selected' : '' ?>>🔧 Bảo trì</option>
-            <option value="inactive"    <?= $currentStatus === 'inactive'    ? 'selected' : '' ?>>⛔ Không hoạt động</option>
+            <option value="available"   <?= $currentStatus === 'available'   ? 'selected' : '' ?>> Còn trống</option>
+            <option value="full"        <?= $currentStatus === 'full'        ? 'selected' : '' ?>> Đầy</option>
+            <option value="maintenance" <?= $currentStatus === 'maintenance' ? 'selected' : '' ?>> Bảo trì</option>
+            <option value="inactive"    <?= $currentStatus === 'inactive'    ? 'selected' : '' ?>> Không hoạt động</option>
         </select>
 
         <?php if ($currentQ || $currentBuilding || $currentStatus): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms" class="btn btn-ghost btn-sm">✕ Xóa bộ lọc</a>
+            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms" class="btn btn-ghost btn-sm"> Xóa bộ lọc</a>
         <?php endif; ?>
 
         <span style="margin-left:auto;font-size:12px;color:var(--txt-muted)">
@@ -192,7 +190,7 @@ $typeLabels = [
                             <!-- Tòa nhà -->
                             <td>
                                 <div style="display:flex;align-items:center;gap:6px">
-                                    <span style="font-size:16px">🏢</span>
+                                    <span style="font-size:16px"></span>
                                     <span style="font-weight:500"><?= htmlspecialchars($room['building_name'] ?? '—') ?></span>
                                 </div>
                             </td>
@@ -235,7 +233,7 @@ $typeLabels = [
                             <!-- AC -->
                             <td style="text-align:center">
                                 <?php if ($hasAc): ?>
-                                    <span title="Có điều hòa" style="font-size:18px">❄️</span>
+                                    <span title="Có điều hòa" style="font-size:18px"></span>
                                 <?php else: ?>
                                     <span title="Không có điều hòa" style="font-size:16px;opacity:.3">—</span>
                                 <?php endif; ?>
@@ -246,17 +244,17 @@ $typeLabels = [
                                 <div style="display:flex;gap:4px;justify-content:center">
                                     <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms/<?= $rid ?>"
                                        class="btn btn-ghost btn-sm" title="Xem chi tiết">
-                                        👁️
+                                        
                                     </a>
                                     <button class="btn btn-ghost btn-sm"
                                             title="Sửa"
                                             onclick="openEditRoomModal(<?= $rid ?>)">
-                                        ✏️
+                                        
                                     </button>
                                     <button class="btn btn-danger-outline btn-sm"
                                             title="Xóa"
                                             onclick="deleteRoom(<?= $rid ?>, '<?= htmlspecialchars(addslashes($room['room_number'] ?? '')) ?>')">
-                                        🗑️
+                                        
                                     </button>
                                 </div>
                             </td>
@@ -266,7 +264,7 @@ $typeLabels = [
                     <tr>
                         <td colspan="9">
                             <div class="empty-state">
-                                <div class="empty-icon">🚪</div>
+                                <div class="empty-icon" aria-hidden="true"></div>
                                 <div class="empty-title">Không tìm thấy phòng</div>
                                 <div class="empty-msg">
                                     <?php if ($currentQ || $currentBuilding || $currentStatus): ?>
@@ -343,7 +341,7 @@ $typeLabels = [
 <div class="modal-overlay" id="modalAddRoom">
     <div class="modal" style="max-width:580px">
         <div class="modal-header">
-            <div class="modal-title">➕ Thêm phòng mới</div>
+            <div class="modal-title"> Thêm phòng mới</div>
             <button class="modal-close" data-modal-close="modalAddRoom">×</button>
         </div>
         <form id="formAddRoom" onsubmit="submitAddRoom(event)">
@@ -381,11 +379,11 @@ $typeLabels = [
                         <label class="form-label">Loại phòng <span class="req">*</span></label>
                         <select name="room_type" class="form-control" required>
                             <option value="">-- Chọn loại --</option>
-                            <option value="single">👤 Đơn</option>
-                            <option value="double">👥 Đôi</option>
-                            <option value="triple">👥 Ba người</option>
-                            <option value="quad">👥 Bốn người</option>
-                            <option value="dormitory">🏠 Tập thể</option>
+                            <option value="single"> Đơn</option>
+                            <option value="double"> Đôi</option>
+                            <option value="triple"> Ba người</option>
+                            <option value="quad"> Bốn người</option>
+                            <option value="dormitory"> Tập thể</option>
                         </select>
                     </div>
                 </div>
@@ -407,15 +405,14 @@ $typeLabels = [
                     <div class="form-group">
                         <label class="form-label">Trạng thái</label>
                         <select name="status" class="form-control">
-                            <option value="available">✅ Còn trống</option>
-                            <option value="maintenance">🔧 Bảo trì</option>
-                            <option value="inactive">⛔ Không hoạt động</option>
+                            <option value="available"> Còn trống</option>
+                            <option value="maintenance"> Bảo trì</option>
+                            <option value="inactive"> Không hoạt động</option>
                         </select>
                     </div>
                     <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:4px">
-                        <label class="form-check">
-                            <input type="checkbox" name="has_ac" value="1">
-                            <span style="font-size:13.5px">❄️ Có điều hòa nhiệt độ</span>
+                        <label class="form-check"><input type="checkbox" name="has_ac" value="1">
+                            <span style="font-size:13.5px"> Có điều hòa nhiệt độ</span>
                         </label>
                     </div>
                 </div>
@@ -431,7 +428,7 @@ $typeLabels = [
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" data-modal-close="modalAddRoom">Hủy</button>
                 <button type="submit" class="btn btn-primary" id="btnAddRoom">
-                    <span>➕ Thêm phòng</span>
+                    <span> Thêm phòng</span>
                 </button>
             </div>
         </form>
@@ -444,7 +441,7 @@ $typeLabels = [
 <div class="modal-overlay" id="modalEditRoom">
     <div class="modal" style="max-width:580px">
         <div class="modal-header">
-            <div class="modal-title">✏️ Sửa thông tin phòng</div>
+            <div class="modal-title"> Sửa thông tin phòng</div>
             <button class="modal-close" data-modal-close="modalEditRoom">×</button>
         </div>
         <form id="formEditRoom" onsubmit="submitEditRoom(event)">
@@ -481,11 +478,11 @@ $typeLabels = [
                     <div class="form-group">
                         <label class="form-label">Loại phòng</label>
                         <select name="room_type" id="edit_room_type" class="form-control">
-                            <option value="single">👤 Đơn</option>
-                            <option value="double">👥 Đôi</option>
-                            <option value="triple">👥 Ba người</option>
-                            <option value="quad">👥 Bốn người</option>
-                            <option value="dormitory">🏠 Tập thể</option>
+                            <option value="single"> Đơn</option>
+                            <option value="double"> Đôi</option>
+                            <option value="triple"> Ba người</option>
+                            <option value="quad"> Bốn người</option>
+                            <option value="dormitory"> Tập thể</option>
                         </select>
                     </div>
                 </div>
@@ -507,16 +504,15 @@ $typeLabels = [
                     <div class="form-group">
                         <label class="form-label">Trạng thái</label>
                         <select name="status" id="edit_status" class="form-control">
-                            <option value="available">✅ Còn trống</option>
-                            <option value="full">🔴 Đầy</option>
-                            <option value="maintenance">🔧 Bảo trì</option>
-                            <option value="inactive">⛔ Không hoạt động</option>
+                            <option value="available"> Còn trống</option>
+                            <option value="full"> Đầy</option>
+                            <option value="maintenance"> Bảo trì</option>
+                            <option value="inactive"> Không hoạt động</option>
                         </select>
                     </div>
                     <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:4px">
-                        <label class="form-check">
-                            <input type="checkbox" name="has_ac" id="edit_has_ac" value="1">
-                            <span style="font-size:13.5px">❄️ Có điều hòa nhiệt độ</span>
+                        <label class="form-check"><input type="checkbox" name="has_ac" id="edit_has_ac" value="1">
+                            <span style="font-size:13.5px"> Có điều hòa nhiệt độ</span>
                         </label>
                     </div>
                 </div>
@@ -529,7 +525,7 @@ $typeLabels = [
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-ghost" data-modal-close="modalEditRoom">Hủy</button>
-                <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
+                <button type="submit" class="btn btn-primary"> Lưu thay đổi</button>
             </div>
         </form>
     </div>
@@ -593,7 +589,7 @@ function submitAddRoom(e) {
     .then(json => {
         if (json.success) {
             closeModal('modalAddRoom');
-            showKtxToast('success', '✅ Thêm phòng thành công!');
+            showKtxToast('success', ' Thêm phòng thành công!');
             setTimeout(() => location.reload(), 1200);
         } else {
             if (json.errors) {
@@ -609,7 +605,7 @@ function submitAddRoom(e) {
     .catch(err => showKtxToast('error', 'Lỗi kết nối: ' + err.message))
     .finally(() => {
         btn.disabled = false;
-        btn.innerHTML = '<span>➕ Thêm phòng</span>';
+        btn.innerHTML = '<span> Thêm phòng</span>';
     });
 }
 
@@ -654,7 +650,7 @@ function submitEditRoom(e) {
     .then(json => {
         if (json.success) {
             closeModal('modalEditRoom');
-            showKtxToast('success', '✅ Cập nhật phòng thành công!');
+            showKtxToast('success', ' Cập nhật phòng thành công!');
             setTimeout(() => location.reload(), 1200);
         } else {
             showKtxToast('error', json.message || 'Cập nhật thất bại.');
@@ -671,7 +667,7 @@ function deleteRoom(id, roomNumber) {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            showKtxToast('success', '🗑️ Đã xóa phòng ' + roomNumber);
+            showKtxToast('success', ' Đã xóa phòng ' + roomNumber);
             setTimeout(() => location.reload(), 1200);
         } else {
             showKtxToast('error', json.message || 'Xóa thất bại. Phòng có thể đang được sử dụng.');

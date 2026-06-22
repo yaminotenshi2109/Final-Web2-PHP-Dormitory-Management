@@ -15,7 +15,7 @@ $unpaidTotal = (float)($unpaidStats['total'] ?? 0);
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">📈 Báo cáo doanh thu</h1>
+    <h1 class="page-title"> Báo cáo doanh thu</h1>
     <p class="page-subtitle">Thống kê tài chính và các khoản thu hộ tiền phòng ký túc xá</p>
   </div>
 </div>
@@ -23,7 +23,7 @@ $unpaidTotal = (float)($unpaidStats['total'] ?? 0);
 <div class="stat-grid mb-24">
   <!-- Tổng đã thu -->
   <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#d1fae5;">
-    <div class="stat-icon">💰</div>
+    <div class="stat-icon"></div>
     <div>
       <div class="stat-value"><?= number_format($totalCollected) ?>đ</div>
       <div class="stat-label">Tổng đã thu (12 tháng qua)</div>
@@ -43,7 +43,7 @@ $unpaidTotal = (float)($unpaidStats['total'] ?? 0);
 <div class="grid-2" style="grid-template-columns: 2fr 1.2fr; gap: 24px;">
   <!-- Doanh thu theo tháng -->
   <div class="card" style="padding:24px;">
-    <h3 style="font-size: 15px; font-weight: 800; color: var(--txt-primary); margin-bottom: 16px;">📊 Biểu đồ doanh thu 12 tháng qua</h3>
+    <h3 style="font-size: 15px; font-weight: 800; color: var(--txt-primary); margin-bottom: 16px;"> Biểu đồ doanh thu 12 tháng qua</h3>
     <div class="table-wrapper">
       <table>
         <thead>
@@ -66,7 +66,7 @@ $unpaidTotal = (float)($unpaidStats['total'] ?? 0);
             <tr>
               <td colspan="3">
                 <div class="empty-state">
-                  <div class="empty-icon">📈</div>
+                  <div class="empty-icon" aria-hidden="true"></div>
                   <div class="empty-title">Chưa có dữ liệu doanh thu</div>
                 </div>
               </td>
@@ -79,7 +79,7 @@ $unpaidTotal = (float)($unpaidStats['total'] ?? 0);
 
   <!-- Phương thức thanh toán -->
   <div class="card" style="padding:24px;">
-    <h3 style="font-size: 15px; font-weight: 800; color: var(--txt-primary); margin-bottom: 16px;">💳 Cơ cấu phương thức thanh toán</h3>
+    <h3 style="font-size: 15px; font-weight: 800; color: var(--txt-primary); margin-bottom: 16px;"> Cơ cấu phương thức thanh toán</h3>
     <div class="table-wrapper">
       <table>
         <thead>
@@ -94,8 +94,8 @@ $unpaidTotal = (float)($unpaidStats['total'] ?? 0);
             <?php foreach ($paymentMethods as $pm): ?>
               <?php 
                 $methodLabel = match($pm['payment_method']) {
-                    'cash' => '💵 Tiền mặt',
-                    'bank' => '🏦 Chuyển khoản',
+                    'cash' => ' Tiền mặt',
+                    'bank' => ' Chuyển khoản',
                     'vnpay' => ' VNPay',
                     'momo' => ' MoMo',
                     default => $pm['payment_method']
@@ -111,7 +111,7 @@ $unpaidTotal = (float)($unpaidStats['total'] ?? 0);
             <tr>
               <td colspan="3">
                 <div class="empty-state">
-                  <div class="empty-icon">💳</div>
+                  <div class="empty-icon" aria-hidden="true"></div>
                   <div class="empty-title">Chưa có thống kê phương thức</div>
                 </div>
               </td>

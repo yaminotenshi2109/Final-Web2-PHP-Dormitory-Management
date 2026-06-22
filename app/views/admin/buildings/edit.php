@@ -22,7 +22,7 @@ $address = htmlspecialchars($building['address']);
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🏢 Chỉnh sửa tòa nhà</h1>
+    <h1 class="page-title"> Chỉnh sửa tòa nhà</h1>
     <p class="page-subtitle">Cập nhật thông tin chi tiết cho tòa nhà <?= $name ?></p>
   </div>
   <div class="page-actions">
@@ -93,7 +93,7 @@ $address = htmlspecialchars($building['address']);
     </div>
     <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
       <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings" class="btn btn-ghost">Hủy</a>
-      <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
+      <button type="submit" class="btn btn-primary"> Lưu thay đổi</button>
     </div>
   </form>
 </div>

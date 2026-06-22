@@ -9,12 +9,12 @@
 <!-- Page Header -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">⚠️ <?= htmlspecialchars($title ?? 'Quản lý vi phạm') ?></h1>
+        <h1 class="page-title"> <?= htmlspecialchars($title ?? 'Quản lý vi phạm') ?></h1>
         <p class="page-subtitle">Theo dõi và xử lý các vi phạm nội quy của sinh viên</p>
     </div>
     <div class="page-actions">
         <button class="btn btn-primary" data-modal-open="modal-add-violation">
-            ➕ Ghi nhận vi phạm
+             Ghi nhận vi phạm
         </button>
     </div>
 </div>
@@ -27,7 +27,7 @@
                 type="text"
                 name="search"
                 class="form-control"
-                placeholder="🔍 Tìm theo tên sinh viên, mã SV..."
+                placeholder="Tìm theo tên sinh viên, mã SV..."
                 value="<?= htmlspecialchars($search ?? '') ?>"
             >
         </div>
@@ -103,7 +103,7 @@
                                 <td><?= htmlspecialchars($v['violation_type'] ?? '—') ?></td>
                                 <td style="text-align:center">
                                     <span style="color:#ef4444;font-weight:700;font-size:1rem">
-                                        ⚠️ <?= (int)($v['penalty_points'] ?? 0) ?>
+                                         <?= (int)($v['penalty_points'] ?? 0) ?>
                                     </span>
                                 </td>
                                 <td style="text-align:center">
@@ -121,14 +121,14 @@
                                 <td style="text-align:center">
                                     <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
                                         <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>"
-                                           class="btn btn-ghost btn-sm">👁 Chi tiết</a>
+                                           class="btn btn-ghost btn-sm"> Chi tiết</a>
                                         <?php if (($v['status'] ?? '') !== 'dismissed'): ?>
                                             <form method="POST"
                                                   action="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>/dismiss"
                                                   onsubmit="return confirm('Xác nhận hủy vi phạm này?')"
                                                   style="display:inline">
                                                 <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-                                                <button type="submit" class="btn btn-outline btn-sm">🚫 Hủy</button>
+                                                <button type="submit" class="btn btn-outline btn-sm"> Hủy</button>
                                             </form>
                                         <?php endif; ?>
                                     </div>
@@ -140,7 +140,7 @@
             </div>
         <?php else: ?>
             <div class="empty-state">
-                <div class="empty-state-icon">✅</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-state-title">Không có vi phạm nào</div>
                 <div class="empty-state-desc">Không tìm thấy bản ghi vi phạm phù hợp với bộ lọc hiện tại.</div>
             </div>
@@ -178,16 +178,15 @@
     <div class="modal" onclick="event.stopPropagation()">
         <div class="card">
             <div class="card-header" style="display:flex;justify-content:space-between;align-items:center">
-                <h3 class="card-title">⚠️ Ghi nhận vi phạm</h3>
-                <button class="btn btn-ghost btn-sm" data-modal-close="modal-add-violation">✕</button>
+                <h3 class="card-title"> Ghi nhận vi phạm</h3>
+                <button class="btn btn-ghost btn-sm" data-modal-close="modal-add-violation"></button>
             </div>
             <div class="card-body">
                 <form id="form-add-violation" novalidate>
                     <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
 
                     <div class="form-group">
-                        <label class="form-label" for="fv-student-id">
-                            Mã sinh viên (ID) <span style="color:#ef4444">*</span>
+                        <label class="form-label" for="fv-student-id">Mã sinh viên (ID) <span style="color:#ef4444">*</span>
                         </label>
                         <input
                             type="number"
@@ -202,8 +201,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="fv-type">
-                            Loại vi phạm <span style="color:#ef4444">*</span>
+                        <label class="form-label" for="fv-type">Loại vi phạm <span style="color:#ef4444">*</span>
                         </label>
                         <select id="fv-type" name="violation_type" class="form-control" required>
                             <option value="">-- Chọn loại vi phạm --</option>
@@ -228,8 +226,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="fv-points">
-                            Điểm trừ tùy chỉnh
+                        <label class="form-label" for="fv-points">Điểm trừ tùy chỉnh
                         </label>
                         <input
                             type="number"
@@ -248,7 +245,7 @@
             </div>
             <div class="card-footer" style="display:flex;justify-content:flex-end;gap:10px">
                 <button class="btn btn-outline" data-modal-close="modal-add-violation">Hủy</button>
-                <button class="btn btn-primary" id="btn-submit-violation">💾 Ghi nhận</button>
+                <button class="btn btn-primary" id="btn-submit-violation"> Ghi nhận</button>
             </div>
         </div>
     </div>
@@ -315,7 +312,7 @@
             ktxFetch('POST', '/Final-Web2-PHP-Dormitory-Management/public/api/violations', data)
                 .then(function (res) {
                     if (res && res.success) {
-                        alert.innerHTML = '<div class="alert alert-success">✅ Ghi nhận vi phạm thành công!</div>';
+                        alert.innerHTML = '<div class="alert alert-success"> Ghi nhận vi phạm thành công!</div>';
                         alert.style.display = 'block';
                         setTimeout(function () { location.reload(); }, 1200);
                     } else {
@@ -323,10 +320,10 @@
                     }
                 })
                 .catch(function (err) {
-                    alert.innerHTML = '<div class="alert alert-danger">❌ ' + (err.message || 'Có lỗi xảy ra.') + '</div>';
+                    alert.innerHTML = '<div class="alert alert-danger"> ' + (err.message || 'Có lỗi xảy ra.') + '</div>';
                     alert.style.display = 'block';
                     submitBtn.disabled = false;
-                    submitBtn.textContent = '💾 Ghi nhận';
+                    submitBtn.textContent = ' Ghi nhận';
                 });
         });
     }

@@ -256,12 +256,12 @@
             <input type="hidden" id="appealViolationId">
 
             <div style="padding: 1rem; background: #E6F1FB; border-radius: 4px; margin-bottom: 1rem;">
-                <div style="font-weight: 500; margin-bottom: 8px;">📋 Vi phạm</div>
+                <div style="font-weight: 500; margin-bottom: 8px;"> Vi phạm</div>
                 <div style="font-size: 14px;" id="appealViolationInfo"></div>
             </div>
 
             <div style="padding: 1rem; background: #FEF3E3; border-radius: 4px; margin-bottom: 1rem;">
-                <div style="font-weight: 500; margin-bottom: 8px;">💬 Lý do khiếu nại</div>
+                <div style="font-weight: 500; margin-bottom: 8px;"> Lý do khiếu nại</div>
                 <div style="font-size: 14px;" id="appealReasonText"></div>
             </div>
 

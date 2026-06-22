@@ -28,12 +28,12 @@ $currentYear = (int)date('Y');
 <!-- Page Header -->
 <div class="page-header">
     <div>
-        <h1 class="page-title">🧾 <?= htmlspecialchars($title ?? 'Quản lý hóa đơn') ?></h1>
+        <h1 class="page-title"> <?= htmlspecialchars($title ?? 'Quản lý hóa đơn') ?></h1>
         <p class="page-subtitle">Quản lý thu tiền phòng và các khoản phí dịch vụ</p>
     </div>
     <div class="page-actions">
         <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/generate" class="btn btn-primary">
-            ➕ Tạo hóa đơn
+             Tạo hóa đơn
         </a>
     </div>
 </div>
@@ -41,7 +41,7 @@ $currentYear = (int)date('Y');
 <!-- Summary Cards -->
 <div class="stat-grid" style="margin-bottom:1.5rem">
     <div class="stat-card" style="--stat-color:#6366f1;--stat-icon-bg:#eef2ff">
-        <div class="stat-icon">📄</div>
+        <div class="stat-icon"></div>
         <div class="stat-info">
             <div class="stat-value"><?= $totalCount ?></div>
             <div class="stat-label">Tổng hóa đơn</div>
@@ -55,7 +55,7 @@ $currentYear = (int)date('Y');
         </div>
     </div>
     <div class="stat-card" style="--stat-color:#10b981;--stat-icon-bg:#ecfdf5">
-        <div class="stat-icon">💰</div>
+        <div class="stat-icon"></div>
         <div class="stat-info">
             <div class="stat-value"><?= number_format($totalCollected, 0, ',', '.') ?>₫</div>
             <div class="stat-label">Đã thu (trang này)</div>
@@ -180,14 +180,14 @@ $currentYear = (int)date('Y');
                             <td style="text-align:center">
                                 <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
                                     <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= (int)$inv['id'] ?>"
-                                       class="btn btn-ghost btn-sm">👁 Xem</a>
+                                       class="btn btn-ghost btn-sm"> Xem</a>
                                     <?php if (($inv['status'] ?? '') === 'unpaid' || ($inv['status'] ?? '') === 'overdue'): ?>
                                         <form method="POST"
                                               action="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/<?= (int)$inv['id'] ?>/mark-paid"
                                               onsubmit="return confirm('Xác nhận đánh dấu hóa đơn #<?= (int)$inv['id'] ?> là đã thanh toán?')"
                                               style="display:inline">
                                             <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
-                                            <button type="submit" class="btn btn-primary btn-sm">✅ Đã thu</button>
+                                            <button type="submit" class="btn btn-primary btn-sm"> Đã thu</button>
                                         </form>
                                     <?php endif; ?>
                                 </div>
@@ -199,11 +199,11 @@ $currentYear = (int)date('Y');
             </div>
         <?php else: ?>
             <div class="empty-state">
-                <div class="empty-state-icon">🧾</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-state-title">Không có hóa đơn nào</div>
                 <div class="empty-state-desc">Không tìm thấy hóa đơn phù hợp với bộ lọc hiện tại.</div>
                 <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/invoices/generate" class="btn btn-primary" style="margin-top:1rem">
-                    ➕ Tạo hóa đơn mới
+                     Tạo hóa đơn mới
                 </a>
             </div>
         <?php endif; ?>

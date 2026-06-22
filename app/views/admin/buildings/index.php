@@ -8,11 +8,11 @@
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">🏢 Quản lý tòa nhà</h1>
+    <h1 class="page-title"> Quản lý tòa nhà</h1>
     <p class="page-subtitle">Quản lý cơ cấu các tòa nhà ký túc xá</p>
   </div>
   <div class="page-actions">
-    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/create" class="btn btn-primary">➕ Thêm tòa nhà</a>
+    <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/create" class="btn btn-primary"> Thêm tòa nhà</a>
   </div>
 </div>
 
@@ -36,9 +36,9 @@
           <?php foreach ($buildings as $b): ?>
             <?php 
               $genderLabel = match($b['gender_type']) {
-                  'male'   => '🟢 Nam',
-                  'female' => '🌸 Nữ',
-                  'mixed'  => '⚖️ Hỗn hợp',
+                  'male'   => ' Nam',
+                  'female' => ' Nữ',
+                  'mixed'  => ' Hỗn hợp',
                   default  => $b['gender_type']
               };
               
@@ -48,7 +48,7 @@
               $barClass       = $fillPct >= 90 ? 'danger' : ($fillPct >= 70 ? 'warning' : 'success');
             ?>
             <tr id="building-row-<?= (int)$b['id'] ?>">
-              <td><strong style="color:var(--txt-primary);font-size:15px;">🏢 Tòa <?= htmlspecialchars($b['name']) ?></strong></td>
+              <td><strong style="color:var(--txt-primary);font-size:15px;"> Tòa <?= htmlspecialchars($b['name']) ?></strong></td>
               <td style="color:var(--txt-secondary);"><?= (int)$b['total_floors'] ?> tầng</td>
               <td><?= $genderLabel ?></td>
               <td style="font-weight:600;color:var(--txt-primary);"><?= (int)$b['room_count'] ?> phòng</td>
@@ -69,9 +69,9 @@
               </td>
               <td>
                 <div style="display:flex;gap:6px;justify-content:center;">
-                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/<?= (int)$b['id'] ?>" class="btn btn-ghost btn-sm">👁️ Xem</a>
-                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/<?= (int)$b['id'] ?>/edit" class="btn btn-ghost btn-sm">✏️ Sửa</a>
-                  <button class="btn btn-danger-outline btn-sm" onclick="deleteBuilding(<?= (int)$b['id'] ?>, '<?= htmlspecialchars(addslashes($b['name'])) ?>')">🗑️ Xóa</button>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/<?= (int)$b['id'] ?>" class="btn btn-ghost btn-sm"> Xem</a>
+                  <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/buildings/<?= (int)$b['id'] ?>/edit" class="btn btn-ghost btn-sm"> Sửa</a>
+                  <button class="btn btn-danger-outline btn-sm" onclick="deleteBuilding(<?= (int)$b['id'] ?>, '<?= htmlspecialchars(addslashes($b['name'])) ?>')"> Xóa</button>
                 </div>
               </td>
             </tr>
@@ -80,7 +80,7 @@
           <tr>
             <td colspan="8">
               <div class="empty-state">
-                <div class="empty-icon">🏢</div>
+                <div class="empty-icon" aria-hidden="true"></div>
                 <div class="empty-title">Chưa có tòa nhà nào</div>
                 <div class="empty-msg">Bấm nút "Thêm tòa nhà" ở góc trên để tạo mới.</div>
               </div>
@@ -103,11 +103,11 @@ function deleteBuilding(id, name) {
     .then(r => r.json())
     .then(json => {
         if (json.success) {
-            alert('✅ Đã xóa tòa nhà thành công!');
+            alert(' Đã xóa tòa nhà thành công!');
             const row = document.getElementById('building-row-' + id);
             if (row) row.remove();
         } else {
-            alert('❌ Lỗi: ' + json.message);
+            alert(' Lỗi: ' + json.message);
         }
     })
     .catch(err => alert('Lỗi kết nối: ' + err.message));

@@ -28,7 +28,7 @@ $genderLabel = $gender === 'male' ? 'Nam' : ($gender === 'female' ? 'Nữ' : 'Kh
 
 <div class="page-header">
   <div>
-    <h1 class="page-title">👤 Hồ sơ cá nhân</h1>
+    <h1 class="page-title"> Hồ sơ cá nhân</h1>
     <p class="page-subtitle">Quản lý và cập nhật thông tin cá nhân của bạn</p>
   </div>
 </div>
@@ -61,7 +61,7 @@ $genderLabel = $gender === 'male' ? 'Nam' : ($gender === 'female' ? 'Nữ' : 'Kh
   <!-- Right Side: Edit Form -->
   <div class="card">
     <div class="card-header">
-      <h3 class="card-title">📝 Cập nhật thông tin chi tiết</h3>
+      <h3 class="card-title"> Cập nhật thông tin chi tiết</h3>
     </div>
     <form method="POST" action="<?= getDynamicUrl('/student/profile') ?>">
       <div class="card-body" style="display: flex; flex-direction: column; gap: 18px;">
@@ -116,7 +116,7 @@ $genderLabel = $gender === 'male' ? 'Nam' : ($gender === 'female' ? 'Nữ' : 'Kh
       </div>
       <div class="card-footer" style="display: flex; justify-content: flex-end; gap: 10px;">
         <a href="<?= getDynamicUrl('/student/dashboard') ?>" class="btn btn-ghost">Quay lại</a>
-        <button type="submit" class="btn btn-primary">💾 Lưu thay đổi</button>
+        <button type="submit" class="btn btn-primary"> Lưu thay đổi</button>
       </div>
     </form>
   </div>
