@@ -93,6 +93,7 @@ class MaintenanceController extends BaseController
 
     public function cancel(array $params = []): void
     {
+        $this->verifyCsrf();
         $id = (int)$params['id'];
         $userId = $this->auth('id');
 
@@ -106,7 +107,7 @@ class MaintenanceController extends BaseController
         }
 
         if ($request['status'] !== 'open') {
-            $this->jsonError('Chỉ có thể hủy yêu cầu ở trạng thái đang chờ xử lý', 409);
+            $this->jsonError('Chỉ có thể hủy yêu cầu đang ở trạng thái chờ xử lý', 409);
         }
 
         try {
