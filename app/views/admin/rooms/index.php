@@ -48,8 +48,6 @@ $typeLabels = [
         <p class="page-subtitle">Tổng cộng <?= number_format($total) ?> phòng trong hệ thống</p>
     </div>
     <div class="page-actions">
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/rooms/map" class="btn btn-outline btn-sm"> Sơ đồ phòng</a>
-
         <button class="btn btn-primary" data-modal-open="modalAddRoom"> Thêm phòng</button>
     </div>
 </div>
