@@ -33,11 +33,6 @@ class InvoiceAdminController extends BillingController
         ]);
     }
 
-    public function generate(array $params = []): void
-    {
-        $this->generateBatch($params);
-    }
-
     public function generateSingle(array $params = []): void
     {
         $this->verifyCsrf();
