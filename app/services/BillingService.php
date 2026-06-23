@@ -192,6 +192,88 @@ class BillingService
     }
 
     /**
+     * Tạo hóa đơn cá nhân có kèm theo ghi chỉ số điện nước
+     */
+    public function generateSingleWithUtility(int $contractId, int $month, int $year, float $elecCurr, float $waterCurr): array
+    {
+        // Get the contract
+        $contract = $this->db->selectOne(
+            "SELECT c.room_id FROM contracts c WHERE c.id = ? AND c.status = 'active'",
+            [$contractId]
+        );
+
+        if (!$contract) {
+            return $this->error('Hợp đồng không tồn tại hoặc không active');
+        }
+
+        $roomId = (int)$contract['room_id'];
+
+        try {
+            $this->db->transaction(function (Database $db) use ($roomId, $month, $year, $elecCurr, $waterCurr) {
+                // Find previous readings (if any) to set elec_prev and water_prev
+                // We'll look for the reading of the previous month. 
+                $prevMonth = $month - 1;
+                $prevYear = $year;
+                if ($prevMonth === 0) {
+                    $prevMonth = 12;
+                    $prevYear--;
+                }
+
+                $prevReading = $db->selectOne(
+                    "SELECT elec_curr, water_curr FROM utility_readings WHERE room_id = ? AND month = ? AND year = ?",
+                    [$roomId, $prevMonth, $prevYear]
+                );
+
+                $elecPrev = $prevReading ? (float)$prevReading['elec_curr'] : 0.0;
+                $waterPrev = $prevReading ? (float)$prevReading['water_curr'] : 0.0;
+                
+                // If the user inputs a smaller reading than previous month, it's an error.
+                if ($elecCurr < $elecPrev || $waterCurr < $waterPrev) {
+                    throw new \Exception("Chỉ số mới không thể nhỏ hơn chỉ số tháng trước (Điện: {$elecPrev}, Nước: {$waterPrev})");
+                }
+
+                // Check if utility reading for current month already exists
+                $existingReading = $db->selectOne(
+                    "SELECT id FROM utility_readings WHERE room_id = ? AND month = ? AND year = ?",
+                    [$roomId, $month, $year]
+                );
+
+                if ($existingReading) {
+                    // Update
+                    $db->update('utility_readings', [
+                        'elec_curr' => $elecCurr,
+                        'water_curr' => $waterCurr,
+                        // We also need to make sure elec_prev and water_prev are up to date
+                        'elec_prev' => $elecPrev,
+                        'water_prev' => $waterPrev,
+                    ], 'id = ?', [$existingReading['id']]);
+                } else {
+                    // Insert
+                    $db->insert('utility_readings', [
+                        'room_id' => $roomId,
+                        'month' => $month,
+                        'year' => $year,
+                        'elec_prev' => $elecPrev,
+                        'elec_curr' => $elecCurr,
+                        'water_prev' => $waterPrev,
+                        'water_curr' => $waterCurr,
+                        'elec_rate' => $this->getElectricityRate(),
+                        'water_rate' => $this->getWaterRate(),
+                        'recorded_by' => $_SESSION['auth_user']['id'] ?? 1, // Fallback to 1 if no auth in CLI
+                    ]);
+                }
+            });
+
+            // After setting utility, generate invoice normally
+            return $this->generateInvoice($contractId, $month, $year);
+
+        } catch (\Throwable $e) {
+            error_log($e->getMessage());
+            return $this->error($e->getMessage());
+        }
+    }
+
+    /**
      * ───────────────────────────────────────────────────────────
      *  UTILITY FEE CALCULATIONS
      * ───────────────────────────────────────────────────────────
@@ -204,28 +286,23 @@ class BillingService
      */
     private function calculateElectricityFee(int $roomId, int $month, int $year): float
     {
-        // Get electricity readings for this month and previous month
-        $readings = $this->db->select(
-            "SELECT reading_date, electricity_units FROM utility_readings
-             WHERE room_id = ? AND YEAR(reading_date) = ?
-             AND (MONTH(reading_date) = ? OR MONTH(reading_date) = ?)
-             ORDER BY reading_date DESC
-             LIMIT 2",
-            [$roomId, $year, $month, $month - 1]
+        // Get electricity reading for this month
+        $reading = $this->db->selectOne(
+            "SELECT elec_prev, elec_curr, elec_rate FROM utility_readings
+             WHERE room_id = ? AND month = ? AND year = ?",
+            [$roomId, $month, $year]
         );
 
-        if (count($readings) < 2) {
+        if (!$reading) {
             // Not enough data, estimate based on average
             return 500000; // Default estimate
         }
 
         // Calculate units consumed (current - previous)
-        $currentReading = (float)$readings[0]['electricity_units'];
-        $previousReading = (float)$readings[1]['electricity_units'];
-        $unitsConsumed = max(0, $currentReading - $previousReading);
+        $unitsConsumed = max(0, (float)$reading['elec_curr'] - (float)$reading['elec_prev']);
 
-        // Get rate from database or config
-        $rate = $this->getElectricityRate();
+        // Get rate from reading (it captures snapshot rate)
+        $rate = (float)$reading['elec_rate'];
 
         return $unitsConsumed * $rate;
     }
@@ -237,28 +314,23 @@ class BillingService
      */
     private function calculateWaterFee(int $roomId, int $month, int $year): float
     {
-        // Get water readings for this month and previous month
-        $readings = $this->db->select(
-            "SELECT reading_date, water_units FROM utility_readings
-             WHERE room_id = ? AND YEAR(reading_date) = ?
-             AND (MONTH(reading_date) = ? OR MONTH(reading_date) = ?)
-             ORDER BY reading_date DESC
-             LIMIT 2",
-            [$roomId, $year, $month, $month - 1]
+        // Get water reading for this month
+        $reading = $this->db->selectOne(
+            "SELECT water_prev, water_curr, water_rate FROM utility_readings
+             WHERE room_id = ? AND month = ? AND year = ?",
+            [$roomId, $month, $year]
         );
 
-        if (count($readings) < 2) {
+        if (!$reading) {
             // Not enough data, estimate
             return 150000; // Default estimate
         }
 
         // Calculate units consumed
-        $currentReading = (float)$readings[0]['water_units'];
-        $previousReading = (float)$readings[1]['water_units'];
-        $unitsConsumed = max(0, $currentReading - $previousReading);
+        $unitsConsumed = max(0, (float)$reading['water_curr'] - (float)$reading['water_prev']);
 
-        // Get rate
-        $rate = $this->getWaterRate();
+        // Get rate from reading
+        $rate = (float)$reading['water_rate'];
 
         return $unitsConsumed * $rate;
     }

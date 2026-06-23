@@ -129,7 +129,9 @@ $router->group('/admin', function (Router $r) {
 
     // ── Hóa đơn ────────────────────────────────────────
     $r->get('/invoices',              'InvoiceAdminController@index')->name('admin.invoice.index');
+    $r->get('/invoices/generate',     'InvoiceAdminController@showGenerateForm');
     $r->post('/invoices/generate',    'InvoiceAdminController@generate');
+    $r->post('/invoices/generate-single', 'InvoiceAdminController@generateSingle');
     $r->get('/invoices/:id',          'InvoiceAdminController@show')->where('id', '\d+');
     $r->post('/invoices/:id/pay',     'InvoiceAdminController@markPaid')->where('id', '\d+');
     $r->get('/invoices/:id/pdf',      'InvoiceAdminController@pdf')->where('id', '\d+');
