@@ -108,6 +108,9 @@ class ViolationService
             return $this->error('Sinh viên không tồn tại');
         }
 
+        // Normalize violation type (guard against HTML-encoded values)
+        $violationType = strip_tags(htmlspecialchars_decode(trim($violationType)));
+
         if (!isset(self::VIOLATION_CATALOG[$violationType])) {
             return $this->error('Loại vi phạm không hợp lệ');
         }

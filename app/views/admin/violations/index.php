@@ -21,7 +21,7 @@
 
 <!-- Filter Bar -->
 <div class="filter-bar">
-    <form method="GET" action="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="filter-bar-form">
+    <form method="GET" action="<?= getDynamicUrl('/admin/violations') ?>" class="filter-bar-form">
         <div class="filter-group">
             <input
                 type="text"
@@ -52,7 +52,7 @@
             </select>
         </div>
         <button type="submit" class="btn btn-primary">Lọc</button>
-        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations" class="btn btn-outline">Đặt lại</a>
+        <a href="<?= getDynamicUrl('/admin/violations') ?>" class="btn btn-outline">Đặt lại</a>
     </form>
 </div>
 
@@ -79,6 +79,20 @@
                         $page    = $pagination['current_page'] ?? 1;
                         $perPage = $pagination['per_page'] ?? 20;
                         $offset  = ($page - 1) * $perPage;
+
+                        // Build a flat map: type_key => Vietnamese name & severity
+                        $typeNameMap = [];
+                        foreach ($types ?? [] as $tk => $td) {
+                            if (is_array($td)) {
+                                $typeNameMap[$tk] = [
+                                    'name'     => $td['name']     ?? $tk,
+                                    'severity' => $td['severity'] ?? 0,
+                                ];
+                            } else {
+                                $typeNameMap[$tk] = ['name' => (string)$td, 'severity' => 0];
+                            }
+                        }
+
                         foreach ($violations as $i => $v):
                             $statusMap = [
                                 'active'    => ['label' => 'Đang hiệu lực', 'class' => 'badge-danger'],
@@ -87,12 +101,18 @@
                             ];
                             $s = $statusMap[$v['status'] ?? ''] ?? ['label' => $v['status'] ?? '—', 'class' => 'badge-neutral'];
 
+                            // Resolve severity: prefer DB value, fall back to type catalog
+                            $typeKey  = $v['violation_type'] ?? '';
+                            $typeInfo = $typeNameMap[$typeKey] ?? null;
+                            $typeName = $typeInfo ? $typeInfo['name'] : $typeKey;
+                            $sevVal   = (int)($v['severity'] ?? $typeInfo['severity'] ?? 0);
+
                             $severityMap = [
-                                1 => ['label' => 'Nhẹ',      'class' => 'badge-info'],
-                                2 => ['label' => 'Trung bình','class' => 'badge-warning'],
-                                3 => ['label' => 'Nặng',     'class' => 'badge-danger'],
+                                1 => ['label' => 'Nhẹ',       'class' => 'badge-info'],
+                                2 => ['label' => 'Trung bình', 'class' => 'badge-warning'],
+                                3 => ['label' => 'Nặng',      'class' => 'badge-danger'],
                             ];
-                            $sev = $severityMap[(int)($v['severity'] ?? 0)] ?? ['label' => '—', 'class' => 'badge-neutral'];
+                            $sev = $severityMap[$sevVal] ?? ['label' => '—', 'class' => 'badge-neutral'];
                         ?>
                             <tr>
                                 <td><?= $offset + $i + 1 ?></td>
@@ -100,7 +120,7 @@
                                     <div style="font-weight:600"><?= htmlspecialchars($v['full_name'] ?? '—') ?></div>
                                     <div style="font-size:0.78rem;color:var(--text-muted)"><?= htmlspecialchars($v['student_code'] ?? '') ?></div>
                                 </td>
-                                <td><?= htmlspecialchars($v['violation_type'] ?? '—') ?></td>
+                                <td><?= htmlspecialchars($typeName) ?></td>
                                 <td style="text-align:center">
                                     <span style="color:#ef4444;font-weight:700;font-size:1rem">
                                          <?= (int)($v['penalty_points'] ?? 0) ?>
@@ -120,11 +140,11 @@
                                 </td>
                                 <td style="text-align:center">
                                     <div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-                                        <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>"
+                                        <a href="<?= getDynamicUrl('/admin/violations/' . (int)$v['id']) ?>"
                                            class="btn btn-ghost btn-sm"> Chi tiết</a>
                                         <?php if (($v['status'] ?? '') !== 'dismissed'): ?>
                                             <form method="POST"
-                                                  action="/Final-Web2-PHP-Dormitory-Management/public/admin/violations/<?= (int)$v['id'] ?>/dismiss"
+                                                  action="<?= getDynamicUrl('/admin/violations/' . (int)$v['id'] . '/dismiss') ?>"
                                                   onsubmit="return confirm('Xác nhận hủy vi phạm này?')"
                                                   style="display:inline">
                                                 <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
@@ -161,14 +181,14 @@
         ]));
         ?>
         <?php if ($cur > 1): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
+            <a href="<?= getDynamicUrl('/admin/violations') ?>?page=<?= $cur - 1 ?>&<?= $qs ?>" class="page-link">‹ Trước</a>
         <?php endif; ?>
         <?php for ($p = max(1, $cur - 2); $p <= min($total, $cur + 2); $p++): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?page=<?= $p ?>&<?= $qs ?>"
+            <a href="<?= getDynamicUrl('/admin/violations') ?>?page=<?= $p ?>&<?= $qs ?>"
                class="page-link <?= $p === $cur ? 'active' : '' ?>"><?= $p ?></a>
         <?php endfor; ?>
         <?php if ($cur < $total): ?>
-            <a href="/Final-Web2-PHP-Dormitory-Management/public/admin/violations?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
+            <a href="<?= getDynamicUrl('/admin/violations') ?>?page=<?= $cur + 1 ?>&<?= $qs ?>" class="page-link">Sau ›</a>
         <?php endif; ?>
     </div>
 <?php endif; ?>
@@ -186,17 +206,17 @@
                     <input type="hidden" name="_csrf_token" value="<?= htmlspecialchars($_csrfToken ?? '') ?>">
 
                     <div class="form-group">
-                        <label class="form-label" for="fv-student-id">Mã sinh viên (ID) <span style="color:#ef4444">*</span>
+                        <label class="form-label" for="fv-student-id">Mã sinh viên <span style="color:#ef4444">*</span>
                         </label>
                         <input
-                            type="number"
+                            type="text"
                             id="fv-student-id"
                             name="student_id"
                             class="form-control"
-                            placeholder="Nhập ID sinh viên..."
-                            min="1"
+                            placeholder="Nhập mã sinh viên (VD: 20260028)..."
                             required
                         >
+                        <div class="form-hint">Nhập mã sinh viên hoặc ID nội bộ.</div>
                         <div class="form-error" id="err-student-id" style="display:none"></div>
                     </div>
 
@@ -205,9 +225,9 @@
                         </label>
                         <select id="fv-type" name="violation_type" class="form-control" required>
                             <option value="">-- Chọn loại vi phạm --</option>
-                            <?php foreach ($types ?? [] as $t): ?>
-                                <option value="<?= htmlspecialchars(is_array($t) ? ($t['id'] ?? $t['name'] ?? $t) : $t) ?>">
-                                    <?= htmlspecialchars(is_array($t) ? ($t['name'] ?? $t['label'] ?? $t) : $t) ?>
+                            <?php foreach ($types ?? [] as $typeKey => $t): ?>
+                                <option value="<?= htmlspecialchars(is_array($t) ? $typeKey : $t) ?>">
+                                    <?= htmlspecialchars(is_array($t) ? ($t['name'] ?? $typeKey) : $t) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -309,7 +329,11 @@
 
             if (!data.override_points) delete data.override_points;
 
-            ktxFetch('POST', '/Final-Web2-PHP-Dormitory-Management/public/api/violations', data)
+            var apiUrl = '<?= getDynamicUrl('/api/violations') ?>';
+            ktxFetch(apiUrl, {
+                method: 'POST',
+                body: JSON.stringify(data)
+            })
                 .then(function (res) {
                     if (res && res.success) {
                         alert.innerHTML = '<div class="alert alert-success"> Ghi nhận vi phạm thành công!</div>';
@@ -320,7 +344,24 @@
                     }
                 })
                 .catch(function (err) {
-                    alert.innerHTML = '<div class="alert alert-danger"> ' + (err.message || 'Có lỗi xảy ra.') + '</div>';
+                    var errMsg = '';
+                    if (err && typeof err === 'object') {
+                        errMsg = err.message || JSON.stringify(err);
+                        // Show field-level errors if present
+                        if (err.errors) {
+                            if (err.errors.student_id) {
+                                errSid.textContent = Array.isArray(err.errors.student_id) ? err.errors.student_id[0] : err.errors.student_id;
+                                errSid.style.display = 'block';
+                            }
+                            if (err.errors.violation_type) {
+                                errType.textContent = Array.isArray(err.errors.violation_type) ? err.errors.violation_type[0] : err.errors.violation_type;
+                                errType.style.display = 'block';
+                            }
+                        }
+                    } else {
+                        errMsg = String(err);
+                    }
+                    alert.innerHTML = '<div class="alert alert-danger"> ' + errMsg + '</div>';
                     alert.style.display = 'block';
                     submitBtn.disabled = false;
                     submitBtn.textContent = ' Ghi nhận';

@@ -210,9 +210,7 @@ class ViolationController extends BaseController
                 $db->update(
                     'violation_records',
                     [
-                        'status'       => 'dismissed',
-                        'dismissed_at' => date('Y-m-d H:i:s'),
-                        'dismissed_by' => $this->auth('id'),
+                        'status' => 'dismissed',
                     ],
                     'id = ?',
                     [$id]
@@ -277,16 +275,36 @@ class ViolationController extends BaseController
         // Validation
         $errors = [];
 
-        $student = $this->studentModel->find((int)$data['student_id']);
-        if (!$student) {
-            $errors['student_id'] = ['Sinh viên không tồn tại'];
+        // Support lookup by numeric DB id OR by student_code string (e.g. "20260028")
+        $studentInput = trim((string)($data['student_id'] ?? ''));
+        $student = null;
+        if (ctype_digit($studentInput)) {
+            // Try numeric DB id first
+            $student = $this->studentModel->find((int)$studentInput);
+            // If not found by DB id, try student_code (e.g. the number happens to be a code)
+            if (!$student) {
+                $student = $this->studentModel->findByStudentCode($studentInput);
+            }
+        } else {
+            // Non-numeric: must be a student_code
+            $student = $this->studentModel->findByStudentCode($studentInput);
         }
 
-        if (!isset(self::VIOLATION_TYPES[$data['violation_type']])) {
+        if (!$student) {
+            $errors['student_id'] = ['Sinh viên không tồn tại (kiểm tra lại ID hoặc mã sinh viên)'];
+        }
+
+        // Normalize violation_type: the sanitize() method HTML-encodes strings,
+        // so decode it back to get the raw key for array lookup and service call.
+        $violationType = strip_tags(htmlspecialchars_decode(trim((string)($data['violation_type'] ?? ''))));
+
+        if (!isset(self::VIOLATION_TYPES[$violationType])) {
             $errors['violation_type'] = ['Loại vi phạm không hợp lệ'];
         }
 
-        if (empty($data['description']) || strlen($data['description']) < 5) {
+        // Normalize description
+        $description = trim(strip_tags(htmlspecialchars_decode((string)($data['description'] ?? ''))));
+        if (empty($description) || strlen($description) < 5) {
             $errors['description'] = ['Mô tả phải ít nhất 5 ký tự'];
         }
 
@@ -294,14 +312,17 @@ class ViolationController extends BaseController
             $this->jsonError('Dữ liệu không hợp lệ', 422, $errors);
         }
 
+        // Use the resolved integer DB id for the rest of the operation
+        $studentDbId = (int)$student['id'];
+
         try {
             $result = $this->violationService->recordViolation(
-                (int)$data['student_id'],
-                $data['violation_type'],
-                $data['description'],
-                $data['location'] ?? '',
-                $data['witnessed_by'] ?? '',
-                $data['evidence'] ?? '',
+                $studentDbId,
+                $violationType,
+                $description,
+                strip_tags(htmlspecialchars_decode((string)($data['location'] ?? ''))),
+                strip_tags(htmlspecialchars_decode((string)($data['witnessed_by'] ?? ''))),
+                strip_tags(htmlspecialchars_decode((string)($data['evidence'] ?? ''))),
                 !empty($data['override_points']) ? (int)$data['override_points'] : null,
                 (int)$this->auth('id')  // recorded_by admin ID
             );
@@ -423,9 +444,7 @@ class ViolationController extends BaseController
             $this->db->update(
                 'violation_records',
                 [
-                    'status'        => 'dismissed',
-                    'dismissed_at'  => date('Y-m-d H:i:s'),
-                    'dismissed_by'  => $this->auth('id'),
+                    'status' => 'dismissed',
                 ],
                 'id = ?',
                 [$id]
