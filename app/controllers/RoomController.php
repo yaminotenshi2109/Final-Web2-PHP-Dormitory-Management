@@ -172,7 +172,7 @@ class RoomController extends BaseController
 
         // Lấy sinh viên đang ở trong phòng
         $occupants = $this->db->select("
-            SELECT s.full_name, s.student_code, s.gender,
+            SELECT s.full_name, s.student_code, s.gender, s.faculty, s.phone,
                    c.start_date, c.end_date, c.status AS contract_status
             FROM contracts c
             JOIN students s ON s.id = c.student_id
@@ -196,7 +196,7 @@ class RoomController extends BaseController
         $this->view('admin/rooms/show', [
             'title'     => "Phòng {$room['room_number']}",
             'room'      => $room,
-            'occupants' => $occupants,
+            'students'  => $occupants,
             'amenities' => $amenities,
         ]);
     }

@@ -337,6 +337,17 @@ class RoomAllocationService
             $roomId,
             $monthlyFee
         ) {
+            // 0. Khóa row phòng để tránh race condition (Pessimistic Locking)
+            $room = $db->selectOne("SELECT * FROM rooms WHERE id = ? FOR UPDATE", [$roomId]);
+
+            if (!$room) {
+                throw new \Exception('Phòng không tồn tại.');
+            }
+
+            if ($room['current_occupants'] >= $room['capacity']) {
+                throw new \Exception('Phòng đã đầy, không thể gán thêm sinh viên.');
+            }
+
             // 1. Cập nhật đơn đăng ký
             $db->update(
                 'room_registrations',
@@ -350,7 +361,6 @@ class RoomAllocationService
             );
 
             // 2. Tạo hợp đồng
-            $room = $db->find('rooms', $roomId);
             $contractId = $db->insert('contracts', [
                 'registration_id' => $registrationId,
                 'student_id'      => $studentId,
@@ -362,17 +372,15 @@ class RoomAllocationService
                 'signed_at'       => date('Y-m-d H:i:s'),
             ]);
 
-            // 3. Tăng occupants
-            $db->query(
-                "UPDATE rooms SET current_occupants = current_occupants + 1 WHERE id = ?",
-                [$roomId]
-            );
-
-            // 4. Cập nhật room status
+            // 3. Cập nhật occupants và room status
             $newOccupancy = $room['current_occupants'] + 1;
+            $updateData = ['current_occupants' => $newOccupancy];
+            
             if ($newOccupancy >= $room['capacity']) {
-                $db->update('rooms', ['status' => 'full'], 'id = ?', [$roomId]);
+                $updateData['status'] = 'full';
             }
+
+            $db->update('rooms', $updateData, 'id = ?', [$roomId]);
 
             // 5. Gửi thông báo
             $student = $db->selectOne(
